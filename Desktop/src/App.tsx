@@ -1,10 +1,11 @@
 import React from 'react';
-import {BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom';
+import { HashRouter as Router, Switch, Route, Link } from 'react-router-dom';
 import icon from '../assets/logo.png';
 import './App.global.css';
 import  Profile  from './pages/Profile';
 import  Agenda  from './pages/Agenda';
 import  Login  from './pages/Login';
+
 
 const Hello = () => {
   return (
