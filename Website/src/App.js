@@ -9,11 +9,14 @@ import InstallationD from './Components/InstallationD';
 import {BrowserRouter as Router ,Route , Link , Switch, NavLink} from "react-router-dom";
 import Navbar from './Components/Navbar';
 import InstallationP from './Components/InstallationP';
-
+import {toast} from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 
 function App() {
+  
   return (<div>
+    
     <Router>
     <Navbar/>
     

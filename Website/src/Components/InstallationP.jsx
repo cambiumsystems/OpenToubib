@@ -1,6 +1,7 @@
 import React from 'react'
 import aboutimageee from '../images/mobile comu.png'
 import Installation from './Installation';
+
 function InstallationP() {
     return (
         <div>
@@ -8,7 +9,8 @@ function InstallationP() {
 ......
 
 '/> 
-        </div>
+
+  </div>
     )
 }
 
