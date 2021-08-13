@@ -1,5 +1,6 @@
 import React,{useState} from 'react'
 import logo from '../images/Opentoubib.png.jpeg'
+import {Link }from 'react-router-dom'
 function Navbar() {
     const [nav,setnav]=useState(false)
     const changeBackground=()=>{
@@ -20,9 +21,10 @@ function Navbar() {
              <span className='nav-icon'></span>
          </label>
          <ul className='menu'>
-             <li><a href='' className='active'>Home</a></li>
-             <li><a href=''>Pour medecin</a></li>
-             <li><a href=''>Pour patient</a></li>
+             <Link to="/"><li><a href='' className=''>Home</a></li></Link>
+             <Link to="/InstallationD"><li><a href=''>Pour medecin</a></li></Link>
+            <Link to="/InstallationP"> <li><a href=''>Pour patient</a></li></Link>
+            
          </ul>
         </nav>
     )
