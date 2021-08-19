@@ -1,5 +1,5 @@
 import React,{useState} from 'react'
-import logo from '../images/Opentoubib.png.jpeg'
+import logo from '../images/logo (1).png'
 import {Link }from 'react-router-dom'
 function Navbar() {
     const [nav,setnav]=useState(false)
@@ -22,8 +22,8 @@ function Navbar() {
          </label>
          <ul className='menu'>
              <Link to="/"><li><a href='' className=''>Home</a></li></Link>
-             <Link to="/InstallationD"><li><a href=''>Pour medecin</a></li></Link>
-            <Link to="/InstallationP"> <li><a href=''>Pour patient</a></li></Link>
+             <Link to="/InstallationD"><li><a href=''>Connexion</a></li></Link>
+            <Link to="/InstallationP"> <li><a href=''>Vous etes un professionel ? </a></li></Link>
             
          </ul>
         </nav>
