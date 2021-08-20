@@ -2,6 +2,8 @@ import React, { Component } from 'react'
 import{FontAwsomeIcon} from "@fortawesome/react-fontawesome"
 import {Link }from 'react-router-dom'
 import MuiAlert from "@material-ui/lab/Alert";
+import PhoneIcon from '@material-ui/icons/Phone';
+
 function Alert(props) {
     return <MuiAlert elevation={6} 
                      variant="filled" {...props} />;
@@ -95,7 +97,8 @@ class Inscription extends Component {
                 <form onSubmit={this.handleSubmit} >
                     <h1 className="titre_form">Nouveau sur OPEN-Toubib ? </h1>
                     <div class="grid-container">
-                   <input type="text" className=" column" value={this.state.firstName} onChange={this.firsthandler} placeholder="Nom..." />
+                   <input type="text" className=" column" value={this.state.firstName} onChange={this.firsthandler} placeholder="Nom..." /> 
+                   
                     <input type="text" className=" column" value={this.state.lastName} onChange={this.lasthandler} placeholder="Prenom..." />
                     </div>
                     <input type="text" className="input_pwd" value={this.state.adresse} onChange={this.adressehandler} placeholder="Adresse..." /><br />
@@ -111,7 +114,7 @@ class Inscription extends Component {
                        <option>qst1</option>
                        <option>qst2</option>
                    </select>
-                    <input type="text" className=" column" value={this.state.repqst} onChange={this.repqsthandle} placeholder="Reponce a la qst..." />
+                    <input type="text" className=" column" value={this.state.repqst} onChange={this.repqsthandle} placeholder="Reponce..." />
                     </div>
                     <Alert severity="info" className ="alert">Cette qst est votre seul moyen de recuperer votre mdp </Alert>
             
