@@ -23,7 +23,7 @@ import * as Yup from 'yup';
 import Multiselect from 'multiselect-react-dropdown';
 // import knex from '../../database.js';
 
-const knex = require('../database');
+const knex = require('../../database');
 
 // const sleep = (time) => new Promise((acc) => setTimeout(acc, time));
 const lngs = {
