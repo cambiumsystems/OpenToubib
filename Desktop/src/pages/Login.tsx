@@ -12,8 +12,7 @@ import {
   InputLabel,
   ButtonGroup,
 } from '@material-ui/core';
-import { useTranslation, Trans } from 'react-i18next';
-import axios from 'axios';
+import { useTranslation } from 'react-i18next';
 import { Field, Form, Formik, FormikConfig, FormikValues } from 'formik';
 import { Link } from 'react-router-dom';
 import { Checkbox, CheckboxWithLabel, TextField } from 'formik-material-ui';
@@ -22,14 +21,14 @@ import React, { useState } from 'react';
 import { CountryDropdown, RegionDropdown } from 'react-country-region-selector';
 import * as Yup from 'yup';
 import Multiselect from 'multiselect-react-dropdown';
+// import knex from '../../database.js';
 
-const knex = require('./../../database');
-// const sqlite3 = require('sqlite3').verbose();
+const knex = require('../database');
 
 // const sleep = (time) => new Promise((acc) => setTimeout(acc, time));
 const lngs = {
   en: { nativeName: 'English' },
-  fr: { nativeName: 'Français' }
+  fr: { nativeName: 'Français' },
 };
 const validationSchemaStep1 = Yup.object().shape({
   firstName: Yup.string().required('Firstname is required'),
@@ -92,16 +91,33 @@ const rdvGaps = [
   { value: '45', label: '45mins' },
   { value: '60', label: '1hour' },
 ];
-// const handleDoctorCreate = (values: FormikValues) => {
-//   const db = new sqlite3.Database('./../../database');
-//   db.run(`INSERT INTO doctors(firstName) VALUES(?)`, values.firstName, function(err) {
-//     if (err) {
-//       return console.log(err.message);
-//     }
-//     // get the last insert id
-//     console.log(`A row has been inserted with rowid ${this.lastID}`);
-//   });
-// }
+const handleDoctorCreate = (a: string, b: string, c: string) => {
+  knex('doctors')
+    .insert({
+      // insert new record, a book
+      firstName: a,
+      lastName: b,
+      password: c,
+    })
+    // eslint-disable-next-line promise/always-return
+    .then(() => {
+      // Send a success message in response
+      // eslint-disable-next-line no-console
+      console.log('AN object created!!');
+    })
+    .catch((err: any) => {
+      // Send a error message in response
+      // eslint-disable-next-line no-console
+      console.log(err);
+    });
+  knex
+    .select('*')
+    .from('doctors')
+    // eslint-disable-next-line no-console
+    .then((data: any) => console.log('data:', data))
+    // eslint-disable-next-line no-console
+    .catch((err: any) => console.log(err));
+};
 export default function Home() {
   const [country, setCountry] = useState('');
   const [region, setRegion] = useState('');
@@ -152,9 +168,9 @@ export default function Home() {
             workDay: false,
           }}
           onSubmit={async (values) => {
-            //await sleep(3000);
+            // await sleep(3000);
             console.log('values', values, values.firstName);
-            //console.log('firstName', values.firstName);
+            // console.log('firstName', values.firstName);
           }}
         >
           <FormikStep
@@ -510,16 +526,21 @@ export function FormikStepper({
   function isLastStep() {
     return step === childrenArray.length - 1;
   }
-  const { t, i18n } = useTranslation();
+  // const { t, i18n } = useTranslation();
   return (
     <div>
-      <div>
-          {Object.keys(lngs).map((lng) => (
-            <button key={lng} style={{ fontWeight: i18n.language === lng ? 'bold' : 'normal' }} type="submit" onClick={() => i18n.changeLanguage(lng)}>
-              {lngs[lng].nativeName}
-            </button>
-          ))}
-        </div>
+      {/* <div>
+        {Object.keys(lngs).map((lng) => (
+          <button
+            key={lng}
+            style={{ fontWeight: i18n.language === lng ? 'bold' : 'normal' }}
+            type="submit"
+            onClick={() => i18n.changeLanguage(lng)}
+          >
+            {lngs[lng].nativeName}
+          </button>
+        ))}
+      </div> */}
       <Link to="/">Go back to home</Link>
       <Formik
         // eslint-disable-next-line react/jsx-props-no-spreading
@@ -528,7 +549,11 @@ export function FormikStepper({
         onSubmit={async (values, helpers) => {
           if (isLastStep()) {
             await props.onSubmit(values, helpers);
-            // handleDoctorCreate(values);
+            handleDoctorCreate(
+              values.firstName,
+              values.lastName,
+              values.password
+            );
             setCompleted(true);
           } else {
             setStep((s) => s + 1);
