@@ -18,7 +18,7 @@ import 'antd/dist/antd.css';
 import { useTranslation } from 'react-i18next';
 import { Field, Form, Formik, FormikConfig, FormikValues } from 'formik';
 import { Link } from 'react-router-dom';
-import {  CheckboxWithLabel, TextField } from 'formik-material-ui';
+import { CheckboxWithLabel, TextField } from 'formik-material-ui';
 import Select from 'react-select';
 import React, { useState } from 'react';
 import { CountryDropdown, RegionDropdown } from 'react-country-region-selector';
@@ -73,6 +73,7 @@ const specialities: string[] = [
   'Ophtalmo',
   'Généraliste',
 ];
+let gend: boolean;
 const secretQuests = [
   { value: '0', label: 'What was your first pet?' },
   { value: '1', label: 'What was the model of your first car?' },
@@ -94,13 +95,23 @@ const rdvGaps = [
   { value: '45', label: '45mins' },
   { value: '60', label: '1hour' },
 ];
-const handleDoctorCreate = (a: string, b: string, c: string) => {
+const handleDoctorCreate = (values: FormikValues) => {
   knex('doctors')
     .insert({
       // insert new record, a book
-      firstName: a,
-      lastName: b,
-      password: c,
+      firstName: values.firstName,
+      lastName: values.lastName,
+      password: values.password,
+      dateOfBirth: values.dateOfBirth,
+      city: values.city,
+      address: values.address,
+      fee: values.fee,
+      secretQuest: values.secretQuest,
+      postalCode: values.postalCode,
+      country: values.country,
+      phoneNumber: values.phoneNumber,
+      gender: values.gender,
+      feeTeleconsultation: values.feeTeleconsultation,
     })
     // eslint-disable-next-line promise/always-return
     .then(() => {
@@ -129,10 +140,12 @@ export default function Home() {
   const handleClick1 = () => {
     setFlag1(!flag1);
     setFlag2(true);
+    gend=true;
   };
   const handleClick2 = () => {
     setFlag2(!flag2);
     setFlag1(true);
+    gend=false;
   };
   const { t, i18n } = useTranslation();
   return (
@@ -311,12 +324,20 @@ export default function Home() {
             </Box>
             <Box paddingBottom={2}>
               <Field
-                fullWidth
                 variant="outlined"
                 name="address"
                 component={TextField}
                 label="Full Address"
+                style={{ width: 400 }}
                 multiline
+              />
+              <Field
+                variant="outlined"
+                name="postalCode"
+                component={TextField}
+                type="number"
+                label="Postal Code"
+                placeholder="00000"
               />
             </Box>
           </FormikStep>
@@ -382,7 +403,7 @@ export default function Home() {
            <FormikStep label="Operating days">
              <div className="center_element">
            <Checkbox
-            
+
           >
            monday
           </Checkbox>
@@ -391,7 +412,7 @@ export default function Home() {
             allowClear="true"
             disabledHours={() => [1, 2, 3]}
             className="timepicker"
-          
+            minuteStep={10}
             />
           <label className="text">And</label>
             <TimePicker.RangePicker
@@ -404,7 +425,7 @@ export default function Home() {
            <br/>
            <div className="center_element">
            <Checkbox
-            
+
           >
           Tuesday
           </Checkbox>
@@ -413,7 +434,7 @@ export default function Home() {
             allowClear="true"
             disabledHours={() => [1, 2, 3]}
             className="timepicker"
-          
+
             />
           <label className="text">And</label>
             <TimePicker.RangePicker
@@ -426,7 +447,7 @@ export default function Home() {
             <br/>
             <div className="center_element">
            <Checkbox
-            
+
           >
           Wednesday
           </Checkbox>
@@ -435,7 +456,7 @@ export default function Home() {
             allowClear="true"
             disabledHours={() => [1, 2, 3]}
             className="timepicker"
-          
+
             />
           <label className="text">And</label>
             <TimePicker.RangePicker
@@ -448,16 +469,16 @@ export default function Home() {
             <br/>
             <div className="center_element">
            <Checkbox
-            
+
           >
-          Thuesday
+          Thursday
           </Checkbox>
            <TimePicker.RangePicker
             format="HH:mm"
             allowClear="true"
             disabledHours={() => [1, 2, 3]}
             className="timepicker"
-          
+
             />
           <label className="text">And</label>
             <TimePicker.RangePicker
@@ -470,7 +491,7 @@ export default function Home() {
             <br/>
             <div className="center_element">
            <Checkbox
-            
+
           >
           Friday
           </Checkbox>
@@ -479,7 +500,7 @@ export default function Home() {
             allowClear="true"
             disabledHours={() => [1, 2, 3]}
             className="timepicker"
-          
+
             />
           <label className="text">And</label>
             <TimePicker.RangePicker
@@ -492,7 +513,7 @@ export default function Home() {
             <br/>
             <div className="center_element">
            <Checkbox
-            
+
           >
           Sunday
           </Checkbox>
@@ -501,7 +522,7 @@ export default function Home() {
             allowClear="true"
             disabledHours={() => [1, 2, 3]}
             className="timepicker"
-          
+
             />
           <label className="text">And</label>
             <TimePicker.RangePicker
@@ -516,7 +537,7 @@ export default function Home() {
 
 
 
-            {/*<Box>
+            {/* <Box>
               <Field
                 type="checkbox"
                 component={CheckboxWithLabel}
@@ -571,9 +592,9 @@ export default function Home() {
                 options={rdvGaps}
                 style={{ width: '80px' }}
               />
-            </Box>*/}
-          </FormikStep> 
-          
+            </Box> */}
+          </FormikStep>
+
           <FormikStep
             label={t('form.step4')}
             // validationSchema={Yup.object({
@@ -688,12 +709,9 @@ export function FormikStepper({
         validationSchema={currentChild.props.validationSchema}
         onSubmit={async (values, helpers) => {
           if (isLastStep()) {
+            values.gender = gend ? 'male' : 'female';
             await props.onSubmit(values, helpers);
-            handleDoctorCreate(
-              values.firstName,
-              values.lastName,
-              values.password
-            );
+            handleDoctorCreate(values);
             setCompleted(true);
           } else {
             setStep((s) => s + 1);
