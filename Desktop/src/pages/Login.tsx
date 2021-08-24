@@ -526,10 +526,10 @@ export function FormikStepper({
   function isLastStep() {
     return step === childrenArray.length - 1;
   }
-  // const { t, i18n } = useTranslation();
+  const { t, i18n } = useTranslation();
   return (
     <div>
-      {/* <div>
+      <div>
         {Object.keys(lngs).map((lng) => (
           <button
             key={lng}
@@ -540,7 +540,7 @@ export function FormikStepper({
             {lngs[lng].nativeName}
           </button>
         ))}
-      </div> */}
+      </div>
       <Link to="/">Go back to home</Link>
       <Formik
         // eslint-disable-next-line react/jsx-props-no-spreading
