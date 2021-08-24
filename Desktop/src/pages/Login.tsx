@@ -12,10 +12,13 @@ import {
   InputLabel,
   ButtonGroup,
 } from '@material-ui/core';
+import { TimePicker } from 'antd';
+import { Checkbox } from 'antd';
+import 'antd/dist/antd.css';
 import { useTranslation } from 'react-i18next';
 import { Field, Form, Formik, FormikConfig, FormikValues } from 'formik';
 import { Link } from 'react-router-dom';
-import { Checkbox, CheckboxWithLabel, TextField } from 'formik-material-ui';
+import {  CheckboxWithLabel, TextField } from 'formik-material-ui';
 import Select from 'react-select';
 import React, { useState } from 'react';
 import { CountryDropdown, RegionDropdown } from 'react-country-region-selector';
@@ -376,8 +379,144 @@ export default function Home() {
               />
             </Box>
           </FormikStep>
-          {/* <FormikStep label="Operating days">
-            <Box>
+           <FormikStep label="Operating days">
+             <div className="center_element">
+           <Checkbox
+            
+          >
+           monday
+          </Checkbox>
+           <TimePicker.RangePicker
+            format="HH:mm"
+            allowClear="true"
+            disabledHours={() => [1, 2, 3]}
+            className="timepicker"
+          
+            />
+          <label className="text">And</label>
+            <TimePicker.RangePicker
+            format="HH:mm"
+            allowClear="true"
+            disabledHours={() => [1, 2, 3]}
+            className="timepicker"
+            />
+            </div>
+           <br/>
+           <div className="center_element">
+           <Checkbox
+            
+          >
+          Tuesday
+          </Checkbox>
+           <TimePicker.RangePicker
+            format="HH:mm"
+            allowClear="true"
+            disabledHours={() => [1, 2, 3]}
+            className="timepicker"
+          
+            />
+          <label className="text">And</label>
+            <TimePicker.RangePicker
+            format="HH:mm"
+            allowClear="true"
+            disabledHours={() => [1, 2, 3]}
+            className="timepicker"
+            />
+            </div>
+            <br/>
+            <div className="center_element">
+           <Checkbox
+            
+          >
+          Wednesday
+          </Checkbox>
+           <TimePicker.RangePicker
+            format="HH:mm"
+            allowClear="true"
+            disabledHours={() => [1, 2, 3]}
+            className="timepicker"
+          
+            />
+          <label className="text">And</label>
+            <TimePicker.RangePicker
+            format="HH:mm"
+            allowClear="true"
+            disabledHours={() => [1, 2, 3]}
+            className="timepicker"
+            />
+            </div>
+            <br/>
+            <div className="center_element">
+           <Checkbox
+            
+          >
+          Thuesday
+          </Checkbox>
+           <TimePicker.RangePicker
+            format="HH:mm"
+            allowClear="true"
+            disabledHours={() => [1, 2, 3]}
+            className="timepicker"
+          
+            />
+          <label className="text">And</label>
+            <TimePicker.RangePicker
+            format="HH:mm"
+            allowClear="true"
+            disabledHours={() => [1, 2, 3]}
+            className="timepicker"
+            />
+            </div>
+            <br/>
+            <div className="center_element">
+           <Checkbox
+            
+          >
+          Friday
+          </Checkbox>
+           <TimePicker.RangePicker
+            format="HH:mm"
+            allowClear="true"
+            disabledHours={() => [1, 2, 3]}
+            className="timepicker"
+          
+            />
+          <label className="text">And</label>
+            <TimePicker.RangePicker
+            format="HH:mm"
+            allowClear="true"
+            disabledHours={() => [1, 2, 3]}
+            className="timepicker"
+            />
+            </div>
+            <br/>
+            <div className="center_element">
+           <Checkbox
+            
+          >
+          Sunday
+          </Checkbox>
+           <TimePicker.RangePicker
+            format="HH:mm"
+            allowClear="true"
+            disabledHours={() => [1, 2, 3]}
+            className="timepicker"
+          
+            />
+          <label className="text">And</label>
+            <TimePicker.RangePicker
+            format="HH:mm"
+            allowClear="true"
+            disabledHours={() => [1, 2, 3]}
+            className="timepicker"
+            />
+            </div>
+
+
+
+
+
+            {/*<Box>
               <Field
                 type="checkbox"
                 component={CheckboxWithLabel}
@@ -432,8 +571,9 @@ export default function Home() {
                 options={rdvGaps}
                 style={{ width: '80px' }}
               />
-            </Box>
-          </FormikStep> */}
+            </Box>*/}
+          </FormikStep> 
+          
           <FormikStep
             label={t('form.step4')}
             // validationSchema={Yup.object({

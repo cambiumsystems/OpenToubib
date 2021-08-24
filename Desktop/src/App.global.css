@@ -2,6 +2,7 @@
  * @NOTE: Prepend a `~` to css file paths that are in your node_modules
  *        See https://github.com/webpack-contrib/sass-loader#imports
  */
+ @import '~antd/dist/antd.css';
  body {
   position: relative;
   color: #4682B4;
@@ -12,6 +13,8 @@
     #ffffff 51.77%,
     #B0E0E6 129.35%
   );
+ 
+  
   font-family: sans-serif;
   overflow-y: hidden;
   display: flex;
@@ -72,4 +75,19 @@ a:hover {
   float: left;
   padding: 20px;
   border: 2px solid white;
+}
+.timepicker{
+  width: 180px;
+}
+.text{
+  padding-right: 8px;
+    padding-left: 8px;
+    font-size: 14px;
+}
+.center_element{
+  margin-left: 8%;
+  
+}
+.checkbox_days{
+  width: 20px;
 }
