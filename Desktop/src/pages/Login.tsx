@@ -12,13 +12,14 @@ import {
   InputLabel,
   ButtonGroup,
 } from '@material-ui/core';
+import Alert from "@material-ui/lab/Alert";
 import { TimePicker } from 'antd';
 import { Checkbox } from 'antd';
 import 'antd/dist/antd.css';
 import { useTranslation } from 'react-i18next';
 import { Field, Form, Formik, FormikConfig, FormikValues } from 'formik';
 import { Link } from 'react-router-dom';
-import { CheckboxWithLabel, TextField } from 'formik-material-ui';
+import {  CheckboxWithLabel, TextField } from 'formik-material-ui';
 import Select from 'react-select';
 import React, { useState } from 'react';
 import { CountryDropdown, RegionDropdown } from 'react-country-region-selector';
@@ -73,7 +74,6 @@ const specialities: string[] = [
   'Ophtalmo',
   'Généraliste',
 ];
-let gend: boolean;
 const secretQuests = [
   { value: '0', label: 'What was your first pet?' },
   { value: '1', label: 'What was the model of your first car?' },
@@ -95,23 +95,13 @@ const rdvGaps = [
   { value: '45', label: '45mins' },
   { value: '60', label: '1hour' },
 ];
-const handleDoctorCreate = (values: FormikValues) => {
+const handleDoctorCreate = (a: string, b: string, c: string) => {
   knex('doctors')
     .insert({
       // insert new record, a book
-      firstName: values.firstName,
-      lastName: values.lastName,
-      password: values.password,
-      dateOfBirth: values.dateOfBirth,
-      city: values.city,
-      address: values.address,
-      fee: values.fee,
-      secretQuest: values.secretQuest,
-      postalCode: values.postalCode,
-      country: values.country,
-      phoneNumber: values.phoneNumber,
-      gender: values.gender,
-      feeTeleconsultation: values.feeTeleconsultation,
+      firstName: a,
+      lastName: b,
+      password: c,
     })
     // eslint-disable-next-line promise/always-return
     .then(() => {
@@ -137,15 +127,31 @@ export default function Home() {
   const [region, setRegion] = useState('');
   const [flag1, setFlag1] = React.useState(true);
   const [flag2, setFlag2] = React.useState(true);
+  const [selectedtimeMM,setSelectedtimeMM]=useState(null);
+  const [selectedtimeMAf,setSelectedtimeMAf]=useState(null);
+
+  const [selectedtimeTM,setSelectedtimeTM]=useState(null);
+  const [selectedtimeTAf,setSelectedtimeTAf]=useState(null);
+
+  const [selectedtimeWM,setSelectedtimeWM]=useState(null);
+  const [selectedtimeWAf,setSelectedtimeWAf]=useState(null);
+
+  const [selectedtimeThM,setSelectedtimeThM]=useState(null);
+  const [selectedtimeThAf,setSelectedtimeThAf]=useState(null);
+
+  const [selectedtimeFM,setSelectedtimeFM]=useState(null);
+  const [selectedtimeFAf,setSelectedtimeFAf]=useState(null);
+
+  const [selectedtimeSM,setSelectedtimeSM]=useState(null);
+  const [selectedtimeSAf,setSelectedtimeSAf]=useState(null);
+
   const handleClick1 = () => {
     setFlag1(!flag1);
     setFlag2(true);
-    gend=true;
   };
   const handleClick2 = () => {
     setFlag2(!flag2);
     setFlag1(true);
-    gend=false;
   };
   const { t, i18n } = useTranslation();
   return (
@@ -198,6 +204,7 @@ export default function Home() {
                 name="firstName"
                 component={TextField}
                 label={t('form.firstName')}
+                style={{ marginLeft: '50px',width:'200px' }}
               />
               <Field
                 name="lastName"
@@ -213,6 +220,7 @@ export default function Home() {
                 component={TextField}
                 label="Email"
                 // placeholder="doctor@example.com"
+                style={{ marginLeft: '50px',width:'450px' }}
               />
             </Box>
             <Box paddingBottom={2}>
@@ -221,6 +229,7 @@ export default function Home() {
                 component={TextField}
                 label={t('form.password')}
                 type="password"
+                style={{ marginLeft: '50px',width:'200px' }}
               />
               <Field
                 name="confirmPassword"
@@ -231,15 +240,30 @@ export default function Home() {
               />
             </Box>
             <Box paddingBottom={2}>
-              <Field
-                fullWidth
+              <div className="wrapper">
+              <div className="select_size one">
+                <br/><Field
                 variant="outlined"
                 name="secretQuest"
                 component={Select}
                 placeholder={t('form.secretQuest')}
                 label={t('form.secretQuest')}
                 options={secretQuests}
+                style={{ marginLeft: '50px',width:'80px' }}
               />
+              </div>
+             <div className="two"> <Field
+                name="rep"
+                component={TextField}
+                label="rep"
+                type="password"
+                style={{ marginLeft: '10px'}}
+              />
+              </div>
+
+              </div>
+                <Alert severity="info" className ="alert">Cette qst est votre seul moyen de recuperer votre mdp </Alert>
+            
             </Box>
             <Field name="gender" component={ButtonGroup} placeholder="Gender">
               <Button
@@ -247,6 +271,7 @@ export default function Home() {
                 value="male"
                 onClick={handleClick1}
                 color={flag1 ? 'default' : 'primary'}
+                style={{ marginLeft: '50px'}}
               >
                 {t('form.male')}
               </Button>
@@ -258,21 +283,19 @@ export default function Home() {
               >
                 {t('form.female')}
               </Button>
-            </Field>
-            <Box paddingBottom={2}>
               <Field
                 name="dobDay"
                 component={TextField}
                 label={t('form.day')}
                 type="number"
                 placeholder="DD"
-                style={{ width: '70px' }}
+                style={{ marginLeft: '90px',width: '60px' }}
               />
               <Field
                 name="dobMonth"
                 component={TextField}
                 label={t('form.month')}
-                style={{ marginLeft: '50px', width: '70px' }}
+                style={{ marginLeft: '10px', width: '65px' }}
                 type="number"
                 placeholder="MM"
               />
@@ -280,10 +303,13 @@ export default function Home() {
                 name="dobYear"
                 component={TextField}
                 label={t('form.year')}
-                style={{ marginLeft: '50px', width: '100px' }}
+                style={{ marginLeft: '10px', width: '60px' }}
                 type="number"
                 placeholder="YYYY"
               />
+            </Field>
+            <Box paddingBottom={2}>
+              
             </Box>
             <Box paddingBottom={2}>
               <Field
@@ -291,45 +317,52 @@ export default function Home() {
                 type="checkbox"
                 component={CheckboxWithLabel}
                 Label={{ label: t('form.teleconsultation') }}
+                style={{ marginLeft: '50px'}}
               />
             </Box>
           </FormikStep>
           <FormikStep label={t('form.step2')}>
             <Box paddingBottom={2}>
-              <Field
-                variant="outlined"
-                name="officeName"
-                component={TextField}
-                label="Hospital/Office name"
-              />
-            </Box>
-            <Box paddingBottom={2}>
-              <Field
+            <Field
                 name="country"
                 component={CountryDropdown}
                 value={country}
                 onChange={(val: React.SetStateAction<string>) =>
                   setCountry(val)
                 }
-                style={{ height: '50px' }}
+                style={{ marginLeft: '70px',height: '55px',width:'175px',padding: "18.5px 14px" }}
               />
-              <Field
+               <Field
                 name="region"
                 component={RegionDropdown}
                 country={country}
                 value={region}
                 onChange={(val: React.SetStateAction<string>) => setRegion(val)}
-                style={{ height: '50px' }}
+                style={{ marginRight:'25px', height: '55px',width:'25px' }}
               />
+              <Field
+                name="City"
+                component={TextField}
+                label="city"
+                value={country}
+               style={{ 
+                width: '210px'}}
+              />
+               
+            </Box>
+            
+            <Box paddingBottom={2}>
+             
+             
             </Box>
             <Box paddingBottom={2}>
-              <Field
+            <Field
                 variant="outlined"
-                name="address"
+                name="officeName"
                 component={TextField}
-                label="Full Address"
-                style={{ width: 400 }}
-                multiline
+                label="Hospital/Office name"
+                style={{ marginLeft: '70px',
+                marginRight:'20px', width: '200px' }}
               />
               <Field
                 variant="outlined"
@@ -339,15 +372,30 @@ export default function Home() {
                 label="Postal Code"
                 placeholder="00000"
               />
+              
+            </Box>
+            <Box paddingBottom={2}>
+            <Field
+                
+                variant="outlined"
+                name="address"
+                component={TextField}
+                label="Full Address"
+                multiline
+                style={{ marginLeft: "13%",
+                 width: '440px' }}
+
+              />
             </Box>
           </FormikStep>
           <FormikStep label={t('form.step3')}>
-            <Box paddingBottom={2}>
+            <Box paddingBottom={3}>
               <Field
                 variant="outlined"
                 name="professionalID"
                 component={TextField}
                 label="Your professional ID"
+                style={{ marginLeft: '70px', marginRight:'25px',width:'200px' }}
               />
               <Field
                 variant="outlined"
@@ -364,46 +412,71 @@ export default function Home() {
                 name="fee"
                 type="number"
                 component={TextField}
-                label="Fees"
-                style={{ width: '80px' }}
+                label="Min Fees"
+                style={{  marginLeft: '70px', marginRight:'30px', width: '85px' }}
               />
               <Field
                 variant="outlined"
                 name="feeTeleconsultation"
                 type="number"
                 component={TextField}
-                label="Teleconsultation fees"
-                style={{ marginLeft: '50px', width: '80px' }}
+                label="Max fees"
+                style={{ width: '85px',marginRight:'30px' }}
+              />
+              <Field
+                variant="outlined"
+                name="fee"
+                type="number"
+                component={TextField}
+                label="Teleconsultation Min Fees"
+                style={{   marginRight:'35px', width: '90px' }}
+              />
+              <Field
+                variant="outlined"
+                name="feeTeleconsultation"
+                type="number"
+                component={TextField}
+                label="Teleconsultation Max Fees"
+                style={{ width: '90px' }}
               />
             </Box>
+           
             <Box paddingBottom={2}>
+              <div className="wrapper">
+              <div className="select_size_spec one ">
               <Field
-                fullWidth
-                name="specialities"
+               name="specialities"
                 component={Multiselect}
                 label="Specialities"
                 isObject={false}
                 options={specialities}
                 placeholder="Select your specialities"
+                
+                
               />
-            </Box>
-            <Box paddingBottom={2}>
+              </div>
+<div className="two">
               <Field
                 multiline
-                fullWidth
+                
                 variant="outlined"
                 maxRows="5"
                 minRows="2"
                 name="description"
                 component={TextField}
                 label="Description"
+                style={{ width:'220px' }}
               />
+              </div>
+              </div>
             </Box>
+            
+           
           </FormikStep>
            <FormikStep label="Operating days">
              <div className="center_element">
            <Checkbox
-
+         
           >
            monday
           </Checkbox>
@@ -412,7 +485,8 @@ export default function Home() {
             allowClear="true"
             disabledHours={() => [1, 2, 3]}
             className="timepicker"
-            minuteStep={10}
+            selected={selectedtimeMM}
+            onchange={timemm=>setSelectedtimeMM(timemm)}
             />
           <label className="text">And</label>
             <TimePicker.RangePicker
@@ -425,7 +499,6 @@ export default function Home() {
            <br/>
            <div className="center_element">
            <Checkbox
-
           >
           Tuesday
           </Checkbox>
@@ -434,7 +507,8 @@ export default function Home() {
             allowClear="true"
             disabledHours={() => [1, 2, 3]}
             className="timepicker"
-
+            selected={selectedtimeMAf}
+            onChange={timema=>setSelectedtimeMAf(timema)}
             />
           <label className="text">And</label>
             <TimePicker.RangePicker
@@ -447,7 +521,7 @@ export default function Home() {
             <br/>
             <div className="center_element">
            <Checkbox
-
+            
           >
           Wednesday
           </Checkbox>
@@ -456,7 +530,7 @@ export default function Home() {
             allowClear="true"
             disabledHours={() => [1, 2, 3]}
             className="timepicker"
-
+          
             />
           <label className="text">And</label>
             <TimePicker.RangePicker
@@ -469,16 +543,16 @@ export default function Home() {
             <br/>
             <div className="center_element">
            <Checkbox
-
+            
           >
-          Thursday
+          Thuesday
           </Checkbox>
            <TimePicker.RangePicker
             format="HH:mm"
             allowClear="true"
             disabledHours={() => [1, 2, 3]}
             className="timepicker"
-
+          
             />
           <label className="text">And</label>
             <TimePicker.RangePicker
@@ -491,7 +565,7 @@ export default function Home() {
             <br/>
             <div className="center_element">
            <Checkbox
-
+            
           >
           Friday
           </Checkbox>
@@ -500,7 +574,7 @@ export default function Home() {
             allowClear="true"
             disabledHours={() => [1, 2, 3]}
             className="timepicker"
-
+          
             />
           <label className="text">And</label>
             <TimePicker.RangePicker
@@ -513,7 +587,7 @@ export default function Home() {
             <br/>
             <div className="center_element">
            <Checkbox
-
+            
           >
           Sunday
           </Checkbox>
@@ -522,7 +596,7 @@ export default function Home() {
             allowClear="true"
             disabledHours={() => [1, 2, 3]}
             className="timepicker"
-
+          
             />
           <label className="text">And</label>
             <TimePicker.RangePicker
@@ -537,7 +611,7 @@ export default function Home() {
 
 
 
-            {/* <Box>
+            {/*<Box>
               <Field
                 type="checkbox"
                 component={CheckboxWithLabel}
@@ -592,9 +666,9 @@ export default function Home() {
                 options={rdvGaps}
                 style={{ width: '80px' }}
               />
-            </Box> */}
-          </FormikStep>
-
+            </Box>*/}
+          </FormikStep> 
+          
           <FormikStep
             label={t('form.step4')}
             // validationSchema={Yup.object({
@@ -648,14 +722,7 @@ export default function Home() {
                 style={{ width: 400 }}
                 multiline
               />
-              <Field
-                variant="outlined"
-                name="postalCode"
-                component={TextField}
-                type="number"
-                label="Postal Code"
-                placeholder="00000"
-              />
+              
             </Box>
           </FormikStep>
         </FormikStepper>
@@ -709,9 +776,12 @@ export function FormikStepper({
         validationSchema={currentChild.props.validationSchema}
         onSubmit={async (values, helpers) => {
           if (isLastStep()) {
-            values.gender = gend ? 'male' : 'female';
             await props.onSubmit(values, helpers);
-            handleDoctorCreate(values);
+            handleDoctorCreate(
+              values.firstName,
+              values.lastName,
+              values.password
+            );
             setCompleted(true);
           } else {
             setStep((s) => s + 1);
@@ -745,10 +815,12 @@ export function FormikStepper({
             </Stepper>
 
             {currentChild}
+            <br/>
 
             <Grid container spacing={2}>
               {step > 0 ? (
                 <Grid item>
+                 
                   <Button
                     disabled={isSubmitting}
                     variant="contained"
