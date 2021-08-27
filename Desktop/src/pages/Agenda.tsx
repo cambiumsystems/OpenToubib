@@ -3,14 +3,25 @@ import { Link } from 'react-router-dom';
 import FullCalendar from '@fullcalendar/react'; // must go before plugins
 import dayGridPlugin from '@fullcalendar/daygrid'; // a plugin!
 import timeGridPlugin from '@fullcalendar/timegrid';
-import inf from "../../Events_db.js";
-//const inf = require('../../Events_db.js');
+// import inf from "../../Events_db.js";
+// const inf = require('../../Events_db.js');
+const knex = require('../../database');
+let inf = [];
+knex
+  .select('*')
+  .from('events')
+  .then((data) => {
+    inf = data;
+    console.log('voila ', inf);
+  })
+
+  .catch((err) => console.log(err));
 const Agenda = () => {
   const calendarRef=createRef()
   const handleDateSelect=(selectInfo)=>{
     let calendarApi =selectInfo.view.calendar;
     console.log(selectInfo);
- 
+
       calendarApi.addEvent({
        id:"f1",
        title:"",
@@ -18,18 +29,18 @@ const Agenda = () => {
        end:selectInfo.endStr,
        allDay:selectInfo.allDay,
       });
-    
+
   }
   return (
     <div className="calendar">
-   <FullCalendar 
-   ref={calendarRef} 
+      <Link to="/">Go back to home</Link>
+   <FullCalendar
+   ref={calendarRef}
    plugins={[dayGridPlugin,timeGridPlugin]}
     initialView="dayGridMonth"
-    events=
-      "http://localhost:1212/OPENTOUBIB/Desktop/Events_db"
-    
- 
+    events={inf}
+
+
     customButtons={{
       myTimeDayBtn:{
       text:"timeDay",
@@ -51,7 +62,7 @@ const Agenda = () => {
         }
       },
     },
-    
+
   }}
     headerToolbar={
       {

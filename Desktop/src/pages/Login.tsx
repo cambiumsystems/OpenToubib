@@ -12,20 +12,17 @@ import {
   InputLabel,
   ButtonGroup,
 } from '@material-ui/core';
-import Alert from "@material-ui/lab/Alert";
-import { TimePicker } from 'antd';
-import { Checkbox } from 'antd';
+import Alert from '@material-ui/lab/Alert';
+import { TimePicker, Checkbox } from 'antd';
 import 'antd/dist/antd.css';
 import { useTranslation } from 'react-i18next';
 import { Field, Form, Formik, FormikConfig, FormikValues } from 'formik';
 import { Link } from 'react-router-dom';
-import {  CheckboxWithLabel, TextField } from 'formik-material-ui';
+import { CheckboxWithLabel, TextField } from 'formik-material-ui';
 import Select from 'react-select';
 import React, { useState } from 'react';
 import { CountryDropdown, RegionDropdown } from 'react-country-region-selector';
 import * as Yup from 'yup';
-import Multiselect from 'multiselect-react-dropdown';
-// import knex from '../../database.js';
 
 const knex = require('../../database');
 
@@ -43,36 +40,93 @@ const validationSchemaStep1 = Yup.object().shape({
   email: Yup.string().required('Email is required').email('Email is invalid'),
   password: Yup.string()
     .required('Password is required')
-    .min(8, 'Password must be at least 6 characters')
-    .max(40, 'Password must not exceed 40 characters'),
+    .matches(
+      /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,40}$/,
+      'Must at least Contain 8 Characters, One Uppercase, One Lowercase, One Number and one special case Character'
+    ),
   confirmPassword: Yup.string()
     .required('Confirm Password is required')
     .oneOf([Yup.ref('password'), null], 'Confirm Password does not match'),
   gender: Yup.string().required('Must choose at least one option.'),
-  secretQuest: Yup.string().required('Must choose at least one question.'),
+  // secretQuest: Yup.string().required('Must choose at least one question.'),
+  answerScrtQuest: Yup.string().required('Answer required.'),
+  dobDay: Yup.number()
+    .required('Day required')
+    .min(1, 'Day not valid')
+    .max(31, 'Day not valid'),
+  dobMonth: Yup.number()
+    .required('Month required')
+    .min(1, 'Month not valid')
+    .max(12, 'Month not valid'),
+  dobYear: Yup.number()
+    .required('Year required')
+    .min(1990, 'Year not valid')
+    .max(2003, 'Year not valid'),
 });
-const validationSchemaStep4 = Yup.object().shape({
-  card_nbr: Yup.number()
-    .required()
-    .min(15, 'Must be at least 15 digits')
+const validationSchemaStep2 = Yup.object().shape({
+  country: Yup.string().required('Country is required'),
+  region: Yup.string().required('Region is required'),
+  city: Yup.string()
+    .required('City is required')
+    .min(3, 'Few characters! enter a valid city'),
+  officeName: Yup.string()
+    .required('Name required')
+    .min(6, 'few characters! Enter a valid name'),
+  postalCode: Yup.string()
+    .required('Postal Code is required')
+    .min(4, 'Must be at least 4 Digits')
+    .max(10, 'Must not exceed 10 Digits'),
+  address: Yup.string()
+    .required('Adress required')
+    .min(3, 'Your full address please!'),
+});
+const validationSchemaStep3 = Yup.object().shape({
+  professionalID: Yup.string()
+    .required('Required!')
+    .min(5, 'Must be at least 5 digits')
     .max(16, 'Must be less than 16 digits'),
-  expDate: Yup.string()
-    .typeError('Not a valid expiration date. Example: MM/YY')
-    .max(5, 'Not a valid expiration date. Example: MM/YY')
-    .matches(
-      /([0-9]{2})\/([0-9]{2})/,
-      'Not a valid expiration date. Example: MM/YY'
-    )
-    .required('Expiration date is required'),
+  minFee: Yup.number()
+    .required('Min Fee required')
+    .min(10, 'Too low!')
+    .max(150, 'Too high'),
+  maxFee: Yup.number()
+    .required('Max Fee required')
+    .max(150, 'Too high')
+    .moreThan(Yup.ref('minFee'), 'Higher than min fee please!'),
+  minTeleFee: Yup.number().when('teleconsultation', {
+    is: true,
+    then: Yup.number().required(),
+    otherwise: Yup.number()
+      .min(0, 'No teleconsultation')
+      .max(0, 'No teleconsultation'),
+  }),
+  maxTeleFee: Yup.number().when('teleconsultation', {
+    is: true,
+    then: Yup.number().required(),
+    otherwise: Yup.number()
+      .min(0, 'No teleconsultation')
+      .max(0, 'No teleconsultation'),
+  }),
+  // speciality: Yup.string().required('Required!'),
+  description: Yup.string()
+    .required('Description required')
+    .min(50, 'too short'),
 });
-const specialities: string[] = [
-  'Gastro',
-  'Pneumo',
-  'Psychiatrie',
-  'Orl',
-  'Dermato',
-  'Ophtalmo',
-  'Généraliste',
+const validationSchemaStep5 = Yup.object().shape({
+  privateKey: Yup.number()
+    .required(),
+    // .min(15, 'Must be at least 15 digits')
+    // .max(16, 'Must be less than 16 digits'),
+  publicKey: Yup.number().required(),
+});
+const specialities = [
+  { value: 'Gastro', label: 'Gastro' },
+  { value: 'Pneumo', label: 'Pneumo' },
+  { value: 'Psychiatrie', label: 'Psychiatrie' },
+  { value: 'Orl', label: 'Orl' },
+  { value: 'Dermato', label: 'Dermato' },
+  { value: 'Ophtalmo', label: 'Ophtalmo' },
+  { value: 'Généraliste', label: 'Généraliste' },
 ];
 const secretQuests = [
   { value: '0', label: 'What was your first pet?' },
@@ -85,23 +139,36 @@ const secretQuests = [
     label: 'What is the name of the place your wedding reception was held?',
   },
 ];
-const rdvGaps = [
-  { value: '15', label: '15min' },
-  { value: '20', label: '20mins' },
-  { value: '25', label: '25mins' },
-  { value: '30', label: '30mins' },
-  { value: '35', label: '35mins' },
-  { value: '40', label: '40mins' },
-  { value: '45', label: '45mins' },
-  { value: '60', label: '1hour' },
-];
-const handleDoctorCreate = (a: string, b: string, c: string) => {
+const rdvGaps = ['15', '20', '25', '30', '35', '40'];
+
+const handleDoctorCreate = (values) => {
   knex('doctors')
     .insert({
-      // insert new record, a book
-      firstName: a,
-      lastName: b,
-      password: c,
+      firstName: values.firstName,
+      lastName: values.lastName,
+      password: values.password,
+      email: values.email,
+      gender: values.gender,
+      dateOfBirth: `${values.dobYear}-${values.dobMonth}-${values.dobDay}`,
+      city: values.city,
+      region: values.region,
+      country: values.country,
+      address: values.address,
+      postalCode: values.postalCode,
+      secretQuest: values.secretQuest,
+      answerScrtQuest: values.answerScrtQuest,
+      description: values.description,
+      officeName: values.officeName,
+      speciality: values.speciality,
+      professionalID: values.professionalID,
+      phoneNumber: values.phoneNumber,
+      rdvGap: values.rdvGap,
+      minFee: values.minFee,
+      maxFee: values.maxFee,
+      minTeleFee: values.minTeleFee,
+      maxTeleFee: values.maxTeleFee,
+      privateKey: values.privateKey,
+      publicKey: values.publicKey,
     })
     // eslint-disable-next-line promise/always-return
     .then(() => {
@@ -122,28 +189,27 @@ const handleDoctorCreate = (a: string, b: string, c: string) => {
     // eslint-disable-next-line no-console
     .catch((err: any) => console.log(err));
 };
+let country: string;
 export default function Home() {
-  const [country, setCountry] = useState('');
-  const [region, setRegion] = useState('');
   const [flag1, setFlag1] = React.useState(true);
   const [flag2, setFlag2] = React.useState(true);
-  const [selectedtimeMM,setSelectedtimeMM]=useState(null);
-  const [selectedtimeMAf,setSelectedtimeMAf]=useState(null);
+  const [selectedtimeMM, setSelectedtimeMM] = useState(null);
+  const [selectedtimeMAf, setSelectedtimeMAf] = useState(null);
 
-  const [selectedtimeTM,setSelectedtimeTM]=useState(null);
-  const [selectedtimeTAf,setSelectedtimeTAf]=useState(null);
+  const [selectedtimeTM, setSelectedtimeTM] = useState(null);
+  const [selectedtimeTAf, setSelectedtimeTAf] = useState(null);
 
-  const [selectedtimeWM,setSelectedtimeWM]=useState(null);
-  const [selectedtimeWAf,setSelectedtimeWAf]=useState(null);
+  const [selectedtimeWM, setSelectedtimeWM] = useState(null);
+  const [selectedtimeWAf, setSelectedtimeWAf] = useState(null);
 
-  const [selectedtimeThM,setSelectedtimeThM]=useState(null);
-  const [selectedtimeThAf,setSelectedtimeThAf]=useState(null);
+  const [selectedtimeThM, setSelectedtimeThM] = useState(null);
+  const [selectedtimeThAf, setSelectedtimeThAf] = useState(null);
 
-  const [selectedtimeFM,setSelectedtimeFM]=useState(null);
-  const [selectedtimeFAf,setSelectedtimeFAf]=useState(null);
+  const [selectedtimeFM, setSelectedtimeFM] = useState(null);
+  const [selectedtimeFAf, setSelectedtimeFAf] = useState(null);
 
-  const [selectedtimeSM,setSelectedtimeSM]=useState(null);
-  const [selectedtimeSAf,setSelectedtimeSAf]=useState(null);
+  const [selectedtimeSM, setSelectedtimeSM] = useState(null);
+  const [selectedtimeSAf, setSelectedtimeSAf] = useState(null);
 
   const handleClick1 = () => {
     setFlag1(!flag1);
@@ -162,8 +228,12 @@ export default function Home() {
           initialValues={{
             firstName: '',
             lastName: '',
+            email: '',
             teleconsultation: false,
-            fee: 0,
+            minFee: 0,
+            maxFee: 0,
+            minTeleFee: 0,
+            maxTeleFee: 0,
             description: '',
             password: '',
             confirmPassword: '',
@@ -172,39 +242,38 @@ export default function Home() {
             address: '',
             city: '',
             secretQuest: '',
+            answerScrtQuest: '',
             rdvGap: '',
             country: '',
+            region: '',
             officeName: '',
-            specialities: '',
+            speciality: '',
             professionalID: '',
-            cardNbr: '',
-            expDate: '',
-            postalCode: '',
-            cvc: '',
-            billingAddress: '',
             phoneNumber: '',
+            postalCode: '',
             dobDay: '',
             dobMonth: '',
             dobYear: '',
-            feeTeleconsultation: 0,
             workDay: false,
+            privateKey: '',
+            publicKey: '',
+            isDistantNode: false,
           }}
           onSubmit={async (values) => {
             // await sleep(3000);
             console.log('values', values, values.firstName);
-            // console.log('firstName', values.firstName);
           }}
         >
           <FormikStep
             label={t('form.step1')}
-            // validationSchema={validationSchemaStep1}
+            validationSchema={validationSchemaStep1}
           >
             <Box paddingBottom={2}>
               <Field
                 name="firstName"
                 component={TextField}
                 label={t('form.firstName')}
-                style={{ marginLeft: '50px',width:'200px' }}
+                style={{ marginLeft: '50px', width: '200px' }}
               />
               <Field
                 name="lastName"
@@ -220,7 +289,7 @@ export default function Home() {
                 component={TextField}
                 label="Email"
                 // placeholder="doctor@example.com"
-                style={{ marginLeft: '50px',width:'450px' }}
+                style={{ marginLeft: '50px', width: '450px' }}
               />
             </Box>
             <Box paddingBottom={2}>
@@ -229,7 +298,7 @@ export default function Home() {
                 component={TextField}
                 label={t('form.password')}
                 type="password"
-                style={{ marginLeft: '50px',width:'200px' }}
+                style={{ marginLeft: '50px', width: '200px' }}
               />
               <Field
                 name="confirmPassword"
@@ -241,55 +310,60 @@ export default function Home() {
             </Box>
             <Box paddingBottom={2}>
               <div className="wrapper">
-              <div className="select_size one">
-                <br/><Field
-                variant="outlined"
-                name="secretQuest"
-                component={Select}
-                placeholder={t('form.secretQuest')}
-                label={t('form.secretQuest')}
-                options={secretQuests}
-                style={{ marginLeft: '50px',width:'80px' }}
-              />
+                <div className="select_size one">
+                  <br />
+                  <Field
+                    variant="outlined"
+                    name="secretQuest"
+                    component={SelectComponent}
+                    placeholder={t('form.secretQuest')}
+                    label={t('form.secretQuest')}
+                    options={secretQuests}
+                    style={{ marginLeft: '50px', width: '80px' }}
+                  />
+                </div>
+                <div className="two">
+                  {' '}
+                  <Field
+                    name="answerScrtQuest"
+                    component={TextField}
+                    label="Answer"
+                    type="password"
+                    style={{ marginLeft: '10px' }}
+                  />
+                </div>
               </div>
-             <div className="two"> <Field
-                name="rep"
-                component={TextField}
-                label="rep"
-                type="password"
-                style={{ marginLeft: '10px'}}
-              />
-              </div>
-
-              </div>
-                <Alert severity="info" className ="alert">Cette qst est votre seul moyen de recuperer votre mdp </Alert>
-            
+              <Alert severity="info" className="alert">
+                Cette question est votre seul moyen pour récupérer votre mot de
+                passe!
+              </Alert>
             </Box>
-            <Field name="gender" component={ButtonGroup} placeholder="Gender">
-              <Button
+            <ButtonGroup>
+              <Field name="gender" component={ButtonComponent}
                 variant="contained"
                 value="male"
                 onClick={handleClick1}
                 color={flag1 ? 'default' : 'primary'}
-                style={{ marginLeft: '50px'}}
+                style={{ marginLeft: '50px' }}
               >
                 {t('form.male')}
-              </Button>
-              <Button
+              </Field>
+              <Field name="gender" component={ButtonComponent}
                 variant="contained"
                 value="female"
                 onClick={handleClick2}
                 color={flag2 ? 'default' : 'secondary'}
               >
                 {t('form.female')}
-              </Button>
+              </Field>
+              </ButtonGroup>
               <Field
                 name="dobDay"
                 component={TextField}
                 label={t('form.day')}
                 type="number"
                 placeholder="DD"
-                style={{ marginLeft: '90px',width: '60px' }}
+                style={{ marginLeft: '90px', width: '60px' }}
               />
               <Field
                 name="dobMonth"
@@ -303,66 +377,68 @@ export default function Home() {
                 name="dobYear"
                 component={TextField}
                 label={t('form.year')}
-                style={{ marginLeft: '10px', width: '60px' }}
+                style={{ marginLeft: '10px', width: '100px' }}
                 type="number"
                 placeholder="YYYY"
               />
-            </Field>
-            <Box paddingBottom={2}>
-              
-            </Box>
             <Box paddingBottom={2}>
               <Field
                 name="teleconsultation"
                 type="checkbox"
                 component={CheckboxWithLabel}
                 Label={{ label: t('form.teleconsultation') }}
-                style={{ marginLeft: '50px'}}
+                style={{ marginLeft: '50px' }}
               />
             </Box>
           </FormikStep>
-          <FormikStep label={t('form.step2')}>
+          <FormikStep
+            label={t('form.step2')}
+            validationSchema={validationSchemaStep2}
+          >
             <Box paddingBottom={2}>
-            <Field
+              <Field
                 name="country"
-                component={CountryDropdown}
-                value={country}
-                onChange={(val: React.SetStateAction<string>) =>
-                  setCountry(val)
-                }
-                style={{ marginLeft: '70px',height: '55px',width:'175px',padding: "18.5px 14px" }}
-              />
-               <Field
-                name="region"
-                component={RegionDropdown}
-                country={country}
-                value={region}
-                onChange={(val: React.SetStateAction<string>) => setRegion(val)}
-                style={{ marginRight:'25px', height: '55px',width:'25px' }}
+                component={CountryDropdownComponent}
+                // value={country}
+                // onChange={(val: React.SetStateAction<string>) => {
+                //   setCountry(val);
+                // }}
+                style={{
+                  marginLeft: '70px',
+                  height: '55px',
+                  width: '175px',
+                  padding: '18.5px 14px',
+                }}
               />
               <Field
-                name="City"
+                name="region"
+                component={RegionDropdownComponent}
+                // country={country}
+                // value={region}
+                // onChange={(val: React.SetStateAction<string>) => setRegion(val)}
+                style={{ marginRight: '25px', height: '55px' }}
+              />
+              <Field
+                name="city"
                 component={TextField}
                 label="city"
                 value={country}
-               style={{ 
-                width: '210px'}}
+                style={{
+                  width: '110px',
+                }}
               />
-               
-            </Box>
-            
-            <Box paddingBottom={2}>
-             
-             
             </Box>
             <Box paddingBottom={2}>
-            <Field
+              <Field
                 variant="outlined"
                 name="officeName"
                 component={TextField}
                 label="Hospital/Office name"
-                style={{ marginLeft: '70px',
-                marginRight:'20px', width: '200px' }}
+                style={{
+                  marginLeft: '70px',
+                  marginRight: '20px',
+                  width: '200px',
+                }}
               />
               <Field
                 variant="outlined"
@@ -372,30 +448,33 @@ export default function Home() {
                 label="Postal Code"
                 placeholder="00000"
               />
-              
             </Box>
             <Box paddingBottom={2}>
-            <Field
-                
+              <Field
                 variant="outlined"
                 name="address"
                 component={TextField}
                 label="Full Address"
                 multiline
-                style={{ marginLeft: "13%",
-                 width: '440px' }}
-
+                style={{ marginLeft: '13%', width: '440px' }}
               />
             </Box>
           </FormikStep>
-          <FormikStep label={t('form.step3')}>
+          <FormikStep
+            label={t('form.step3')}
+            validationSchema={validationSchemaStep3}
+          >
             <Box paddingBottom={3}>
               <Field
                 variant="outlined"
                 name="professionalID"
                 component={TextField}
                 label="Your professional ID"
-                style={{ marginLeft: '70px', marginRight:'25px',width:'200px' }}
+                style={{
+                  marginLeft: '70px',
+                  marginRight: '25px',
+                  width: '200px',
+                }}
               />
               <Field
                 variant="outlined"
@@ -409,268 +488,197 @@ export default function Home() {
             <Box paddingBottom={2}>
               <Field
                 variant="outlined"
-                name="fee"
+                name="minFee"
                 type="number"
                 component={TextField}
                 label="Min Fees"
-                style={{  marginLeft: '70px', marginRight:'30px', width: '85px' }}
+                style={{
+                  marginLeft: '70px',
+                  marginRight: '30px',
+                  width: '85px',
+                }}
               />
               <Field
                 variant="outlined"
-                name="feeTeleconsultation"
+                name="maxFee"
                 type="number"
                 component={TextField}
                 label="Max fees"
-                style={{ width: '85px',marginRight:'30px' }}
+                style={{ width: '85px', marginRight: '30px' }}
               />
               <Field
                 variant="outlined"
-                name="fee"
+                name="minTeleFee"
                 type="number"
                 component={TextField}
                 label="Teleconsultation Min Fees"
-                style={{   marginRight:'35px', width: '90px' }}
+                style={{ marginRight: '35px', width: '90px' }}
               />
               <Field
                 variant="outlined"
-                name="feeTeleconsultation"
+                name="maxTeleFee"
                 type="number"
                 component={TextField}
                 label="Teleconsultation Max Fees"
                 style={{ width: '90px' }}
               />
             </Box>
-           
+
             <Box paddingBottom={2}>
               <div className="wrapper">
-              <div className="select_size_spec one ">
-              <Field
-               name="specialities"
-                component={Multiselect}
-                label="Specialities"
-                isObject={false}
-                options={specialities}
-                placeholder="Select your specialities"
-                
-                
-              />
-              </div>
-<div className="two">
-              <Field
-                multiline
-                
-                variant="outlined"
-                maxRows="5"
-                minRows="2"
-                name="description"
-                component={TextField}
-                label="Description"
-                style={{ width:'220px' }}
-              />
-              </div>
+                <div className="select_size_spec one ">
+                  <Field
+                    name="speciality"
+                    component={SelectComponent}
+                    label="Specialities"
+                    options={specialities}
+                    // placeholder="Select your specialities"
+                  />
+                </div>
+                <div className="two">
+                  <Field
+                    multiline
+                    variant="outlined"
+                    maxRows="5"
+                    minRows="2"
+                    name="description"
+                    component={TextField}
+                    label="Description"
+                    style={{ width: '220px' }}
+                  />
+                </div>
               </div>
             </Box>
-            
-           
           </FormikStep>
-           <FormikStep label="Operating days">
-             <div className="center_element">
-           <Checkbox
-         
+          <FormikStep
+            label="Operating days"
+            //validationSchema={validationSchemaStep1}
           >
-           monday
-          </Checkbox>
-           <TimePicker.RangePicker
-            format="HH:mm"
-            allowClear="true"
-            disabledHours={() => [1, 2, 3]}
-            className="timepicker"
-            selected={selectedtimeMM}
-            onchange={timemm=>setSelectedtimeMM(timemm)}
-            />
-          <label className="text">And</label>
-            <TimePicker.RangePicker
-            format="HH:mm"
-            allowClear="true"
-            disabledHours={() => [1, 2, 3]}
-            className="timepicker"
-            />
-            </div>
-           <br/>
-           <div className="center_element">
-           <Checkbox
-          >
-          Tuesday
-          </Checkbox>
-           <TimePicker.RangePicker
-            format="HH:mm"
-            allowClear="true"
-            disabledHours={() => [1, 2, 3]}
-            className="timepicker"
-            selected={selectedtimeMAf}
-            onChange={timema=>setSelectedtimeMAf(timema)}
-            />
-          <label className="text">And</label>
-            <TimePicker.RangePicker
-            format="HH:mm"
-            allowClear="true"
-            disabledHours={() => [1, 2, 3]}
-            className="timepicker"
-            />
-            </div>
-            <br/>
             <div className="center_element">
-           <Checkbox
-            
-          >
-          Wednesday
-          </Checkbox>
-           <TimePicker.RangePicker
-            format="HH:mm"
-            allowClear="true"
-            disabledHours={() => [1, 2, 3]}
-            className="timepicker"
-          
-            />
-          <label className="text">And</label>
-            <TimePicker.RangePicker
-            format="HH:mm"
-            allowClear="true"
-            disabledHours={() => [1, 2, 3]}
-            className="timepicker"
-            />
+              <Box>
+              <p>RDV Gap</p>
+              <ButtonGroup>
+                {rdvGaps.map((rdvGap, i) => (
+                  <Field
+                    name="rdvGap"
+                    key={i}
+                    value={rdvGap}
+                    component={ButtonComponent}
+                  >
+                    {rdvGap + 'mins'}
+                  </Field>
+                ))}
+              </ButtonGroup>
+              </Box>
+              <Checkbox>monday</Checkbox>
+              <TimePicker.RangePicker
+                format="HH:mm"
+                allowClear="true"
+                disabledHours={() => [1, 2, 3]}
+                className="timepicker"
+                selected={selectedtimeMM}
+                onchange={(timemm) => setSelectedtimeMM(timemm)}
+              />
+              <label className="text">And</label>
+              <TimePicker.RangePicker
+                format="HH:mm"
+                allowClear="true"
+                disabledHours={() => [1, 2, 3]}
+                className="timepicker"
+              />
             </div>
-            <br/>
+            <br />
             <div className="center_element">
-           <Checkbox
-            
-          >
-          Thuesday
-          </Checkbox>
-           <TimePicker.RangePicker
-            format="HH:mm"
-            allowClear="true"
-            disabledHours={() => [1, 2, 3]}
-            className="timepicker"
-          
-            />
-          <label className="text">And</label>
-            <TimePicker.RangePicker
-            format="HH:mm"
-            allowClear="true"
-            disabledHours={() => [1, 2, 3]}
-            className="timepicker"
-            />
+              <Checkbox>Tuesday</Checkbox>
+              <TimePicker.RangePicker
+                format="HH:mm"
+                allowClear="true"
+                disabledHours={() => [1, 2, 3]}
+                className="timepicker"
+                selected={selectedtimeMAf}
+                onChange={(timema) => setSelectedtimeMAf(timema)}
+              />
+              <label className="text">And</label>
+              <TimePicker.RangePicker
+                format="HH:mm"
+                allowClear="true"
+                disabledHours={() => [1, 2, 3]}
+                className="timepicker"
+              />
             </div>
-            <br/>
+            <br />
             <div className="center_element">
-           <Checkbox
-            
-          >
-          Friday
-          </Checkbox>
-           <TimePicker.RangePicker
-            format="HH:mm"
-            allowClear="true"
-            disabledHours={() => [1, 2, 3]}
-            className="timepicker"
-          
-            />
-          <label className="text">And</label>
-            <TimePicker.RangePicker
-            format="HH:mm"
-            allowClear="true"
-            disabledHours={() => [1, 2, 3]}
-            className="timepicker"
-            />
+              <Checkbox>Wednesday</Checkbox>
+              <TimePicker.RangePicker
+                format="HH:mm"
+                allowClear="true"
+                disabledHours={() => [1, 2, 3]}
+                className="timepicker"
+              />
+              <label className="text">And</label>
+              <TimePicker.RangePicker
+                format="HH:mm"
+                allowClear="true"
+                disabledHours={() => [1, 2, 3]}
+                className="timepicker"
+              />
             </div>
-            <br/>
+            <br />
             <div className="center_element">
-           <Checkbox
-            
-          >
-          Sunday
-          </Checkbox>
-           <TimePicker.RangePicker
-            format="HH:mm"
-            allowClear="true"
-            disabledHours={() => [1, 2, 3]}
-            className="timepicker"
-          
-            />
-          <label className="text">And</label>
-            <TimePicker.RangePicker
-            format="HH:mm"
-            allowClear="true"
-            disabledHours={() => [1, 2, 3]}
-            className="timepicker"
-            />
+              <Checkbox>Thuesday</Checkbox>
+              <TimePicker.RangePicker
+                format="HH:mm"
+                allowClear="true"
+                disabledHours={() => [1, 2, 3]}
+                className="timepicker"
+              />
+              <label className="text">And</label>
+              <TimePicker.RangePicker
+                format="HH:mm"
+                allowClear="true"
+                disabledHours={() => [1, 2, 3]}
+                className="timepicker"
+              />
             </div>
+            <br />
+            <div className="center_element">
+              <Checkbox>Friday</Checkbox>
+              <TimePicker.RangePicker
+                format="HH:mm"
+                allowClear="true"
+                disabledHours={() => [1, 2, 3]}
+                className="timepicker"
+              />
+              <label className="text">And</label>
+              <TimePicker.RangePicker
+                format="HH:mm"
+                allowClear="true"
+                disabledHours={() => [1, 2, 3]}
+                className="timepicker"
+              />
+            </div>
+            <br />
+            <div className="center_element">
+              <Checkbox>Sunday</Checkbox>
+              <TimePicker.RangePicker
+                format="HH:mm"
+                allowClear="true"
+                disabledHours={() => [1, 2, 3]}
+                className="timepicker"
+              />
+              <label className="text">And</label>
+              <TimePicker.RangePicker
+                format="HH:mm"
+                allowClear="true"
+                disabledHours={() => [1, 2, 3]}
+                className="timepicker"
+              />
+            </div>
+          </FormikStep>
 
-
-
-
-
-            {/*<Box>
-              <Field
-                type="checkbox"
-                component={CheckboxWithLabel}
-                Label={{ label: 'Monday' }}
-                style={{ width: '80px' }}
-              />
-              <Field
-                name="workDay"
-                type="checkbox"
-                component={CheckboxWithLabel}
-                Label={{ label: 'Tuesday' }}
-                style={{ width: '80px' }}
-              />
-              <Field
-                name="workDay"
-                type="checkbox"
-                component={CheckboxWithLabel}
-                Label={{ label: 'Wednesday' }}
-                style={{ width: '80px' }}
-              />
-            </Box>
-            <Box>
-              <Field
-                name="workDay"
-                type="checkbox"
-                component={CheckboxWithLabel}
-                Label={{ label: 'Thrusday' }}
-                style={{ width: '80px' }}
-              />
-              <Field
-                name="workDay"
-                type="checkbox"
-                component={CheckboxWithLabel}
-                Label={{ label: 'Friday' }}
-                style={{ width: '80px' }}
-              />
-              <Field
-                name="workDay"
-                type="checkbox"
-                component={CheckboxWithLabel}
-                Label={{ label: 'Saturday' }}
-                style={{ width: '80px' }}
-              />
-            </Box>
-            <Box paddingBottom={2}>
-              <Field
-                variant="outlined"
-                name="rdvGap"
-                component={Select}
-                placeholder="Choose a rdv duration"
-                label="Choose a rdv duration"
-                options={rdvGaps}
-                style={{ width: '80px' }}
-              />
-            </Box>*/}
-          </FormikStep> 
-          
           <FormikStep
             label={t('form.step4')}
+            validationSchema={validationSchemaStep5}
             // validationSchema={Yup.object({
             //   fee: Yup.mixed().when('teleconsultation', {
             //     is: true,
@@ -688,41 +696,30 @@ export default function Home() {
               <Field
                 variant="outlined"
                 fullWidth
-                name="cardNbr"
+                name="privateKey"
                 type="number"
                 component={TextField}
-                label="Bank card number"
-              />
-            </Box>
-            <Box paddingBottom={2}>
-              <Field
-                size="medium"
-                name="cvc"
-                component={TextField}
-                type="number"
-                label="Security Code"
-                style={{ width: 300 }}
-                variant="outlined"
-              />
-              <Field
-                variant="outlined"
-                name="expDate"
-                component={TextField}
-                placeholder="MM/YY"
-                label="Expiry Date"
-                style={{ marginLeft: '100px' }}
+                label="Private Key"
               />
             </Box>
             <Box paddingBottom={2}>
               <Field
                 variant="outlined"
-                name="billingAddress"
+                fullWidth
+                name="publicKey"
+                type="number"
                 component={TextField}
-                label="Billing Address"
-                style={{ width: 400 }}
-                multiline
+                label="Public Key"
               />
-              
+            </Box>
+            <Box paddingBottom={2}>
+              <Field
+                name="isDistantNode"
+                type="checkbox"
+                component={CheckboxWithLabel}
+                Label={{ label: 'Se connecter un noeud distant' }}
+                style={{ marginLeft: '50px' }}
+              />
             </Box>
           </FormikStep>
         </FormikStepper>
@@ -730,6 +727,125 @@ export default function Home() {
     </Card>
   );
 }
+const SelectComponent = ({
+  field, // { name, value, onChange, onBlur }
+  form: {
+    touched,
+    errors,
+    isValid,
+    handleBlur,
+    handleChange,
+    values,
+    setFieldValue,
+  }, // also values, setXXXX, handleXXXX, dirty, isValid, status, etc.
+  ...props
+}) => {
+  const [select, setSelect] = useState('');
+  return (
+    <Select
+      {...field}
+      {...props}
+      onBlur={handleBlur(field.name)}
+      value={select}
+      onChange={(value) => {
+        setFieldValue(field.name, value.label);
+        setSelect(value); // calling custom onChangeText
+      }}
+    />
+  );
+};
+const ButtonComponent = ({
+  field, // { name, value, onChange, onBlur }
+  form: {
+    touched,
+    errors,
+    isValid,
+    handleBlur,
+    handleChange,
+    values,
+    setFieldValue,
+  }, // also values, setXXXX, handleXXXX, dirty, isValid, status, etc.
+  ...props
+}) => {
+  const [flag, setFlag] = React.useState(true);
+  const handleClick = (e) => {
+    setFlag(!flag);
+  };
+  const handleInput = (e) => {
+    console.log(e.target.innerHTML);
+    console.log(e);
+    handleClick(e);
+  };
+  return (
+    <Button
+      {...field}
+      {...props}
+      onBlur={handleBlur(field.name)}
+      variant={flag ? 'contained' : 'outlined'}
+      onClick={(e) => {
+        handleInput(e);
+        setFieldValue(field.name, e.target.innerHTML);
+      }}
+    />
+  );
+};
+const CountryDropdownComponent = ({
+  field, // { name, value, onChange, onBlur }
+  form: {
+    touched,
+    errors,
+    isValid,
+    handleBlur,
+    handleChange,
+    values,
+    setFieldValue,
+  }, // also values, setXXXX, handleXXXX, dirty, isValid, status, etc.
+  ...props
+}) => {
+  const [country1, setCountry] = useState('');
+  return (
+    <CountryDropdown
+      {...field}
+      {...props}
+      onBlur={handleBlur(field.name)}
+      value={country1}
+      onChange={(value) => {
+        setFieldValue(field.name, value); // calling custom onChangeText
+        setCountry(value);
+        country = value;
+        console.log(country);
+      }}
+    />
+  );
+};
+const RegionDropdownComponent = ({
+  field, // { name, value, onChange, onBlur }
+  form: {
+    touched,
+    errors,
+    isValid,
+    handleBlur,
+    handleChange,
+    values,
+    setFieldValue,
+  }, // also values, setXXXX, handleXXXX, dirty, isValid, status, etc.
+  ...props
+}) => {
+  const [region, setRegion] = useState('');
+  return (
+    <RegionDropdown
+      {...field}
+      {...props}
+      onBlur={handleBlur(field.name)}
+      country={country}
+      region={region}
+      onChange={(value) => {
+        setFieldValue(field.name, value); // calling custom onChangeText
+        setRegion(value);
+      }}
+    />
+  );
+};
 
 export interface FormikStepProps
   extends Pick<FormikConfig<FormikValues>, 'children' | 'validationSchema'> {
@@ -777,11 +893,7 @@ export function FormikStepper({
         onSubmit={async (values, helpers) => {
           if (isLastStep()) {
             await props.onSubmit(values, helpers);
-            handleDoctorCreate(
-              values.firstName,
-              values.lastName,
-              values.password
-            );
+            handleDoctorCreate(values);
             setCompleted(true);
           } else {
             setStep((s) => s + 1);
@@ -815,12 +927,11 @@ export function FormikStepper({
             </Stepper>
 
             {currentChild}
-            <br/>
+            <br />
 
             <Grid container spacing={2}>
               {step > 0 ? (
                 <Grid item>
-                 
                   <Button
                     disabled={isSubmitting}
                     variant="contained"

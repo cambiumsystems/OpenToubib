@@ -1,4 +1,3 @@
-const { TableSortLabel } = require('@material-ui/core');
 const path = require('path');
 
 // Get the location of database.sqlite file
@@ -24,17 +23,28 @@ knex.schema
           table.string('firstName');
           table.string('lastName');
           table.string('password');
+          table.string('email');
+          table.string('gender');
           table.date('dateOfBirth');
           table.string('city');
+          table.string('region');
+          table.string('country');
           table.string('address');
-          table.integer('fee');
-          table.text('secretQuest');
-          table.text('description');
           table.string('postalCode');
-          table.string('country')
+          table.text('secretQuest');
+          table.string('answerScrtQuest');
+          table.text('description');
+          table.string('officeName');
+          table.string('speciality');
+          table.string('professionalID');
           table.string('phoneNumber');
-          table.string('gender');
-          table.integer('feeTeleconsultation');
+          table.integer('rdvGap');
+          table.integer('minFee');
+          table.integer('maxFee');
+          table.integer('minTeleFee');
+          table.integer('maxTeleFee');
+          table.string('privateKey');
+          table.string('publicKey');
         })
         // eslint-disable-next-line promise/always-return
         .then(() => {
@@ -66,7 +76,7 @@ knex.schema
             table.datetime('start');
             table.datetime('end');
             table.string('title');
-            
+
           })
           // eslint-disable-next-line promise/always-return
           .then(() => {
@@ -87,7 +97,39 @@ knex.schema
       // eslint-disable-next-line prettier/prettier
         console.error(`There was an error setting up the database: ${error}`)
       })
-  
+
+
+// Table RDVS
+knex.schema
+  .hasTable('events')
+  .then((exists) => {
+    if (!exists) {
+      return knex.schema
+        .createTable('events', (table) => {
+          table.increments('id').primary();
+          // table.integer('')
+          table.string('firstName');
+          table.datetime('lastName');
+        })
+        // eslint-disable-next-line promise/always-return
+        .then(() => {
+          // Log success message
+          console.log("Table 'Doctors' created");
+        })
+        .catch((error) => {
+          console.error(`There was an error creating table: ${error}`);
+        });
+    }
+    })
+    // eslint-disable-next-line promise/always-return
+  .then(() => {
+    // Log success message
+    console.log('Table Events created');
+  })
+  .catch((error) => {
+    // eslint-disable-next-line prettier/prettier
+      console.error(`There was an error setting up the database: ${error}`)
+    })
 
 knex
   .select('*')
@@ -121,6 +163,6 @@ knex
   .catch((err) => console.log(err));
 
 */
-   
+
 // Export the database
 module.exports = knex;

@@ -38,6 +38,14 @@ const Hello = () => {
             Profil
           </button>
         </Link>
+        <div>
+        <Link to="/">
+          <span role="img" aria-label="books"
+            style={{ position: 'absolute', bottom: '25px', right: '40%' }}>
+            Support this project!
+          </span>
+        </Link>
+        </div>
       </div>
     </div>
   );
