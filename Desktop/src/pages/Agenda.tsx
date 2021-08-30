@@ -3,6 +3,9 @@ import { Link } from 'react-router-dom';
 import FullCalendar from '@fullcalendar/react'; // must go before plugins
 import dayGridPlugin from '@fullcalendar/daygrid'; // a plugin!
 import timeGridPlugin from '@fullcalendar/timegrid';
+
+
+
 // import inf from "../../Events_db.js";
 // const inf = require('../../Events_db.js');
 const knex = require('../../database');
@@ -34,6 +37,7 @@ const Agenda = () => {
   return (
     <div className="calendar">
       <Link to="/">Go back to home</Link>
+
    <FullCalendar
    ref={calendarRef}
    plugins={[dayGridPlugin,timeGridPlugin]}
@@ -68,7 +72,7 @@ const Agenda = () => {
       {
         left:"prev,next",
         center:"title",
-        right:"dayGridMonth,timeGridDay,timeGridWeek,myTimeWeekBtn",
+        right:"dayGridMonth,timeGridDay,timeGridWeek",
       }
     }
     eventClick={

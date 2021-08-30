@@ -5,6 +5,7 @@ import './App.global.css';
 import Profile from './pages/Profile';
 import Agenda from './pages/Agenda';
 import Login from './pages/Login';
+import App_bar from './pages/App_bar';
 
 const Hello = () => {
   return (
@@ -15,6 +16,14 @@ const Hello = () => {
           style={{ position: 'absolute', top: '0px', right: '0px' }}
         >
           LogIn
+        </button>
+      </Link>
+      <Link to="/App_bar">
+        <button
+          type="button"
+          style={{ position: 'absolute', top: '0px', right: '0px' }}
+        >
+          App_bar
         </button>
       </Link>
       <div className="Hello">
@@ -59,6 +68,7 @@ export default function App() {
         <Route path="/profile" component={Profile} />
         <Route path="/agenda" component={Agenda} />
         <Route path="/login" component={Login} />
+        <Route path="/App_bar" component={App_bar} />
       </Switch>
     </Router>
   );
