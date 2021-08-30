@@ -43,6 +43,7 @@ li {
 }
 
 a {
+  color :#808080;
   text-decoration: none;
   height: fit-content;
   width: fit-content;
@@ -504,4 +505,119 @@ button {
   padding-left: 15px;
   margin-right: auto;
   margin-left: auto;
+}
+
+
+
+.fc-toolbar.fc-header-toolbar {
+  margin-bottom: 1.5em;
+}
+.fc-toolbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.fc {
+  direction: ltr;
+  text-align: left;
+}
+.fc-icon-chevron-left:before {
+  content: "<";
+}
+.fc-icon-chevron-right:before {
+  content: ">";
+}
+
+.container-fluid, .container-lg, .container-md, .container-sm, .container-xl {
+  width: 100%;
+  padding-right: 15px;
+  padding-left: 15px;
+  margin-right: auto;
+  margin-left: auto;
+}
+.row {
+ 
+  display: flex;
+  
+  flex-wrap: wrap;
+  margin-right: -15px;
+  margin-left: -15px;
+}
+.col-md-3 {
+    -ms-flex: 0 0 25%;
+    flex: 0 0 25%;
+    max-width: 25%;
+    top: 190px;
+}
+.MuiList-padding {
+  padding-top: 55px;
+  padding-bottom: 8px;
+}
+.col-md-9 {
+  
+  flex: 0 0 75%;
+  max-width: 75%;
+}
+.iq-card {
+  background: #ffffff;
+  border-radius: 25px;
+  margin-bottom: 30px;
+  border: none;
+  box-shadow: 0px 4px 5px 1px rgb(175 175 175 / 10%);
+}
+.iq-card .iq-card-header {
+  padding: 0 20px;
+  min-height: 60px;
+ 
+  align-items: center !important;
+  border-bottom: 1px solid #eeeeee;
+ 
+  -webkit-border-radius: 25px 25px 0 0;
+}
+.justify-content-between {
+  
+  justify-content: space-between!important;
+}
+.d-flex {
+ 
+  display: flex!important;
+}
+.iq-card .iq-card-header .iq-header-title {
+  display: inline-block;
+  align-self: center !important;
+}
+.iq-card .iq-card-header .iq-header-title .card-title {
+  margin-bottom: 0;
+}
+.align-items-center {
+ 
+  align-items: center!important;
+}
+.iq-card-body {
+  top: 50px;
+  padding: 20px;
+}
+.p-0 {
+  padding: 0!important;
+}
+.m-0 {
+  margin: 0!important;
+}
+ul {
+  display: block;
+  list-style-type: disc;
+  margin-block-start: 1em;
+  margin-block-end: 1em;
+  margin-inline-start: 0px;
+  margin-inline-end: 0px;
+  padding-inline-start: 40px;
+}
+.job-classification li > i, .today-schedule li i {
+  margin-right: 10px;
+  border-radius: 50%;
+  color: #fff;
+}
+.job-classification li, .today-schedule li {
+  list-style-type: none;
+  margin-bottom: 10px;
 }
