@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import FullCalendar from '@fullcalendar/react'; // must go before plugins
 import dayGridPlugin from '@fullcalendar/daygrid'; // a plugin!
 import timeGridPlugin from '@fullcalendar/timegrid';
-
+import interactionPlugin from '@fullcalendar/interaction';
 
 
 // import inf from "../../Events_db.js";
@@ -40,11 +40,30 @@ const Agenda = () => {
 
    <FullCalendar
    ref={calendarRef}
-   plugins={[dayGridPlugin,timeGridPlugin]}
+   
+   plugins={[dayGridPlugin,timeGridPlugin, interactionPlugin]}
     initialView="dayGridMonth"
-    events={inf}
+    
+    editable={true}
+    selectable
+    weekends
 
+    eventChange={function(ev){
+      const start = ev.event.start;
+      const end = ev.event.end;
+      const id = ev.event.id;
+      alert("voulez vous vraiment modifier le rdv :" +ev.event.title) 
+      knex("events")
+      .update({start,end})
+      .where({id})
+      .then(alert("date d'ev modifer"))
+      
+    }}
 
+   events={inf}
+
+   
+    
     customButtons={{
       myTimeDayBtn:{
       text:"timeDay",
@@ -56,6 +75,7 @@ const Agenda = () => {
         }
       },
     },
+    
     myTimeWeekBtn:{
       text:"timeDay",
       click(){
@@ -77,9 +97,10 @@ const Agenda = () => {
     }
     eventClick={
       function(arg){
-        alert(arg.event.title)
+        alert("rdv avec :"+arg.event.title)
       }
     }
+  
     select={handleDateSelect}
     />
     </div>

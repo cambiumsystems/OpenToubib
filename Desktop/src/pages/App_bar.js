@@ -1,4 +1,4 @@
-import React from 'react';
+import React , { Component } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Drawer from '@material-ui/core/Drawer';
 import AppBar from '@material-ui/core/AppBar';
@@ -21,6 +21,8 @@ import green from "@material-ui/core/colors/green";
 import red from "@material-ui/core/colors/red";
 import BorderColorIcon from '@material-ui/icons/BorderColor';
 import ArrowForwardIosIcon from '@material-ui/icons/ArrowForwardIos';
+import { OffCanvas, OffCanvasMenu, OffCanvasBody } from "react-offcanvas";
+
 const drawerWidth = 240;
 
 const useStyles = makeStyles((theme) => ({
