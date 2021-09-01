@@ -4,6 +4,7 @@ import FullCalendar from '@fullcalendar/react'; // must go before plugins
 import dayGridPlugin from '@fullcalendar/daygrid'; // a plugin!
 import timeGridPlugin from '@fullcalendar/timegrid';
 import interactionPlugin from '@fullcalendar/interaction';
+import { red } from '@material-ui/core/colors';
 
 
 // import inf from "../../Events_db.js";
@@ -15,9 +16,16 @@ knex
   .from('events')
   .then((data) => {
     inf = data;
-    console.log('voila ', inf);
+    console.log('Data ', data);
+    for (var i = 0; i < inf.length; i++) {
+      inf[i].categorie == 1
+        ? (inf[i].backgroundColor= '#8B0000')
+        : inf[i].categorie == 2
+        ? (inf[i].backgroundColor= 'blue')
+        : (inf[i].backgroundColor= 'yellow');
+    }
+    console.log('Exemple Data avec couleur ', inf);
   })
-
   .catch((err) => console.log(err));
 const Agenda = () => {
   const calendarRef=createRef()
@@ -47,7 +55,7 @@ const Agenda = () => {
     editable={true}
     selectable
     weekends
-
+    
     eventChange={function(ev){
       const start = ev.event.start;
       const end = ev.event.end;

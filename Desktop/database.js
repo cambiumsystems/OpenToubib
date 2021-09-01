@@ -76,6 +76,7 @@ knex.schema
             table.datetime('start');
             table.datetime('end');
             table.string('title');
+            table.string('categorie');
 
           })
           // eslint-disable-next-line promise/always-return

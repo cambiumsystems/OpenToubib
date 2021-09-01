@@ -24,7 +24,7 @@ import ArrowForwardIosIcon from '@material-ui/icons/ArrowForwardIos';
 import { OffCanvas, OffCanvasMenu, OffCanvasBody } from "react-offcanvas";
 import FiberManualRecordIcon from '@material-ui/icons/FiberManualRecord';
 import Modal from '@material-ui/core/Modal';
-
+import CheckIcon from '@material-ui/icons/Check';
 const drawerWidth = 240;
 
 const useStyles = makeStyles((theme) => ({
@@ -86,7 +86,7 @@ const useStyless = makeStyles((theme) => ({
 }));
 
 
-export default function App_bar() {
+export default function Support() {
   const classes = useStyles();
 
 
@@ -104,18 +104,7 @@ export default function App_bar() {
     setOpen(false);
   };
   const [isMenuOpened, setisMenuOpened] = React.useState(false);
-  componentWillMount=()=> {
-    // sets the initial state
-    setisMenuOpened({
-      isMenuOpened: false
-    });
-  }
-  handleClick=()=>{
-    // toggles the menu opened state
-    setisMenuOpened({ isMenuOpened: !this.state.isMenuOpened });
-  }
-
-
+ 
   const body = (
     <div style={modalStyle} className={classess.paper}>
       <h2 id="simple-modal-title"className="h_txt" >Code couleurs</h2>
@@ -200,101 +189,77 @@ export default function App_bar() {
         </div>
       </Drawer>
       <main className="container-fluid">
-        <div className="row">
-          <div className="col-md-3">
-            <div className="iq-card">
-              <div className="iq-card-header d-flex justify-content-between">
-                <div className="iq_header-title">
-                  <h4 className="card-title">Consultation</h4>
-                </div>
-                <div className="iq-card-header-toolbar d-flex align-items-center">
-                 <a onClick={handleOpen}>
-                
-                 <BorderColorIcon/>
-               
-                 </a>
-                </div>
-              </div>
-              <div className="iq-card-body">
-                <ul className="m-0 p-0 job-classification">
-                  <li><HdrStrongIcon style={{ color: "green" }}/>1ere consultation</li>
-                  <li><HdrStrongIcon style={{ color: "red" }}/>Controle</li>
-                  <li><HdrStrongIcon/>Deja consulté</li>
-                </ul>
-              </div>
-            </div>
-            <div className="iq-card">
-              <div className="iq-card-header d-flex justify-content-between">
-                <div className="iq_header-title">
-                  <h4 className="card-title">Prochaine Consultation</h4>
-                </div>
-                <div className="iq-card-header-toolbar d-flex align-items-center">
-                 <a>
-                 <DuoIcon/>
-                 </a>
-                </div>
-              </div>
-              <Modal
-        open={open}
-        onClose={handleClose}
-        aria-labelledby="simple-modal-title"
-        aria-describedby="simple-modal-description"
-      >
-        {body}
-      </Modal>
-              <div className="iq-card-body">
-                <ul className="m-0 p-0 job-classification">
-                  <li> Bla bla</li>
-                  <li>
-                  <OffCanvas
-        width={300}
-        transitionDuration={300}
-        effect={"parallax"}
-        isMenuOpened={this.state.isMenuOpened}
-        position={"right"}
-      >
-        <OffCanvasBody
-          className={styles.bodyClass}
-          style={{ fontSize: "30px" }}
-        >
-          <p>This is the main body container.</p>
-          <p>
-            <a href="#" onClick={this.handleClick.bind(this)}>
-              Click here
-            </a>{" "}
-            to toggle the menu.
-          </p>
-        </OffCanvasBody>
-        <OffCanvasMenu className={styles.menuClass}>
-          <p>Placeholder content.</p>
-          <ul>
-            <li>Link 1</li>
-            <li>Link 2</li>
-            <li>Link 3</li>
-            <li>Link 4</li>
-            <li>Link 5</li>
-            <li>
-              <a href="#" onClick={this.handleClick.bind(this)}>
-                Toggle Menu
-              </a>
-            </li>
+      <div className="container-fluid">
+<div className="row">
+  <div className=" col-md-6 ">
+      <div className="iq-card  bg-primary text-white">
+        <div className="iq-card-body border text-center rounded">
+            <span className="font-size-16 text-uppercase">Support</span>
+             <h2 className="mb-4 display-3 font-weight-bolder text-white">
+              aidezzz nouuuuussss 
+             </h2>
+            <ul className="list-unstyled line-height-4 mb-0">
+             <li>iwaaa</li>
+              <li>blablabla</li>
+             <li>decentralisé blablaa</li> 
           </ul>
-        </OffCanvasMenu>
-      </OffCanvas>
-                  </li>
-                  <li> blaablaa</li>
-                </ul>
-              </div>
-            </div>
           
-          </div>
-          <div className="col-md-9">
-           
-        
-         <Agenda/>
-        
-        </div>
-        </div>
+       </div>
+      </div>
+  </div>
+  <div className=" col-md-6 ">
+      <div className="iq-card ">
+        <div className="iq-card-body ">
+           <div class="table-responsive">
+               <table class="table">
+                <thead className="thead">
+                    <tr className="tr">
+                    <th className="text-center th"></th>  
+                      
+                      <th className="text-center th">fct1</th>  
+                      <th className="text-center th">fct2</th>
+                      <th className="text-center th">fct3</th>    
+                    </tr>
+                 </thead>
+                <tbody className="tbody">
+                   <tr>
+                       <th className="text center">
+                           prog</th>
+                      <th className="text center"><CheckIcon/></th>
+                      <th className="text center"><CheckIcon/></th>
+                      <th className="text center"><CheckIcon/></th>
+                  </tr>
+                  <tr>
+                       <th className="text center">
+                          agenda</th>
+                      <th className="text center"></th>
+                      <th className="text center"><CheckIcon/></th>
+                      <th className="text center"><CheckIcon/></th>
+                  </tr>
+                  <tr>
+                       <th className="text center">
+                          </th>
+                      <th className="text center">
+                          <h2> 12dh <div className="small">/per month</div></h2>
+                          <button type="button"className="btn btn-primary mt-3">pr</button>
+                      </th>
+                      <th className="text center">
+                          <h2> 12dh <div className="small">/per month</div></h2>
+                          <button type="button"className="btn btn-primary mt-3">pr</button>
+                      </th>
+                      <th className="text center">
+                          <h2> 12dh <div className="small">/per month</div></h2>
+                          <button type="button"className="btn btn-primary mt-3">pr</button>
+                      </th> </tr>
+                </tbody>
+               </table>
+           </div> 
+         </div>
+      </div>
+  </div>
+</div>
+
+</div>
       </main>
     </div>
   );
