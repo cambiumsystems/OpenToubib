@@ -15,16 +15,18 @@ import AccountBoxIcon from '@material-ui/icons/AccountBox';
 import DateRangeIcon from '@material-ui/icons/DateRange';
 import MailIcon from '@material-ui/icons/Mail';
 import Agenda from './Agenda';
+import { Link } from "react-router-dom";
 import DuoIcon from '@material-ui/icons/Duo';
 import HdrStrongIcon from '@material-ui/icons/HdrStrong';
 import green from "@material-ui/core/colors/green";
-import red from "@material-ui/core/colors/red";
+import orange from "@material-ui/core/colors/orange";
 import BorderColorIcon from '@material-ui/icons/BorderColor';
 import ArrowForwardIosIcon from '@material-ui/icons/ArrowForwardIos';
 import { OffCanvas, OffCanvasMenu, OffCanvasBody } from "react-offcanvas";
 import FiberManualRecordIcon from '@material-ui/icons/FiberManualRecord';
 import Modal from '@material-ui/core/Modal';
-import CheckIcon from '@material-ui/icons/Check';
+import VerifiedUserIcon from '@material-ui/icons/VerifiedUser';
+
 const drawerWidth = 240;
 
 const useStyles = makeStyles((theme) => ({
@@ -155,9 +157,17 @@ export default function Support() {
       
     </div>
   );
-
-
-  return (
+  const slideValue=document.querySelector("span");
+  const inputSlider=document.querySelector("input");
+  inputSlider.oninput=(()=>{
+   let value=inputSlider.value;
+   slideValue.textContent=value;
+   slideValue.style.left=(value/2)+"%";
+   
+    });
+   
+   
+ return (
     <div className={classes.root}>
       <CssBaseline />
       <AppBar position="fixed" className={classes.appBar}>
@@ -167,48 +177,43 @@ export default function Support() {
           </Typography>
         </Toolbar>
       </AppBar>
-      <Drawer
-        className={classes.drawer}
-        variant="permanent"
-        classes={{
-          paper: classes.drawerPaper,
-        }}
-      >
-        <Toolbar />
-        <div className={classes.drawerContainer}>
-          <List>
-            {['Profil', 'Calendrier', 'Parametre', 'Statistique'].map((text, index) => (
-              <ListItem button key={text}>
-                <ListItemIcon>{index % 2 === 0 ? <AccountBoxIcon /> : <DateRangeIcon />}</ListItemIcon>
-                <ListItemText primary={text} />
-              </ListItem>
-            ))}
-          </List>
-          
-         
-        </div>
-      </Drawer>
+      
       <main className="container-fluid">
       <div className="container-fluid">
 <div className="row">
   <div className=" col-md-6 ">
-      <div className="iq-card  bg-primary text-white">
-        <div className="iq-card-body border text-center rounded">
-            <span className="font-size-16 text-uppercase">Support</span>
-             <h2 className="mb-4 display-3 font-weight-bolder text-white">
-              aidezzz nouuuuussss 
+      <div className="iq-card line-height-4 bg-primaryy text-white">
+        <div className="iq-card-body w_card  border text-center rounded">
+            <p className="font-size-16 text-uppercase">Support</p>
+             <h2 className="mb-4 display-3 font-weight-bolder text-white or" >
+             solution solidaire 
              </h2>
-            <ul className="list-unstyled line-height-4 mb-0">
-             <li>iwaaa</li>
-              <li>blablabla</li>
-             <li>decentralisé blablaa</li> 
+            <ul className="list-unstyled  mb-0">
+            <br/>
+              <li><p>creer votre propre communoté fermé pour un meilleur 
+                service.</p>
+                
+              </li><li><p> Supportez ce projet !</p></li> <li> <p>
+Pour assurer une décentralisation totale du côté des patients, nous avons besoin de votre aide !
+Anisi vous contribuerez dans notre mouvement social et solidaire. </p> </li>
+ <li> <p>Vous pourriez faire des dons mensuels, ou mieux encore acheter un nœud distant propre à vous pour l’utiliser afin de se connecter au réseau des médecins au lieu de votre propre machine.
+Votre soutien permettra aussi de décentraliser l’application du côté des patients afin de leur fournir des nœuds qui joueront le rôle de passerelle. </p>
+              </li>
+                
+              <li><p>100% sécurisé et décentralisé dons vos donnée seront stoquées localement sur vos pc  , 
+
+Nous avons besoin de votre aide pour assurer des noeuds
+qui joueront le rôle de passerelle/gateway
+                </p>
+              </li>
+             <li><p>Faites le choix de nous encourager  .</p></li> 
           </ul>
           
        </div>
       </div>
   </div>
   <div className=" col-md-6 ">
-      <div className="iq-card ">
+      <div className="iq-card  Border_col ">
         <div className="iq-card-body ">
            <div class="table-responsive">
                <table class="table">
@@ -216,47 +221,44 @@ export default function Support() {
                     <tr className="tr">
                     <th className="text-center th"></th>  
                       
-                      <th className="text-center th">fct1</th>  
-                      <th className="text-center th">fct2</th>
-                      <th className="text-center th">fct3</th>    
+                      <th className="text-center th">Gestion d'agenda</th>  
+                      <th className="text-center th">Gestion de teleconsultation</th>
+                      <th className="text-center th">Decentralisation</th>    
                     </tr>
                  </thead>
                 <tbody className="tbody">
                    <tr>
                        <th className="text center">
-                           prog</th>
-                      <th className="text center"><CheckIcon/></th>
-                      <th className="text center"><CheckIcon/></th>
-                      <th className="text center"><CheckIcon/></th>
+                           OPEN-TOUBIB</th>
+                      <th className="text center"><VerifiedUserIcon style={{ color: "orange" }}/></th>
+                      <th className="text center"><VerifiedUserIcon style={{ color: "orange" }}/></th>
+                      <th className="text center"><VerifiedUserIcon style={{ color: "orange" }}/></th>
                   </tr>
-                  <tr>
-                       <th className="text center">
-                          agenda</th>
-                      <th className="text center"></th>
-                      <th className="text center"><CheckIcon/></th>
-                      <th className="text center"><CheckIcon/></th>
-                  </tr>
-                  <tr>
-                       <th className="text center">
-                          </th>
-                      <th className="text center">
-                          <h2> 12dh <div className="small">/per month</div></h2>
-                          <button type="button"className="btn btn-primary mt-3">pr</button>
-                      </th>
-                      <th className="text center">
-                          <h2> 12dh <div className="small">/per month</div></h2>
-                          <button type="button"className="btn btn-primary mt-3">pr</button>
-                      </th>
-                      <th className="text center">
-                          <h2> 12dh <div className="small">/per month</div></h2>
-                          <button type="button"className="btn btn-primary mt-3">pr</button>
-                      </th> </tr>
+                  
                 </tbody>
+                
                </table>
+               <div className=" pl center_e">
+                  <div class="range ">
+                   <div class="sliderValue">
+                     <span>100</span>
+                   </div>
+                   <div class="field">
+                     <div class="value leftt">Euro</div>
+                      <input type="range" min="0" max="200"  steps="1"/>
+                   </div>
+                 </div>
+                           <button type="button"className="btn btn-primary  right_btn">Don</button>
+          
+                           <Link to="/">Go back to home</Link> </div>
            </div> 
+           
          </div>
+         
       </div>
+      
   </div>
+  
 </div>
 
 </div>
