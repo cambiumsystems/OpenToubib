@@ -29,14 +29,14 @@ const useStyles = makeStyles((theme) => ({
     position: 'absolute',
     width: 400,
     backgroundColor: theme.palette.background.paper,
-    
+
     boxShadow: theme.shadows[5],
     padding: theme.spacing(2, 4, 3),
   },
 }));
 // import inf from "../../Events_db.js";
 // const inf = require('../../Events_db.js');
-const knex = require('../../database');
+const knex = require('../database');
 let inf = [];
 knex
   .select('*')
@@ -70,13 +70,13 @@ const Agenda = () => {
     setOpen(false);
   };
 
- 
+
 const body = (
   <div style={modalStyle} className={classes.paper}>
     <h2 id="simple-modal-title"className="h_txt" >Parametrage du calendrier</h2>
     <a className="left">heure de travail</a>
     <br/>
-   
+
     <div id="simple-modal-description">
      <form >
         <div className="form-row">
@@ -85,7 +85,7 @@ const body = (
           </div>
           <div className="col">
           <input type="time"className="form-control"/>
-            
+
            </div>
         </div>
         <div className="form-row">
@@ -94,14 +94,14 @@ const body = (
           </div>
           <div className="col">
           <input type="time"className="form-control"/>
-           
+
            </div>
         </div>
-        
+
         <button className="bg-primary_mini pt-5 pb-5 text-center rounded">submit</button>
      </form>
     </div>
-    
+
   </div>
 );
 
@@ -122,7 +122,7 @@ const body = (
   return (
     <div className="calendar">
       <div className="left"> <a onClick={handleOpen}><SettingsSharpIcon/>
-      </a></div> 
+      </a></div>
 
       <Modal
         open={open}
@@ -137,30 +137,30 @@ const body = (
 
    <FullCalendar
    ref={calendarRef}
-   
+
    plugins={[dayGridPlugin,timeGridPlugin, interactionPlugin]}
     initialView="dayGridMonth"
     slotMinTime= "08:00:00"
     editable={true}
     selectable
     weekends
-    
+
     eventChange={function(ev){
       const start = ev.event.start;
       const end = ev.event.end;
       const id = ev.event.id;
-      alert("voulez vous vraiment modifier le rdv :" +ev.event.title) 
+      alert("voulez vous vraiment modifier le rdv :" +ev.event.title)
       knex("events")
       .update({start,end})
       .where({id})
       .then(alert("rdv modifé"))
-      
+
     }}
 
    events={inf}
 
-   
-    
+
+
     customButtons={{
       myTimeDayBtn:{
       text:"timeDay",
@@ -172,7 +172,7 @@ const body = (
         }
       },
     },
-    
+
     myTimeWeekBtn:{
       text:"timeDay",
       click(){
@@ -197,7 +197,7 @@ const body = (
         alert("rdv avec :"+arg.event.title)
       }
     }
-  
+
     select={handleDateSelect}
     />
     </div>

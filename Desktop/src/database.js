@@ -13,11 +13,11 @@ const knex = require('knex')({
 });
 
 knex.schema
-  .hasTable('doctors')
+  .hasTable('doctor')
   .then((exists) => {
     if (!exists) {
       return knex.schema
-        .createTable('doctors', (table) => {
+        .createTable('doctor', (table) => {
           table.increments('id').primary();
           // table.integer('')
           table.string('firstName');
@@ -25,7 +25,7 @@ knex.schema
           table.string('password');
           table.string('email');
           table.string('gender');
-          table.date('dateOfBirth');
+          table.string('dateOfBirth');
           table.string('city');
           table.string('region');
           table.string('country');
@@ -38,8 +38,8 @@ knex.schema
           table.string('speciality');
           table.string('professionalID');
           table.string('phoneNumber');
-          table.integer('rdvGap');
-          table.integer('minFee');
+          table.string('rdvGap');
+          table.string('minFee');
           table.integer('maxFee');
           table.integer('minTeleFee');
           table.integer('maxTeleFee');
@@ -49,7 +49,7 @@ knex.schema
         // eslint-disable-next-line promise/always-return
         .then(() => {
           // Log success message
-          console.log("Table 'Doctors' created");
+          console.log("Table 'Doctor' created");
         })
         .catch((error) => {
           console.error(`There was an error creating table: ${error}`);
@@ -102,20 +102,28 @@ knex.schema
 
 // Table RDVS
 knex.schema
-  .hasTable('events')
+  .hasTable('schedule')
   .then((exists) => {
     if (!exists) {
       return knex.schema
-        .createTable('events', (table) => {
+        .createTable('schedule', (table) => {
           table.increments('id').primary();
           // table.integer('')
-          table.string('firstName');
-          table.datetime('lastName');
+          table.string('day');
+          table.string('startMorning');
+          table.string('endMorning');
+          table.string('startAfternoon');
+          table.string('endAfternoon');
+          table.bigInteger('doctorId')
+    .unsigned()
+    .index()
+    .references('id')
+    .inTable('Doctor');
         })
         // eslint-disable-next-line promise/always-return
         .then(() => {
           // Log success message
-          console.log("Table 'Doctors' created");
+          console.log("Table 'Schedule' created");
         })
         .catch((error) => {
           console.error(`There was an error creating table: ${error}`);
@@ -125,7 +133,7 @@ knex.schema
     // eslint-disable-next-line promise/always-return
   .then(() => {
     // Log success message
-    console.log('Table Events created');
+    console.log('Table Schedule created');
   })
   .catch((error) => {
     // eslint-disable-next-line prettier/prettier
@@ -134,7 +142,7 @@ knex.schema
 
 knex
   .select('*')
-  .from('doctors')
+  .from('doctor')
   .then((data) => console.log('data:', data))
   .catch((err) => console.log(err));
 

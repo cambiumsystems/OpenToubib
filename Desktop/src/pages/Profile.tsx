@@ -36,6 +36,46 @@ import LongMenu from './LongMenu';
 import ShowChartIcon from '@material-ui/icons/ShowChart';
 import NotificationsActiveIcon from '@material-ui/icons/NotificationsActive';
 const drawerWidth = 240;
+const crypto = require('crypto');
+const knex = require('../database');
+
+const algorithm = 'aes-256-cbc';
+
+// generate 16 bytes of random data
+const initVector = Buffer.alloc(16, 0);
+
+// secret key generate 32 bytes of random data
+const Securitykey = crypto.scryptSync('bncaskdbvasbvlaslslasfhjazerfgty', 'GfG', 32)
+const Decrypt = (data)=>{
+  const decipher = crypto.createDecipheriv(algorithm, Securitykey, initVector);
+
+let decryptedData = decipher.update(data, "hex", "utf-8");
+
+decryptedData += decipher.final("utf8");
+return decryptedData;
+}
+let inf=[]
+knex
+.select('*')
+.from('doctor')
+.then((values) => {inf={
+  firstName: Decrypt( values[0].firstName),
+      lastName: Decrypt( values[0].lastName),
+      password: Decrypt( values[0].password),
+      email: Decrypt( values[0].email),
+      gender: Decrypt( values[0].gender),
+      dateOfBirth: Decrypt(values[0].dateOfBirth),
+      city: Decrypt(values[0].city),
+      region: Decrypt(values[0].region),
+      country: Decrypt(values[0].country),
+      address: Decrypt(values[0].address),
+      speciality: Decrypt(values[0].speciality),
+} ;
+  console.log( "voila ",inf);})
+
+.catch((err) => console.log(err));
+
+
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -57,9 +97,9 @@ const useStyles = makeStyles((theme) => ({
   color_white : {
     background: '#089bab',
     color: '#fff',
-    
+
   },
-  
+
   content: {
     flexGrow: 1,
     padding: theme.spacing(3),
@@ -89,14 +129,14 @@ const useStyless = makeStyles((theme) => ({
     position: 'absolute',
     width: 400,
     backgroundColor: theme.palette.background.paper,
-    
+
     boxShadow: theme.shadows[5],
     padding: theme.spacing(2, 4, 3),
   },
 }));
 
 
-export default function App_bar() {
+export default function Profile() {
   const classes = useStyles();
 
 
@@ -134,7 +174,7 @@ export default function App_bar() {
               <option > vert</option>
               <option >orange</option>
               <option >gris</option>
-              
+
             </select>
              </div>
           </div>
@@ -165,7 +205,7 @@ export default function App_bar() {
           <button className="bg-primary pt-5 pb-5 text-center rounded">submit</button>
        </form>
       </div>
-      
+
     </div>
   );
 
@@ -187,15 +227,15 @@ export default function App_bar() {
           paper: classes.drawerPaper,
         }}
       >
-        
+
         <Toolbar />
         <br/>
         <li className="left"><LongMenu/></li>
         <br/>
         <div className="">
           <li className="">
-            
-      
+
+
           <Link to="/profile"><span className="left_sidebar">&nbsp;<AccountBoxIcon fontSize="small"/> Profil</span>
           </Link>
           </li>
@@ -208,18 +248,18 @@ export default function App_bar() {
           <li className="iq-menu-title">
              <Link to="/Statistique"> <p>&nbsp;<ShowChartIcon   fontSize="small"/> Statistique</p>
               </Link>
-            
+
           </li>
           <br/>
           <li className="iq-menu-title">
           <Link to="/Support"><span>&nbsp;<NotificationsActiveIcon  fontSize="small"/> Support</span>
           </Link>
           </li>
-          
+
 
         </div>
-         
-        
+
+
       </Drawer>
       <main className="container-fluid">
       <div className="iq-card">
@@ -230,28 +270,28 @@ export default function App_bar() {
               <img src={doctor_img}className="avatar-130 img-fluid img_size"/>
             </div>
             <div className="text-center mt-3 pl-3 pr-3">
-              <h4>Doc Zayd</h4>
+              <h4>{inf.firstName}</h4>
               <p></p>
               <form className="form-row center_element">
                 <div className="form-group col-sm-6">
                   <label>First name</label>
-                  <input type="text" className="form-control_P"id="fname" value="Zayd"/>
+                  <input type="text" className="form-control_P"id="fname" value={inf.firstName} readOnly/>
                 </div>
                 <div className="form-group col-sm-6">
                   <label>Last name</label>
-                  <input type="text" className="form-control_P"id="lname" value="Alami"/>
+                  <input type="text" className="form-control_P"id="lname" value={inf.lastName} readOnly/>
                 </div>
                 <div className="form-group col-sm-6">
                   <label>Email</label>
-                  <input type="text" className="form-control_P"id="lname" value="Alami@"/>
+                  <input type="text" className="form-control_P"id="lname" value={inf.email} readOnly/>
                 </div>
                 <div className="form-group col-sm-6">
                   <label>City</label>
-                  <input type="text" className="form-control_P"id="lname" value="Rabat"/>
+                  <input type="text" className="form-control_P"id="lname" value={inf.city} readOnly/>
                 </div>
                 <div className="form-group col-sm-6">
                   <label className="d-block">Gender:</label>
-                  
+
                   <Radio
         checked={selectedValue === 'Male'}
         onChange={handleChange}
@@ -271,23 +311,23 @@ export default function App_bar() {
                 </div>
                 <div className="form-group col-sm-6">
                   <label>Date of birth</label>
-                  <input type="Date" className="form-control_P"id="lname" value="Alami"/>
+                  <input type="Date" className="form-control_P"id="lname" value={inf.dateOfBirth} readOnly/>
                 </div>
                 <div className="form-group col-sm-6">
                   <label>Country</label>
-                  <input type="Date" className="form-control_P"id="lname" value="Alami"/>
+                  <input type="text" className="form-control_P"id="lname" value="--" readOnly/>
                 </div>
                 <div className="form-group col-sm-6">
                   <label>State</label>
-                  <input type="Date" className="form-control_P"id="lname" value="Alami"/>
+                  <input type="text" className="form-control_P"id="lname" value="--" readOnly/>
                 </div>
                 <div className="form-group col-sm-6">
                   <label>Specialité</label>
-                  <input type="Date" className="form-control_P"id="lname" value="Alami"/>
+                  <input type="text" className="form-control_P"id="lname" value={inf.speciality} readOnly/>
                 </div>
                 <div className="form-group col-sm-6">
-                  <label>Detail specialité</label>
-                  <textarea className="form-control_P"id="lname" ></textarea>
+                  <label>Full Address</label>
+                  <textarea className="form-control_P"id="lname" value={inf.address} readOnly></textarea>
                 </div>
                 <div className="form-group center_element">
                 <button type="submit" className="btn btn-primary btn_width mr-2">Modifier</button>

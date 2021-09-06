@@ -12,19 +12,40 @@ import {
   InputLabel,
   ButtonGroup,
 } from '@material-ui/core';
-import Alert from '@material-ui/lab/Alert';
+import Snackbar from '@material-ui/core/Snackbar';
+import MuiAlert from '@material-ui/lab/Alert';
 import { TimePicker, Checkbox } from 'antd';
 import 'antd/dist/antd.css';
 import { useTranslation } from 'react-i18next';
 import { Field, Form, Formik, FormikConfig, FormikValues } from 'formik';
-import { Link } from 'react-router-dom';
+import { Link, Redirect, useHistory } from 'react-router-dom';
 import { CheckboxWithLabel, TextField } from 'formik-material-ui';
 import Select from 'react-select';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { CountryDropdown, RegionDropdown } from 'react-country-region-selector';
 import * as Yup from 'yup';
 
-const knex = require('../../database');
+const crypto = require('crypto');
+const knex = require('../database');
+
+const algorithm = 'aes-256-cbc';
+
+// generate 16 bytes of random data
+const initVector = Buffer.alloc(16, 0);
+
+// secret key generate 32 bytes of random data
+const Securitykey = crypto.scryptSync('bncaskdbvasbvlaslslasfhjazerfgty', 'GfG', 32);
+
+// the cipher function
+//const cipher = crypto.createCipheriv(algorithm, Securitykey, initVector);
+
+const Encrypt = (message) => {
+  let cipher = crypto.createCipheriv(algorithm, Securitykey, initVector);
+  let encryptedData = cipher.update(message, 'utf-8', 'hex');
+
+  encryptedData += cipher.final('hex');
+  return encryptedData;
+};
 
 // const sleep = (time) => new Promise((acc) => setTimeout(acc, time));
 const lngs = {
@@ -113,11 +134,16 @@ const validationSchemaStep3 = Yup.object().shape({
     .min(50, 'too short'),
 });
 const validationSchemaStep5 = Yup.object().shape({
-  privateKey: Yup.number()
-    .required(),
-    // .min(15, 'Must be at least 15 digits')
-    // .max(16, 'Must be less than 16 digits'),
-  publicKey: Yup.number().required(),
+  privateKey: Yup.number().when('teleconsultation', {
+    is: true,
+    then: Yup.number().required(),
+  }),
+  // .min(15, 'Must be at least 15 digits')
+  // .max(16, 'Must be less than 16 digits'),
+  publicKey: Yup.number().when('teleconsultation', {
+    is: true,
+    then: Yup.number().required(),
+  }),
 });
 const specialities = [
   { value: 'Gastro', label: 'Gastro' },
@@ -142,33 +168,35 @@ const secretQuests = [
 const rdvGaps = ['15', '20', '25', '30', '35', '40'];
 
 const handleDoctorCreate = (values) => {
-  knex('doctors')
+  knex('doctor')
     .insert({
-      firstName: values.firstName,
-      lastName: values.lastName,
-      password: values.password,
-      email: values.email,
-      gender: values.gender,
-      dateOfBirth: `${values.dobYear}-${values.dobMonth}-${values.dobDay}`,
-      city: values.city,
-      region: values.region,
-      country: values.country,
-      address: values.address,
-      postalCode: values.postalCode,
-      secretQuest: values.secretQuest,
-      answerScrtQuest: values.answerScrtQuest,
-      description: values.description,
-      officeName: values.officeName,
-      speciality: values.speciality,
-      professionalID: values.professionalID,
-      phoneNumber: values.phoneNumber,
-      rdvGap: values.rdvGap,
-      minFee: values.minFee,
-      maxFee: values.maxFee,
-      minTeleFee: values.minTeleFee,
-      maxTeleFee: values.maxTeleFee,
-      privateKey: values.privateKey,
-      publicKey: values.publicKey,
+      firstName: Encrypt( values.firstName),
+      lastName: Encrypt( values.lastName),
+      password: Encrypt( values.password),
+      email: Encrypt( values.email),
+      gender: Encrypt( values.gender),
+      dateOfBirth: Encrypt(
+         `${values.dobYear}-${values.dobMonth}-${values.dobDay}`
+       ),
+      city: Encrypt(values.city),
+      region: Encrypt(values.region),
+      country: Encrypt(values.country),
+      address: Encrypt(values.address),
+      // postalCode: Encrypt(cipher, values.postalCode),
+      // secretQuest: Encrypt(cipher, values.secretQuest),
+      // answerScrtQuest: Encrypt(cipher, values.answerScrtQuest),
+      // description: Encrypt(cipher, values.description),
+      // officeName: Encrypt(cipher, values.officeName),
+      speciality: Encrypt(values.speciality),
+      // professionalID: Encrypt(cipher, values.professionalID),
+      // phoneNumber: Encrypt(cipher, values.phoneNumber),
+      // rdvGap: Encrypt(cipher, values.rdvGap),
+      // minFee: Encrypt(cipher, values.minFee),
+      // maxFee: Encrypt(cipher, values.maxFee),
+      // minTeleFee: Encrypt(cipher, values.minTeleFee),
+      // maxTeleFee: Encrypt(cipher, values.maxTeleFee),
+      // privateKey: Encrypt(cipher, values.privateKey),
+      // publicKey: Encrypt(cipher, values.publicKey),
     })
     // eslint-disable-next-line promise/always-return
     .then(() => {
@@ -183,14 +211,18 @@ const handleDoctorCreate = (values) => {
     });
   knex
     .select('*')
-    .from('doctors')
+    .from('doctor')
     // eslint-disable-next-line no-console
     .then((data: any) => console.log('data:', data))
     // eslint-disable-next-line no-console
     .catch((err: any) => console.log(err));
 };
 let country: string;
+function Alert(props) {
+  return <MuiAlert elevation={6} variant="filled" {...props} />;
+}
 export default function Home() {
+  // const notify = () => toast("Wow so easy !");
   const [flag1, setFlag1] = React.useState(true);
   const [flag2, setFlag2] = React.useState(true);
   const [selectedtimeMM, setSelectedtimeMM] = useState(null);
@@ -219,6 +251,15 @@ export default function Home() {
     setFlag2(!flag2);
     setFlag1(true);
   };
+
+  const [open, setOpen] = useState(true);
+  const handleClose = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+    setOpen(false);
+  };
+
   const { t, i18n } = useTranslation();
   return (
     <Card>
@@ -261,13 +302,18 @@ export default function Home() {
           }}
           onSubmit={async (values) => {
             // await sleep(3000);
-            console.log('values', values, values.firstName);
+            console.log('values', values);
           }}
         >
           <FormikStep
             label={t('form.step1')}
-            validationSchema={validationSchemaStep1}
+            // validationSchema={validationSchemaStep1}
           >
+            <Snackbar open={open} onClose={handleClose}>
+              <Alert onClose={handleClose} severity="info">
+                Informations personnelles basiques
+              </Alert>
+            </Snackbar>
             <Box paddingBottom={2}>
               <Field
                 name="firstName"
@@ -339,7 +385,9 @@ export default function Home() {
               </Alert>
             </Box>
             <ButtonGroup>
-              <Field name="gender" component={ButtonComponent}
+              <Field
+                name="gender"
+                component={ButtonComponent}
                 variant="contained"
                 value="male"
                 onClick={handleClick1}
@@ -348,7 +396,9 @@ export default function Home() {
               >
                 {t('form.male')}
               </Field>
-              <Field name="gender" component={ButtonComponent}
+              <Field
+                name="gender"
+                component={ButtonComponent}
                 variant="contained"
                 value="female"
                 onClick={handleClick2}
@@ -356,31 +406,31 @@ export default function Home() {
               >
                 {t('form.female')}
               </Field>
-              </ButtonGroup>
-              <Field
-                name="dobDay"
-                component={TextField}
-                label={t('form.day')}
-                type="number"
-                placeholder="DD"
-                style={{ marginLeft: '90px', width: '60px' }}
-              />
-              <Field
-                name="dobMonth"
-                component={TextField}
-                label={t('form.month')}
-                style={{ marginLeft: '10px', width: '65px' }}
-                type="number"
-                placeholder="MM"
-              />
-              <Field
-                name="dobYear"
-                component={TextField}
-                label={t('form.year')}
-                style={{ marginLeft: '10px', width: '100px' }}
-                type="number"
-                placeholder="YYYY"
-              />
+            </ButtonGroup>
+            <Field
+              name="dobDay"
+              component={TextField}
+              label={t('form.day')}
+              type="number"
+              placeholder="DD"
+              style={{ marginLeft: '90px', width: '60px' }}
+            />
+            <Field
+              name="dobMonth"
+              component={TextField}
+              label={t('form.month')}
+              style={{ marginLeft: '10px', width: '65px' }}
+              type="number"
+              placeholder="MM"
+            />
+            <Field
+              name="dobYear"
+              component={TextField}
+              label={t('form.year')}
+              style={{ marginLeft: '10px', width: '100px' }}
+              type="number"
+              placeholder="YYYY"
+            />
             <Box paddingBottom={2}>
               <Field
                 name="teleconsultation"
@@ -393,8 +443,14 @@ export default function Home() {
           </FormikStep>
           <FormikStep
             label={t('form.step2')}
-            validationSchema={validationSchemaStep2}
+            // validationSchema={validationSchemaStep2}
           >
+            <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
+              <Alert onClose={handleClose} severity="info">
+                Informations sur votre adresse pour permettre au patient de vous
+                trouver facilement
+              </Alert>
+            </Snackbar>
             <Box paddingBottom={2}>
               <Field
                 name="country"
@@ -462,8 +518,13 @@ export default function Home() {
           </FormikStep>
           <FormikStep
             label={t('form.step3')}
-            validationSchema={validationSchemaStep3}
+            // validationSchema={validationSchemaStep3}
           >
+            <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
+              <Alert onClose={handleClose} severity="info">
+                Informations professionnelles!
+              </Alert>
+            </Snackbar>
             <Box paddingBottom={3}>
               <Field
                 variant="outlined"
@@ -554,21 +615,26 @@ export default function Home() {
             label="Operating days"
             //validationSchema={validationSchemaStep1}
           >
+            <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
+              <Alert onClose={handleClose} severity="info">
+                Vos horaires de travail
+              </Alert>
+            </Snackbar>
             <div className="center_element">
               <Box>
-              <p>RDV Gap</p>
-              <ButtonGroup>
-                {rdvGaps.map((rdvGap, i) => (
-                  <Field
-                    name="rdvGap"
-                    key={i}
-                    value={rdvGap}
-                    component={ButtonComponent}
-                  >
-                    {rdvGap + 'mins'}
-                  </Field>
-                ))}
-              </ButtonGroup>
+                <p>RDV Gap</p>
+                <ButtonGroup>
+                  {rdvGaps.map((rdvGap, i) => (
+                    <Field
+                      name="rdvGap"
+                      key={i}
+                      value={rdvGap}
+                      component={ButtonComponent}
+                    >
+                      {rdvGap + 'mins'}
+                    </Field>
+                  ))}
+                </ButtonGroup>
               </Box>
               <Checkbox>monday</Checkbox>
               <TimePicker.RangePicker
@@ -678,7 +744,7 @@ export default function Home() {
 
           <FormikStep
             label={t('form.step4')}
-            validationSchema={validationSchemaStep5}
+            // validationSchema={validationSchemaStep5}
             // validationSchema={Yup.object({
             //   fee: Yup.mixed().when('teleconsultation', {
             //     is: true,
@@ -692,6 +758,15 @@ export default function Home() {
             //   }),
             // })}
           >
+            <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
+              <Alert onClose={handleClose} severity="info">
+                Ces deux clés sont requis pour recevoir les frais de
+                téléconsultation au cas où vous l'assurez.
+                <br />
+                Vous pouvez choisir de faire tourner le noeud IPFS soit su r
+                votre machine locale ou sur un noeud distant.
+              </Alert>
+            </Snackbar>
             <Box paddingBottom={2}>
               <Field
                 variant="outlined"
@@ -871,6 +946,8 @@ export function FormikStepper({
     return step === childrenArray.length - 1;
   }
   const { t, i18n } = useTranslation();
+  const history = useHistory();
+
   return (
     <div>
       <div>
@@ -895,6 +972,9 @@ export function FormikStepper({
             await props.onSubmit(values, helpers);
             handleDoctorCreate(values);
             setCompleted(true);
+            // this.props.history.push('/moneyform');
+            // <Redirect to="/agenda" />;
+            history.push('/profile');
           } else {
             setStep((s) => s + 1);
 
