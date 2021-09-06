@@ -35,6 +35,7 @@ import FormLabel from '@material-ui/core/FormLabel';
 import LongMenu from './LongMenu';
 import ShowChartIcon from '@material-ui/icons/ShowChart';
 import NotificationsActiveIcon from '@material-ui/icons/NotificationsActive';
+
 const drawerWidth = 240;
 
 const useStyles = makeStyles((theme) => ({
@@ -213,7 +214,7 @@ export default function App_bar() {
           <br/>
           <li className="iq-menu-title">
           <Link to="/Support"><span>&nbsp;<NotificationsActiveIcon  fontSize="small"/> Support</span>
-          </Link>
+         </Link>
           </li>
           
 
@@ -221,87 +222,152 @@ export default function App_bar() {
          
         
       </Drawer>
-      <main className="container-fluid">
-      <div className="iq-card">
-        <div className="iq-card-body pl-0 pr-0 pt-0">
-          <div className="doctor-details-block">
-            <div className="doc-profile-bg bg-primary" ></div>
-            <div className="doctor-profile text-center">
-              <img src={doctor_img}className="avatar-130 img-fluid img_size"/>
-            </div>
-            <div className="text-center mt-3 pl-3 pr-3">
-              <h4>Doc Zayd</h4>
-              <p></p>
-              <form className="form-row center_element">
-                <div className="form-group col-sm-6">
-                  <label>First name</label>
-                  <input type="text" className="form-control_P"id="fname" value="Zayd"/>
-                </div>
-                <div className="form-group col-sm-6">
-                  <label>Last name</label>
-                  <input type="text" className="form-control_P"id="lname" value="Alami"/>
-                </div>
-                <div className="form-group col-sm-6">
-                  <label>Email</label>
-                  <input type="text" className="form-control_P"id="lname" value="Alami@"/>
-                </div>
-                <div className="form-group col-sm-6">
-                  <label>City</label>
-                  <input type="text" className="form-control_P"id="lname" value="Rabat"/>
-                </div>
-                <div className="form-group col-sm-6">
-                  <label className="d-block">Gender:</label>
-                  
-                  <Radio
-        checked={selectedValue === 'Male'}
-        onChange={handleChange}
-        value="Male"
-        name="radio-button-demo"
-        inputProps={{ 'aria-label': 'Male' }}
-      />
-      <label className="custom-control-label">Male</label>
-      <Radio
-        checked={selectedValue === 'Female'}
-        onChange={handleChange}
-        value="Female"
-        name="radio-button-demo"
-        inputProps={{ 'aria-label': 'Female' }}
-      />
-      <label className="custom-control-label">Female</label>
-                </div>
-                <div className="form-group col-sm-6">
-                  <label>Date of birth</label>
-                  <input type="Date" className="form-control_P"id="lname" value="Alami"/>
-                </div>
-                <div className="form-group col-sm-6">
-                  <label>Country</label>
-                  <input type="Date" className="form-control_P"id="lname" value="Alami"/>
-                </div>
-                <div className="form-group col-sm-6">
-                  <label>State</label>
-                  <input type="Date" className="form-control_P"id="lname" value="Alami"/>
-                </div>
-                <div className="form-group col-sm-6">
-                  <label>Specialité</label>
-                  <input type="Date" className="form-control_P"id="lname" value="Alami"/>
-                </div>
-                <div className="form-group col-sm-6">
-                  <label>Detail specialité</label>
-                  <textarea className="form-control_P"id="lname" ></textarea>
-                </div>
-                <div className="form-group center_element">
-                <button type="submit" className="btn btn-primary btn_width mr-2">Modifier</button>
-                </div>
-              </form>
-            </div>
-          </div>
-        </div>
-         </div>
-        <Link to="/">Go back to home</Link>
-        <div>
+    <div className="container-fluid">
+          <div className="row">
+           <div className="col-lg-4 row m-0 p-0">
+             <div className="col-sm-12">
+               <div className="iq-card iq-card-block
+               iq-card-stretch iq-card-height
+               iq-user-profile-block" >
+                   <div className="iq-card-body">
+                       <div className="user-details-block">
+                           <div className="text-center mt-3">
+                               <h4><b>Mme XY</b></h4>
+                              <p>23ans,Rabat</p>
+                           </div>
+                           <ul className="
+                           doctoe-sedual d-flex align-items-center
+                           justify-content-between 
+                           p-0 mt-4 mb-0
+                           ">
+                             <li className="text-center">
+                               <h6 className="text-primary">Taille</h6>
+                             <h3>1.71 <span>m</span></h3>
+                             </li>
+                             <li className="text-center">
+                                 <h6 className="text-primary">Poids</h6>
+                                 <h3 className="text-warning">62<span>kg</span></h3>
+                             </li>
+                           </ul>
+                       </div>
+                   </div>
+              </div>  
+             
+           </div>
 
-        </div>
-      </main>
+
+
+
+           <div className="col-lg-8">
+            <div className="iq-card iq-card-block iq-card-stretch
+            iq-card-height">
+              <div className="iq-card-body pb-0">
+               <div className="row">
+                <div className="col-sm-12">
+                    <div className="iq-card">
+                        <div className="iq-card-body bg-primarye rounded pt-2 pb-2 pr-2">
+                         <div className="d-flex align-items-center justify-content-between">
+                             <p className="mb-0"> La Consultation sera dans --:-- </p>
+                             <div className="rounded iq-card-icon ">
+                               <div className="img-fluid"><DuoIcon/></div> 
+                             </div>
+                         </div>
+                        </div>
+                    </div>
+                    <div className="iq-card">
+                        <div className="iq-header-title">
+                            <h4 className="card-title text-primary">Mode de vie</h4>
+                        </div>
+                        <div className="iq-card-body pl-0 pr-0 pb-0 ">
+                            <div className="row ">
+                             <div className="col-md-4"> 
+                                <div className="training-block d-flex
+                             align-items-center">
+                                  <div className="rounded-circle iq-card-icon iq-bg-primary">
+                                      <div className="img-fluid">icon</div>
+                                  </div>
+                                  <div className="ml-3"> 
+                                  <h5> Diabette</h5>
+                                  <p className="mb-0">1.05g</p>
+                                  </div>
+                               </div>
+                             </div>
+                             <div className="col-md-4">
+                                 <div className="training-block d-flex
+                             align-items-center">
+                                  <div className="rounded-circle iq-card-icon iq-bg-primary">
+                                      <div className="img-fluid">icon</div>
+                                  </div>
+                                  <div className="ml-3"> 
+                                  <h5> Diabette</h5>
+                                  <p className="mb-0">1.05g</p>
+                                  </div>
+                               </div>
+                             </div>
+                             <div className="col-md-4"><div className="training-block d-flex
+                             align-items-center">
+                                  <div className="rounded-circle iq-card-icon iq-bg-primary">
+                                      <div className="img-fluid">icon</div>
+                                  </div>
+                                  <div className="ml-3"> 
+                                  <h5> Diabette</h5>
+                                  <p className="mb-0">1.05g</p>
+                                  </div>
+                               </div></div>
+                            
+                            </div>
+                        </div>
+                    </div>
+               
+                </div>
+                <div className="col-lg-88">
+                    <div className="iq-card">
+                        <div className="
+                        iq-card-headerr d-flex justify-content-between p-0 bg-white
+                        ">
+                         <div className="iq-heder-title">
+                             <h4 className="
+                             card-title text-primary
+                             "> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Derniere consultation</h4>
+                         </div>
+                        </div>
+                        <div className="iq-card-body p-0">
+                           <table className="table mb-0 table-borderless table-box-shadow">
+                             <thead>
+                                 <tr>
+                                     <th>Consultation</th>
+                                     <th>Date</th>
+                                 </tr>
+                             </thead>
+                              <tbody>
+                                <tr>
+                                   <th>pff </th> 
+                                   <th>prr</th></tr> 
+                              </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <div className="col-lg-44">
+                    <div className="iq-card mb-0">
+                       <div className="iq-card-headerr d-flex justify-content-between p-0 bg-white">
+                         <div className="iq-card-body p-0">
+                           
+                         </div>
+                       </div>
+                    </div>
+                </div>
+                <div className="col-md-6"></div>
+                <div className="col-md-6"></div>
+              
+               </div>
+              </div>
+            </div>
+           </div>
+           
+          </div>
+      </div>
+      </div>
     </div>
   );
 }

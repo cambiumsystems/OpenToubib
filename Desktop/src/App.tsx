@@ -8,16 +8,21 @@ import Login from './pages/Login';
 import App_bar from './pages/App_bar';
 import Sign_in from './pages/Sign_in';
 import Support from './pages/Support';
+import Medical_file from './pages/Medical_file';
+import Menuappbar from './pages/Menuappbar';
+import Statistique from "./pages/Statistique";
+
+
 
 const Hello = () => {
   return (
     <div>
-      <Link to="/Support">
+      <Link to="/Medical_file">
         <button
           type="button"
           style={{ position: 'absolute', top: '0px', right: '0px' }}
         >
-         Support
+        Medical_file
         </button>
       </Link>
       
@@ -42,8 +47,14 @@ const Hello = () => {
             Profil
           </button>
         </Link>
+        <Link to="/Support">
+          <button type="button">
+           
+            Support
+          </button>
+        </Link>
         <div>
-        <Link to="/">
+        <Link to="/Support">
           <span role="img" aria-label="books"
             style={{ position: 'absolute', bottom: '25px', right: '40%' }}>
             Support this project!
@@ -64,6 +75,10 @@ export default function App() {
         <Route path="/agenda" component={Agenda} />
         <Route path="/Support" component={Support} />
         <Route path="/App_bar" component={App_bar} />
+        <Route path="/Medical_file" component={Medical_file} />
+        <Route path="/Statistique" component={Statistique} />
+       
+       
       </Switch>
     </Router>
   );

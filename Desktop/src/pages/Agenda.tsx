@@ -76,6 +76,7 @@ const body = (
     <h2 id="simple-modal-title"className="h_txt" >Parametrage du calendrier</h2>
     <a className="left">heure de travail</a>
     <br/>
+   
     <div id="simple-modal-description">
      <form >
         <div className="form-row">
@@ -139,7 +140,7 @@ const body = (
    
    plugins={[dayGridPlugin,timeGridPlugin, interactionPlugin]}
     initialView="dayGridMonth"
-    
+    slotMinTime= "08:00:00"
     editable={true}
     selectable
     weekends
@@ -152,7 +153,7 @@ const body = (
       knex("events")
       .update({start,end})
       .where({id})
-      .then(alert("date d'ev modifer"))
+      .then(alert("rdv modifé"))
       
     }}
 

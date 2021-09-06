@@ -244,8 +244,8 @@ qui joueront le rôle de passerelle/gateway
                      <span>100</span>
                    </div>
                    <div class="field">
-                     <div class="value leftt">Euro</div>
-                      <input type="range" min="0" max="200"  steps="1"/>
+                     <div class="value leftt">Euro/month</div>
+                      <input type="range" min="0" max="200"   steps="1"/>
                    </div>
                  </div>
                            <button type="button"className="btn btn-primary  right_btn">Don</button>
