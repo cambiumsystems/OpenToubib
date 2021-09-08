@@ -26,7 +26,13 @@ import Modal from '@material-ui/core/Modal';
 import NotificationsActiveIcon from '@material-ui/icons/NotificationsActive';
 import ShowChartIcon from '@material-ui/icons/ShowChart';
 import LongMenu from './LongMenu';
+import AccountCircle from "@material-ui/icons/AccountCircle";
+import IconButton from "@material-ui/core/IconButton";
+import { useHistory } from 'react-router-dom';
+
 import { HashRouter as Router, Switch, Route, Link } from 'react-router-dom';
+import { Redirect } from "react-router-dom";
+import Nav_bar from './Nav_bar';
 
 const drawerWidth = 240;
 
@@ -36,6 +42,11 @@ const useStyles = makeStyles((theme) => ({
   },
   appBar: {
     zIndex: theme.zIndex.drawer + 1,
+  },
+  menuButton: {
+    float:'right'
+  }, flex: {
+    flexGrow: 1
   },
   drawer: {
     width: drawerWidth,
@@ -164,62 +175,18 @@ export default function App_bar() {
       
     </div>
   );
-
-
+  const history = useHistory();
+  const Logout=()=>{
+    localStorage.setItem('user','loggout');
+   history.push('/');
+  }
+  
   return (
     
     <div className={classes.root}>
      
-      <CssBaseline />
-      <AppBar position="fixed" className={classes.appBar}>
-        <Toolbar>
-          <Typography variant="h6" noWrap className={classes.color_white}>
-            OPEN-TOUBIB
-          </Typography>
-          
-        </Toolbar>
-        
-      </AppBar>
-      <Drawer
-        className={classes.drawer}
-        variant="permanent"
-        classes={{
-          paper: classes.drawerPaper,
-        }}
-      >
-        
-        <Toolbar />
-        <br/>
-        <li className="left"><LongMenu/></li>
-        <br/>
-        <div className="">
-          <li className="">
-            
+      <Nav_bar/>
       
-          <Link to="/profile">   <span className="left_sidebar">&nbsp;<AccountBoxIcon fontSize="small"/> Profil</span>
-          </Link>
-          </li>
-          <br/>
-          <li className="">
-           <Link to="/App_bar"><span>&nbsp;<DateRangeIcon  fontSize="small"/> Calendrier</span>
-            </Link>
-          </li>
-          <br/>
-          <li className="iq-menu-title">
-              <Link to="/Statistique"> <p>&nbsp;<ShowChartIcon   fontSize="small"/> Statistique</p>
-              </Link>
-          </li>
-          <br/>
-          <li className="iq-menu-title">
-          <Link to="/Support"><span>&nbsp;<NotificationsActiveIcon  fontSize="small"/> Support</span>
-          </Link>
-          </li>
-          
-
-        </div>
-         
-        
-      </Drawer>
       <main className="container-fluid">
         <div className="row">
           <div className="col-md-3">

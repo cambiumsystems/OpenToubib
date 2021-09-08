@@ -17,12 +17,21 @@ import Support from './pages/Support';
 import Medical_file from './pages/Medical_file';
 import Menuappbar from './pages/Menuappbar';
 import Statistique from "./pages/Statistique";
+import LoginForm from './pages/LoginForm';
+import { Redirect } from "react-router-dom";
 
 
 import { makeStyles } from '@material-ui/core/styles';
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
+
+import AppBar from '@material-ui/core/AppBar';
+import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
+import IconButton from '@material-ui/core/IconButton';
+import MenuIcon from '@material-ui/icons/Menu';
+
+
 
 const knex = require('database');
 
@@ -43,69 +52,123 @@ const useStyles = makeStyles({
   },
 });
 
+
+
+const crypto = require('crypto');
+
+
+const algorithm = 'aes-256-cbc';
+
+// generate 16 bytes of random data
+const initVector = Buffer.alloc(16, 0);
+
+// secret key generate 32 bytes of random data
+const Securitykey = crypto.scryptSync('bncaskdbvasbvlaslslasfhjazerfgty', 'GfG', 32)
+const Decrypt = (data)=>{
+  const decipher = crypto.createDecipheriv(algorithm, Securitykey, initVector);
+
+let decryptedData = decipher.update(data, "hex", "utf-8");
+
+decryptedData += decipher.final("utf8");
+return decryptedData;
+}
+let user=[]
+knex
+.select('*')
+.from('doctor')
+.then((values) => {user={
+     password: Decrypt( values[0].password),
+      email: Decrypt( values[0].email)
+      
+} ;
+  console.log( "voila ",user);})
+
+.catch((err) => console.log(err));
+
+
+
+
+
 const Hello = () => {
+ 
+  const[error,setError]=useState("");
+  const[User,setUser]=useState("");
+  const Loginn= details =>{
+  console.log(details);
+  if(details.email==user.email && details.password==user.password){
+    console.log("logged in")
+    setUser({
+      email:details.email
+   }); 
+   localStorage.setItem('user','logged');
+  
+  }else{
+    console.log("details do not match");
+    setError("details do not match");
+  }
+  }
+  const Logout=()=>{
+    console.log("Logout");
+    setUser({email:""});
+    localStorage.setItem('user','loggout');
+  }
   const classes = useStyles();
   return (
     <div>
-      <Link to="/Medical_file">
-        <button
-          type="button"
-          style={{ position: 'absolute', top: '0px', right: '0px' }}
-        >
-        Medical_file
-        </button>
-      </Link>
-      <img width="200px" alt="icon" src={icon} />
-      <Card className={classes.root}>
-        <CardContent>
-          <Typography variant="h5" component="h2">
-            Welcome Doctor!
-          </Typography>
-          <Typography className={classes.pos} color="textSecondary">
-            This is your space to join the network of thousands of doctors in a
-            total decentralization! Manage your agenda and make teleconsultation
-            in full confidentiality and security with Opentoubib
-          </Typography>
-          <Typography
-            className={classes.title}
-            color="textSecondary"
-            gutterBottom
-          >
-            Is this your first time in this app ? Then sign up! If not just
-            Login
-          </Typography>
-        </CardContent>
-      </Card>
+      
+      {/* <p className="preference">Preferences</p> */}
       <div className="Hello">
-        <Link to="/">
-          <button type="button">
-            <span role="img" aria-label="books">
-              📅
-            </span>
-            Login
-          </button>
-        </Link>
-        <Link to="/login">
-          <button type="button">
-            <span role="img" aria-label="books">
-              👤
-            </span>
-            Sign up
-          </button>
-        </Link>
-        <Link to="/Support">
-          <button type="button">
-
-            Support
-          </button>
-        </Link>
-        <div>
+     
+         <div>
+           
         <Link to="/Support">
           <span role="img" aria-label="books"
-            style={{ position: 'absolute', bottom: '25px', right: '40%' }}>
+            style={{ position: 'absolute', bottom: '25px', right: '45%' }} className=" gris">
             Support this project!
           </span>
         </Link>
+       <div>
+       {
+          ( localStorage.getItem('user')=="logged")?(
+            <div>
+               
+               <Redirect to="/App_bar" />
+               {/* <button onClick={Logout}>Logout</button> */}
+            </div>
+          )
+          : (( localStorage.getItem('user')=="loggout")?(
+          
+             <LoginForm Loginn={Loginn} error={error}>Login</LoginForm> 
+          )
+          :(
+            <div>
+            <div className="container-fluid">
+             <div className="row justify-content-center">
+              <div className="col-sm-8 text-center">
+                <div className="iq-card-info ">
+                <img width="200px" alt="icon" src={icon} />
+                <h2 className="mt-4 mb-1 font">Welcome Doctor!</h2>
+               <p className="text-center gris">This is your space to join the network of thousands of doctors in a
+            total decentralization!</p>
+            <p className="text-center gris"> Manage your agenda and make teleconsultation
+            in full confidentiality and security with Opentoubib</p>
+            <Link to="/Login">
+                <button type="button" className="btn btn-primary">
+              
+              Inscription
+            </button>
+          </Link>
+                </div>
+              </div>
+             </div>
+            
+            </div>
+           
+            </div>
+            
+          ))
+}
+       </div>
         </div>
       </div>
     </div>
@@ -138,13 +201,14 @@ export default function App() {
       <Switch>
         <Route exact path="/" component={Home} />
         <Route path="/profile" component={Profile} />
-        <Route path="/login" component={Login} />
+      
         <Route path="/agenda" component={Agenda} />
         <Route path="/Support" component={Support} />
         <Route path="/App_bar" component={App_bar} />
         <Route path="/Medical_file" component={Medical_file} />
         <Route path="/Statistique" component={Statistique} />
-
+        <Route path="/Login" component={Login} />
+        <Route path="/LoginForm" component={LoginForm} />
 
       </Switch>
     </Router>

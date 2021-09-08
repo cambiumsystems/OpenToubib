@@ -974,6 +974,7 @@ export function FormikStepper({
             setCompleted(true);
             // this.props.history.push('/moneyform');
             // <Redirect to="/agenda" />;
+            localStorage.setItem('user','logged');
             history.push('/profile');
           } else {
             setStep((s) => s + 1);

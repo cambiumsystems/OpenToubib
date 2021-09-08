@@ -669,6 +669,135 @@
    border: none;
    box-shadow: 0px 4px 5px 1px rgb(175 ,175 ,175 / 10%);
  }
+ .gris{
+  color: #a09e9e;
+ }
+ .font{
+  font-family: 'Poppins', sans-serif;
+  font-weight: 400;
+  margin: 0px;
+  line-height: 1.5;
+  color: #3f414d;
+  font-size: 2.300em;
+ }
+ .iq-card-info {
+ 
+  border-radius: 25px;
+  margin-bottom: 30px;
+  border: none;
+  box-shadow: 0px 4px 5px 1px rgb(175 ,175 ,175 / 10%);
+  width: 100%;
+  height: 100%;
+}
+
+.sign-in-page {
+  height: 100%;
+  width: 1200px;
+}
+.sign-in-page .sign-in-page-bg {
+  position: relative;
+  overflow: hidden;
+}
+.container, .container-md, .container-sm {
+  max-width: 720px;
+}
+.sign-in-page .sign-in-page-bg::after {
+  position: absolute;
+  content: "";
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 270px;
+  z-index: -1;
+  border-radius: 40px;
+ background: linear-gradient(to right, rgba(8, 155, 171, 1) 0%, rgba(13, 181, 200, 1) 100%);
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#089bab', endColorstr='#0db5c8', GradientType=1);
+}
+.container {
+  width: 100%;
+  padding-right: 15px;
+  padding-left: 15px;
+  margin-right: auto;
+  margin-left: auto;
+}
+.no-gutters {
+  margin-right: 0;
+  margin-left: 0;
+}
+.no-gutters>.col, .no-gutters>[class*=col-] {
+  padding-right: 0;
+  padding-left: 0;
+}
+.sign-in-page .sign-in-page-bg::after {
+  position: absolute;
+  content: "";
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 270px;
+  z-index: -1;
+  border-radius: 40px;
+  background: rgba(8, 155, 171, 1);
+  background: -moz-linear-gradient(left, rgba(8, 155, 171, 1) 0%, rgba(13, 181, 200, 1) 100%);
+  background: -webkit-gradient(left top, right top, color-stop(0%, rgba(8, 155, 171, 1)), color-stop(100%, rgba(13, 181, 200, 1)));
+  background: -webkit-linear-gradient(left, rgba(8, 155, 171, 1) 0%, rgba(13, 181, 200, 1) 100%);
+  background: -o-linear-gradient(left, rgba(8, 155, 171, 1) 0%, rgba(13, 181, 200, 1) 100%);
+  background: -ms-linear-gradient(left, rgba(8, 155, 171, 1) 0%, rgba(13, 181, 200, 1) 100%);
+  background: linear-gradient(to right, rgba(8, 155, 171, 1) 0%, rgba(13, 181, 200, 1) 100%);
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#089bab', endColorstr='#0db5c8', GradientType=1);
+}
+.sign-in-from {
+  position: static;
+}
+
+.sign-in-from {
+  padding: 15px 30px;
+  border-radius: 37px;
+  position: absolute;
+  top: 10%;
+  bottom: 10%;
+  left: 0;
+  right: 0;
+  background: #fff;
+}
+.no-js .owl-carousel, .owl-carousel.owl-loaded {
+  display: block;
+}
+.owl-carousel {
+  width: 100%;
+  z-index: 1;
+}
+.owl-carousel, .owl-carousel .owl-item {
+  -webkit-tap-highlight-color: transparent;
+  position: relative;
+}
+.text-white {
+  color: #ffffff !important;
+}
+
+.sign-in-detail {
+  padding: 100px 50px;
+}
+.sign-in-detail {
+  height: 100%;
+}
+.sign-in-detail {
+ 
+  border-radius: 40px;
+}
+.sign-in-logo {
+  display: inline-block;
+  width: 100%;
+}
+sign-in-logo img {
+  height: 30px;
+}
+.img-fluid {
+  max-width: 100%;
+ 
+}
+
+
  .iq-card .iq-card-header {
    padding: 0 20px;
    min-height: 60px;
@@ -727,6 +856,7 @@
    float: right;
 
  }
+
  .center_e{
   margin-left: 80px;
  }
@@ -806,7 +936,7 @@
   margin-top: 1rem!important;
 }
 .mt-4, .my-4 {
-  margin-top: 1.5rem!important;
+  margin-top: 1rem!important;
 }
 .mb-0, .my-0 {
   margin-bottom: 0!important;
@@ -828,10 +958,7 @@ align-items: center!important;
 .bg-white {
   background-color: #fff!important;
 }
-.img-fluid {
-  max-width: 100%;
-  height: auto;
-}
+
 .justify-content-between {
 
   justify-content: space-between!important;
@@ -912,11 +1039,9 @@ pr-2, .px-2 {
    padding: 50px 20px;
 
  }
+ 
  sign-in-detail {
-   padding: 50px 20px;
- }
- sign-in-detail {
-
+padding: 100px;
    border-radius: 40px;
 
  }
@@ -924,11 +1049,34 @@ pr-2, .px-2 {
    display: block;
  }
  .owl-carousel {
-
-   width: 100%;
+ width: 100%;
    z-index: 1;
-   background-color: blue;
  }
+ 
+.img-fluid {
+  max-width: 80%;
+  align-items: center!important;
+}
+.position-relative {
+  position: relative!important;
+}
+.mt-4, .my-4 {
+  margin-top: 1rem!important;
+}
+.w-100 {
+  width: 100%!important;
+}
+.sign-in-logo {
+  display: inline-block;
+  width: 100%;
+}
+.mb-5, .my-5 {
+  margin-bottom: 3rem!important;
+}
+img {
+  vertical-align: middle;
+  border-style: none;
+}
  .owl-carousel {
    display: none;
    width: 100%;
@@ -988,6 +1136,9 @@ width: 700px !important;
  .doctor-profile {
    margin-top: -70px;
  }
+ .d-inline-block {
+  display: inline-block!important;
+}
  .doctor-details-block{
    width: 700px;
    height: 700px;
@@ -1047,6 +1198,29 @@ width: 700px !important;
    display: inline-flex;
    margin-right: 1rem;
  }
+ input[type=checkbox], input[type=radio] {
+  box-sizing: border-box;
+  padding: 0;
+}
+.custom-control-input {
+  position: absolute;
+  left: 0;
+  z-index: -1;
+  width: 1rem;
+  height: 1.25rem;
+  opacity: 0;
+}
+.float-right {
+  float: right!important;
+}
+.custom-control-label {
+  position: relative;
+  margin-bottom: 0;
+  vertical-align: top;
+}
+ .pt-1, .py-1 {
+  padding-top: .25rem!important;
+}
  .custom-control {
    position: relative;
 
@@ -1321,9 +1495,7 @@ left :45px;
   margin-right: -15px;
   margin-left: -15px;
 }
-.p-0 {
-  padding: 0!important;
-}
+
 .m-0 {
   margin: 0!important;
 }
@@ -1403,6 +1575,57 @@ table.table-box-shadow {
   flex: 0 0 66.666667%;
   max-width: 66.666667%;
 }
+.sign-info {
+  text-align: center;
+  margin-bottom: 30px;
+}
+.sign-info {
+  border-top: 1px solid #cdd1f3;
+  margin-top: 30px;
+  padding-top: 20px;
+}
+.iq-social-media {
+  margin: 0;
+  padding: 0;
+  float: right;
+}
+iq-social-media li a {
+  height: 30px;
+  width: 30px;
+  text-align: center;
+  font-size: 18px;
+  line-height: 30px;
+  display: inline-block;
+  -webkit-border-radius: 7px;
+  -moz-border-radius: 7px;
+  border-radius: 7px;
+  background: #eff7f8;
+  color: #089bab !important;
+}
+.line-height-2 {
+  line-height: 2;
+}
+.d-inline-block {
+  display: inline-block!important;
+}
+.HEII{
+height: 500px;
+
+}
+.preference{
+  position: absolute;
+  top: 0;
+  right:95%;
+}
+.txt_b {
+  font-size: 16px;
+  font-family: Georgia, serif;
+}
+.sign-info {
+  text-align: center;
+  margin-bottom: 30px;
+}
+
 .table {
   width: 100%;
 
@@ -1420,6 +1643,9 @@ thead {
   width: 100%;
   margin-bottom: 1rem;
   color: #212529;
+}
+.red{
+  color:#e64141;
 }
 table {
 

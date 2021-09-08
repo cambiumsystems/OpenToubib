@@ -35,6 +35,7 @@ import FormLabel from '@material-ui/core/FormLabel';
 import LongMenu from './LongMenu';
 import ShowChartIcon from '@material-ui/icons/ShowChart';
 import NotificationsActiveIcon from '@material-ui/icons/NotificationsActive';
+import Nav_bar from './Nav_bar';
 const drawerWidth = 240;
 const crypto = require('crypto');
 const knex = require('../database');
@@ -212,55 +213,9 @@ export default function Profile() {
 
   return (
     <div className={classes.root}>
-      <CssBaseline />
-      <AppBar position="fixed" className={classes.appBar}>
-        <Toolbar>
-          <Typography variant="h6" noWrap className={classes.color_white}>
-            OPEN-TOUBIB
-          </Typography>
-        </Toolbar>
-      </AppBar>
-      <Drawer
-        className={classes.drawer}
-        variant="permanent"
-        classes={{
-          paper: classes.drawerPaper,
-        }}
-      >
-
-        <Toolbar />
-        <br/>
-        <li className="left"><LongMenu/></li>
-        <br/>
-        <div className="">
-          <li className="">
-
-
-          <Link to="/profile"><span className="left_sidebar">&nbsp;<AccountBoxIcon fontSize="small"/> Profil</span>
-          </Link>
-          </li>
-          <br/>
-          <li className="">
-           <Link to="/App_bar"><span>&nbsp;<DateRangeIcon  fontSize="small"/> Calendrier</span>
-            </Link>
-          </li>
-          <br/>
-          <li className="iq-menu-title">
-             <Link to="/Statistique"> <p>&nbsp;<ShowChartIcon   fontSize="small"/> Statistique</p>
-              </Link>
-
-          </li>
-          <br/>
-          <li className="iq-menu-title">
-          <Link to="/Support"><span>&nbsp;<NotificationsActiveIcon  fontSize="small"/> Support</span>
-          </Link>
-          </li>
-
-
-        </div>
-
-
-      </Drawer>
+      <Nav_bar/>
+         
+         
       <main className="container-fluid">
       <div className="iq-card">
         <div className="iq-card-body pl-0 pr-0 pt-0">

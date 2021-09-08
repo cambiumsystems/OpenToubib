@@ -15,6 +15,8 @@ import { app, BrowserWindow, shell } from 'electron';
 import { autoUpdater } from 'electron-updater';
 import log from 'electron-log';
 import MenuBuilder from './menu';
+const electron=require("electron");
+const Menu=electron.Menu
 
 export default class AppUpdater {
   constructor() {
@@ -97,15 +99,7 @@ const createWindow = async () => {
     mainWindow = null;
   });
 
-  const menuBuilder = new MenuBuilder(mainWindow);
-  menuBuilder.buildMenu();
-
-  // Open urls in the user's browser
-  mainWindow.webContents.on('new-window', (event, url) => {
-    event.preventDefault();
-    shell.openExternal(url);
-  });
-
+  
   // Remove this if your app does not use auto updates
   // eslint-disable-next-line
   new AppUpdater();
@@ -123,7 +117,18 @@ app.on('window-all-closed', () => {
   }
 });
 
-app.whenReady().then(createWindow).catch(console.log);
+app.whenReady().then(function(){
+  createWindow()
+  const template=[
+    {
+     label :'Parametre',
+     
+  }
+    
+  ]
+ const menu= Menu.buildFromTemplate(template)
+ Menu.setApplicationMenu(menu)
+}).catch(console.log);
 
 app.on('activate', () => {
   // On macOS it's common to re-create a window in the app when the
