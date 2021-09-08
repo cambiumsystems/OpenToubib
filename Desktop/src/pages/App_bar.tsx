@@ -34,6 +34,7 @@ import { HashRouter as Router, Switch, Route, Link } from 'react-router-dom';
 import { Redirect } from "react-router-dom";
 import Nav_bar from './Nav_bar';
 
+
 const drawerWidth = 240;
 
 const useStyles = makeStyles((theme) => ({

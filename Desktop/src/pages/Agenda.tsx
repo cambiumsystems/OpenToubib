@@ -8,6 +8,7 @@ import { red } from '@material-ui/core/colors';
 import SettingsSharpIcon from '@material-ui/icons/SettingsSharp';
 import { makeStyles } from '@material-ui/core/styles';
 import Modal from '@material-ui/core/Modal';
+import swal from 'sweetalert';
 
 function rand() {
   return Math.round(Math.random() * 20) - 10;
@@ -43,16 +44,9 @@ knex
   .from('events')
   .then((data) => {
     inf = data;
-    console.log('Data ', data);
-    for (var i = 0; i < inf.length; i++) {
-      inf[i].categorie == 1
-        ? (inf[i].backgroundColor= '#8B0000')
-        : inf[i].categorie == 2
-        ? (inf[i].backgroundColor= 'blue')
-        : (inf[i].backgroundColor= 'yellow');
     }
-    console.log('Exemple Data avec couleur ', inf);
-  })
+    
+  )
   .catch((err) => console.log(err));
 const Agenda = () => {
 
@@ -119,6 +113,7 @@ const body = (
       });
 
   }
+ 
   return (
     <div className="calendar">
       <div className="left"> <a onClick={handleOpen}><SettingsSharpIcon/>
@@ -144,16 +139,31 @@ const body = (
     editable={true}
     selectable
     weekends
-
+    eventColor='#00FA9A'
     eventChange={function(ev){
       const start = ev.event.start;
       const end = ev.event.end;
       const id = ev.event.id;
-      alert("voulez vous vraiment modifier le rdv :" +ev.event.title)
+      swal({
+        title: "Etes vous sure de vouloir changer la date de ce rendez-vous?",
+        text: "Le rendez-vous sera reporté et le patient notifié par email!",
+        icon: "warning",
+        buttons: true,
+        dangerMode: true,
+      })
+      .then((willDelete) => {
+        if (willDelete) {
+          swal("La date du rendez-vous a été modifiée!", {
+            icon: "success",
+          });
+        } else {
+          swal("La date du rendez-vous n'a pas été modifiée!");
+        }
+      });
       knex("events")
       .update({start,end})
       .where({id})
-      .then(alert("rdv modifé"))
+      .then()
 
     }}
 
