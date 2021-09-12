@@ -30,7 +30,7 @@ import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
-
+import Signature from './pages/Signature';
 
 
 const knex = require('database');
@@ -201,6 +201,7 @@ export default function App() {
       <Switch>
         <Route exact path="/" component={Home} />
         <Route path="/profile" component={Profile} />
+        <Route path="/Signature" component={Signature} />
       
         <Route path="/agenda" component={Agenda} />
         <Route path="/Support" component={Support} />

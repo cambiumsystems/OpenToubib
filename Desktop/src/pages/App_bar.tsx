@@ -1,4 +1,5 @@
 import React , { Component } from 'react';
+import { useState, useEffect } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Drawer from '@material-ui/core/Drawer';
 import AppBar from '@material-ui/core/AppBar';
@@ -19,6 +20,11 @@ import DuoIcon from '@material-ui/icons/Duo';
 import HdrStrongIcon from '@material-ui/icons/HdrStrong';
 import green from "@material-ui/core/colors/green";
 import red from "@material-ui/core/colors/red";
+import pink from "@material-ui/core/colors/pink";
+import grey from "@material-ui/core/colors/grey";
+
+
+import orange from "@material-ui/core/colors/orange";
 import BorderColorIcon from '@material-ui/icons/BorderColor';
 import ArrowForwardIosIcon from '@material-ui/icons/ArrowForwardIos';
 import FiberManualRecordIcon from '@material-ui/icons/FiberManualRecord';
@@ -33,7 +39,10 @@ import { useHistory } from 'react-router-dom';
 import { HashRouter as Router, Switch, Route, Link } from 'react-router-dom';
 import { Redirect } from "react-router-dom";
 import Nav_bar from './Nav_bar';
-
+import swal from 'sweetalert';
+import NotificationImportantIcon from '@material-ui/icons/NotificationImportant';
+import VideoCallIcon from '@material-ui/icons/VideoCall';
+import Modal_hour from './Modal_hour';
 
 const drawerWidth = 240;
 
@@ -122,6 +131,8 @@ export default function App_bar() {
   };
 
 
+  
+
   const body = (
     <div style={modalStyle} className={classess.paper}>
       <h2 id="simple-modal-title"className="h_txt" >Code couleurs</h2>
@@ -181,6 +192,20 @@ export default function App_bar() {
     localStorage.setItem('user','loggout');
    history.push('/');
   }
+
+
+  const [dt, setDt] = useState(new Date().toLocaleString());
+//this is a test
+  const date= new Date('2021-09-09 11:00:00');
+
+useEffect(() => {
+    let secTimer = setInterval( () => {
+      setDt(((date- Date.now())/(60000)).toLocaleString());
+    },1000)
+
+    return () => clearInterval(secTimer);
+}, []);
+ 
   
   return (
     
@@ -194,7 +219,7 @@ export default function App_bar() {
             <div className="iq-card">
               <div className="iq-card-header d-flex justify-content-between">
                 <div className="iq_header-title">
-                  <h4 className="card-title">Consultation</h4>
+                  <h4 className="card-title"><b>Consultation</b></h4>
                 </div>
                 <div className="iq-card-header-toolbar d-flex align-items-center">
                  <a onClick={handleOpen}>
@@ -206,16 +231,16 @@ export default function App_bar() {
               </div>
               <div className="iq-card-body">
                 <ul className="m-0 p-0 job-classification">
-                  <li><HdrStrongIcon style={{ color: "green" }}/>1ere consultation</li>
-                  <li><HdrStrongIcon style={{ color: "red" }}/>Controle</li>
-                  <li><HdrStrongIcon/>Deja consulté</li>
+                  <li><HdrStrongIcon style={{ color: "pink" }}/>1ere consultation</li>
+                  <li><HdrStrongIcon style={{ color: "orange" }}/>Controle</li>
+                  <li><HdrStrongIcon style={{ color: "grey" }}/>Deja consulté</li>
                 </ul>
               </div>
             </div>
             <div className="iq-card">
               <div className="iq-card-header d-flex justify-content-between">
                 <div className="iq_header-title">
-                  <h4 className="card-title">Prochaine Consultation</h4>
+                  <h4 className="card-title"><b>Prochaine Consultation</b></h4>
                 </div>
                 <div className="iq-card-header-toolbar d-flex align-items-center">
                  <a>
@@ -233,11 +258,14 @@ export default function App_bar() {
       </Modal>
               <div className="iq-card-body">
                 <ul className="m-0 p-0 job-classification">
-                  <li>  Mme :  XY &nbsp; À &nbsp; --:--</li>
-                  <li>
+                  <li> Type : Consultation video </li>
+                  <li> Mme :  XY </li>
+                  <Link to="/Medical_file"> <li className="color_important"> Dossier medicale</li></Link>
+                 
+                  <li> Restant :{parseInt(dt)} min</li>
                   
-                  </li>
-                 <Link to="/Medical_file"> <li> <a>Dossier medicale</a></li></Link>
+                 <li className="row"><div className="col-md-66 space"><Modal_hour/></div>
+                 <div className="col-lg-30 space_right"><button type="submit" className="btn iq-bg-primary "> <VideoCallIcon  fontSize="small"/>Demarer</button> </div></li>
                 </ul>
               </div>
             </div>

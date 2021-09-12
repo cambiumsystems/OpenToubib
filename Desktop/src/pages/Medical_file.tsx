@@ -35,10 +35,21 @@ import FormLabel from '@material-ui/core/FormLabel';
 import LongMenu from './LongMenu';
 import ShowChartIcon from '@material-ui/icons/ShowChart';
 import NotificationsActiveIcon from '@material-ui/icons/NotificationsActive';
-
+import Nav_bar from './Nav_bar';
+import Table from '@material-ui/core/Table';
+import TableBody from '@material-ui/core/TableBody';
+import TableCell from '@material-ui/core/TableCell';
+import TableContainer from '@material-ui/core/TableContainer';
+import TableHead from '@material-ui/core/TableHead';
+import TableRow from '@material-ui/core/TableRow';
+import Paper from '@material-ui/core/Paper';
+import {Image} from "semantic-ui-react";
+import AttachFileIcon from '@material-ui/icons/AttachFile';
+import DescriptionIcon from '@material-ui/icons/Description';
+import TextField from '@material-ui/core/TextField';
 const drawerWidth = 240;
 
-const useStyles = makeStyles((theme) => ({
+const useStyless = makeStyles((theme) => ({
   root: {
     display: 'flex',
   },
@@ -85,24 +96,67 @@ function getModalStyle() {
   };
 }
 
-const useStyless = makeStyles((theme) => ({
-  paper: {
-    position: 'absolute',
-    width: 400,
-    backgroundColor: theme.palette.background.paper,
+
+
+const useStylesss = makeStyles({
+  table: {
+    minWidth: 300,
+    height:300,
+  },
+});
+const useStyles = makeStyles((theme) => ({
+  root: {
+    display: 'flex',
+  },
+  appBar: {
+    zIndex: theme.zIndex.drawer + 1,
+  },
+  menuButton: {
+    float:'right'
+  }, flex: {
+    flexGrow: 1
+  },
+  drawer: {
+    width: drawerWidth,
+    flexShrink: 0,
+  },
+  drawerPaper: {
+    width: drawerWidth,
+  },
+  drawerContainer: {
+    overflow: 'auto',
+  },
+  color_white : {
+    background: '#089bab',
+    color: '#fff',
     
-    boxShadow: theme.shadows[5],
-    padding: theme.spacing(2, 4, 3),
+  },
+  
+  
+  content: {
+    flexGrow: 1,
+    padding: theme.spacing(3),
   },
 }));
 
+function createData(name: string, calories: number, fat: number, carbs: number, protein: number) {
+  return { name, calories, fat, carbs, protein };
+}
 
-export default function App_bar() {
-  const classes = useStyles();
+const rows = [
+  createData('Sinusite', '20/01/2016', 'Details' ),
+  createData('Scoliose', '08/09/2018', 'Details' ),
+  createData('Artrose', '01/11/2020', 'Details' ),
+  
+];
+
+
+export default function Medical_file() {
 
 
 
-  const classess = useStyless();
+
+  const classesss = useStylesss();
   // getModalStyle is not a pure function, we roll the style only on the first render
   const [modalStyle] = React.useState(getModalStyle);
   const [open, setOpen] = React.useState(false);
@@ -119,110 +173,15 @@ export default function App_bar() {
   const handleChange = (event) => {
     setSelectedValue(event.target.value);
   };
-  const body = (
-    <div style={modalStyle} className={classess.paper}>
-      <h2 id="simple-modal-title"className="h_txt" >Code couleurs</h2>
-      <div id="simple-modal-description">
-       <form >
-          <div className="form-row">
-            <div className="col">
-            <label className="form-control">1ere consultation</label>
-            </div>
-            <div className="col">
-            <select className="form-control">
-              <option selected>Couleur attribuée</option>
-              <option ><FiberManualRecordIcon style={{ color: "red" }}/> rouge</option>
-              <option > vert</option>
-              <option >orange</option>
-              <option >gris</option>
-              
-            </select>
-             </div>
-          </div>
-          <div className="form-row">
-            <div className="col">
-            <label className="form-control">Controle</label>
-            </div>
-            <div className="col">
-            <select className="form-control">
-              <option selected>Couleur attribuée</option>
-              <option>col1</option>
-              <option>col2</option>
-            </select>
-             </div>
-          </div>
-          <div className="form-row">
-            <div className="col">
-            <label className="form-control">Deja consulté</label>
-            </div>
-            <div className="col">
-            <select className="form-control">
-              <option selected>Couleur attribuée</option>
-              <option>col1</option>
-              <option>col2</option>
-            </select>
-             </div>
-          </div>
-          <button className="bg-primary pt-5 pb-5 text-center rounded">submit</button>
-       </form>
-      </div>
-      
-    </div>
-  );
-
+  const classes = useStyles();
+ 
+ 
 
   return (
     <div className={classes.root}>
-      <CssBaseline />
-      <AppBar position="fixed" className={classes.appBar}>
-        <Toolbar>
-          <Typography variant="h6" noWrap className={classes.color_white}>
-            OPEN-TOUBIB
-          </Typography>
-        </Toolbar>
-      </AppBar>
-      <Drawer
-        className={classes.drawer}
-        variant="permanent"
-        classes={{
-          paper: classes.drawerPaper,
-        }}
-      >
-        
-        <Toolbar />
-        <br/>
-        <li className="left"><LongMenu/></li>
-        <br/>
-        <div className="">
-          <li className="">
-            
-      
-          <Link to="/profile"><span className="left_sidebar">&nbsp;<AccountBoxIcon fontSize="small"/> Profil</span>
-          </Link>
-          </li>
-          <br/>
-          <li className="">
-           <Link to="/App_bar"><span>&nbsp;<DateRangeIcon  fontSize="small"/> Calendrier</span>
-            </Link>
-          </li>
-          <br/>
-          <li className="iq-menu-title">
-             <Link to="/Statistique"> <p>&nbsp;<ShowChartIcon   fontSize="small"/> Statistique</p>
-              </Link>
-            
-          </li>
-          <br/>
-          <li className="iq-menu-title">
-          <Link to="/Support"><span>&nbsp;<NotificationsActiveIcon  fontSize="small"/> Support</span>
-         </Link>
-          </li>
-          
-
-        </div>
-         
-        
-      </Drawer>
-    <div className="container-fluid">
+      <Nav_bar/>
+     
+    <div className="container-fluid_s iq-card-w">
           <div className="row">
            <div className="col-lg-4 row m-0 p-0">
              <div className="col-sm-12">
@@ -230,25 +189,27 @@ export default function App_bar() {
                iq-card-stretch iq-card-height
                iq-user-profile-block" >
                    <div className="iq-card-body">
+                   
                        <div className="user-details-block">
-                           <div className="text-center mt-3">
-                               <h4><b>Mme XY</b></h4>
+                        <div className="text-center  top">
+                               <h4 className=""><b>Mme XY</b></h4>
                               <p>23ans,Rabat</p>
-                           </div>
-                           <ul className="
+                              <ul className="
                            doctoe-sedual d-flex align-items-center
                            justify-content-between 
                            p-0 mt-4 mb-0
                            ">
                              <li className="text-center">
-                               <h6 className="text-primary">Taille</h6>
-                             <h3>1.71 <span>m</span></h3>
+                               <h6 className="text-primary">Email</h6>
+                             <h3>X@gmail.com</h3>
                              </li>
                              <li className="text-center">
-                                 <h6 className="text-primary">Poids</h6>
-                                 <h3 className="text-warning">62<span>kg</span></h3>
+                                 <h6 className="text-primary">Tel</h6>
+                                 <h3 className="text-warning">+33000000</h3>
                              </li>
                            </ul>
+                           </div>
+                           
                        </div>
                    </div>
               </div>  
@@ -258,105 +219,161 @@ export default function App_bar() {
 
 
 
-           <div className="col-lg-8">
+           <div className="col-lg-8 ">
             <div className="iq-card iq-card-block iq-card-stretch
             iq-card-height">
               <div className="iq-card-body pb-0">
                <div className="row">
                 <div className="col-sm-12">
                     <div className="iq-card">
-                        <div className="iq-card-body bg-primarye rounded pt-2 pb-2 pr-2">
-                         <div className="d-flex align-items-center justify-content-between">
-                             <p className="mb-0"> La Consultation sera dans --:-- </p>
+                        <div className="iq-card-body  rounded pt-2 pb-2 pr-2">
+                         <div className="d-flex align-items-center rounded  orange_back justify-content-between">
+                             <p className="mb-0 ">&nbsp; La Consultation sera dans --:-- </p>
                              <div className="rounded iq-card-icon ">
                                <div className="img-fluid"><DuoIcon/></div> 
                              </div>
                          </div>
                         </div>
                     </div>
-                    <div className="iq-card">
-                        <div className="iq-header-title">
-                            <h4 className="card-title text-primary">Mode de vie</h4>
-                        </div>
-                        <div className="iq-card-body pl-0 pr-0 pb-0 ">
-                            <div className="row ">
-                             <div className="col-md-4"> 
-                                <div className="training-block d-flex
-                             align-items-center">
-                                  <div className="rounded-circle iq-card-icon iq-bg-primary">
-                                      <div className="img-fluid">icon</div>
-                                  </div>
-                                  <div className="ml-3"> 
-                                  <h5> Diabette</h5>
-                                  <p className="mb-0">1.05g</p>
-                                  </div>
-                               </div>
-                             </div>
-                             <div className="col-md-4">
+                   
+                    <div className="iq-card ">
+                    
+                      
+                        <div className="iq-card-body pl-0 pr-0 pb-0 espace_container">
+                            
+                        <div className="row">
+                          <div className="col-md-40">
+                             <div className="col-md-60">
+                               <div className="row">
+                                 <div className="col-md-6">
+                                 <TextField  label="1.70m" defaultValue=""/>
+                              
+                                 </div>
+                                 <div className="col-md-6 ">
+                                 <TextField  label="63kg" defaultValue=""/>
+                             
+                                 </div>
+                                 </div>
+                                 </div>
+                                 <br/>
+                                 
+
+                               
+                             <div className="col-md-22 ">
                                  <div className="training-block d-flex
                              align-items-center">
                                   <div className="rounded-circle iq-card-icon iq-bg-primary">
-                                      <div className="img-fluid">icon</div>
+                                      <div className="img-fluid"><DescriptionIcon/></div>
                                   </div>
                                   <div className="ml-3"> 
-                                  <h5> Diabette</h5>
-                                  <p className="mb-0">1.05g</p>
-                                  </div>
+                                  <h5>Diabete</h5>
+                                  <p className="mb-0 gris">0.8g</p>
+                                   </div>
                                </div>
+                               
                              </div>
-                             <div className="col-md-4"><div className="training-block d-flex
+                             <div className="col-md-22 ">
+                                 <div className="training-block d-flex
                              align-items-center">
                                   <div className="rounded-circle iq-card-icon iq-bg-primary">
-                                      <div className="img-fluid">icon</div>
+                                      <div className="img-fluid"><DescriptionIcon/></div>
                                   </div>
                                   <div className="ml-3"> 
-                                  <h5> Diabette</h5>
-                                  <p className="mb-0">1.05g</p>
+                                  <h5>Alergies</h5>
+                                  <p className="mb-0 gris">details></p>
                                   </div>
-                               </div></div>
+                               </div>
+                               
+                             </div>
+                            
+                             
+                             <div className="col-md-22 "><div className="training-block d-flex
+                             align-items-center">
+                                  <div className="rounded-circle iq-card-icon iq-bg-primary">
+                                      <div className="img-fluid"><DescriptionIcon/></div>
+                                  </div>
+                                  <div className="ml-3"> 
+                                  <h5> Maladie chroniques</h5>
+                                  <p className="mb-0 gris">details></p>
+                                  </div>
+                               </div>
+                               
+                               </div>
+                               <div className="col-md-22 "><div className="training-block d-flex
+                             align-items-center">
+                                  <div className="rounded-circle iq-card-icon iq-bg-primary">
+                                      <div className="img-fluid"><DescriptionIcon/></div>
+                                  </div>
+                                  <div className="ml-3"> 
+                                  <h5> Operations</h5>
+                                  <p className="mb-0 gris">details></p>
+                                  </div>
+                               </div>
+                               
+                               </div>
+                               
+                               
                             
                             </div>
+                          
+                          <div className="col-md-60">
+                          
+                          <button className="text-primary ms"><AttachFileIcon />joindre un fichier</button>
+                         <ul className="
+                           doctoe-seduall d-flex
+                           p-0 mt-4 mb-0
+                           ">
+                             <li className="text-center">
+                             <TableContainer component={Paper}>
+      <Table className={classesss.table} aria-label="simple table">
+        <TableHead>
+          <TableRow>
+            <TableCell>Patologie</TableCell>
+            <TableCell align="right">Date</TableCell>
+            <TableCell align="right">Documents</TableCell>
+            
+          </TableRow>
+        </TableHead>
+        <TableBody>
+          {rows.map((row) => (
+            <TableRow key={row.name}>
+              <TableCell component="th" scope="row">
+                {row.name}
+              </TableCell>
+              <TableCell align="right">{row.calories}</TableCell>
+              <TableCell align="right">{row.fat}</TableCell>
+             
+            </TableRow>
+          ))}
+        </TableBody>
+      </Table>
+    </TableContainer>
+                             </li>
+                            
+                             
+                           </ul>
+                          
+                             </div>
+
+                        </div>
+                             
+                            
                         </div>
                     </div>
                
                 </div>
-                <div className="col-lg-88">
-                    <div className="iq-card">
-                        <div className="
-                        iq-card-headerr d-flex justify-content-between p-0 bg-white
-                        ">
-                         <div className="iq-heder-title">
-                             <h4 className="
-                             card-title text-primary
-                             "> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Derniere consultation</h4>
-                         </div>
-                        </div>
-                        <div className="iq-card-body p-0">
-                           <table className="table mb-0 table-borderless table-box-shadow">
-                             <thead>
-                                 <tr>
-                                     <th>Consultation</th>
-                                     <th>Date</th>
-                                 </tr>
-                             </thead>
-                              <tbody>
-                                <tr>
-                                   <th>pff </th> 
-                                   <th>prr</th></tr> 
-                              </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-                <div className="col-lg-44">
-                    <div className="iq-card mb-0">
-                       <div className="iq-card-headerr d-flex justify-content-between p-0 bg-white">
-                         <div className="iq-card-body p-0">
+                <div className="col-sm-12">
+              
+                   
+                       <div className="user-details-block">
+                           <div className="text-center mt-3">
+                       
+                           </div>
                            
-                         </div>
+                      
                        </div>
-                    </div>
-                </div>
+                       </div>
+                
                 <div className="col-md-6"></div>
                 <div className="col-md-6"></div>
               
