@@ -6,6 +6,7 @@ import MoreVertIcon from '@material-ui/icons/MoreVert';
 import LanguageIcon from '@material-ui/icons/Language';
 import grey from '@material-ui/core/colors/grey';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+import white from "@material-ui/core/colors/orange";
 
 const options = [
   
@@ -34,9 +35,9 @@ export default function LongMenu() {
         aria-controls="long-menu"
         aria-haspopup="true"
         onClick={handleClick}
-        style={{ color: "grey" }}
+        style={{ color: "white" }}
       >
-        <MoreVertIcon />
+        <MoreVertIcon style={{ color: "white" }} />
       </LanguageIcon>
     
       <Menu

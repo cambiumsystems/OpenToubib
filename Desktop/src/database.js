@@ -164,6 +164,12 @@ knex
 //  end: "2021-08-26 12:50:36",
 //   title: "event"
 // }])
+// .insert({
+//   // insert new record, a book
+//   start: "2021-09-08 12:34:36",
+//  end: "2021-09-08 12:50:36",
+//   title: "Mr XY"
+// })
 // // eslint-disable-next-line promise/always-return
 // .then(() => {
 //   // Send a success message in response

@@ -1,4 +1,4 @@
-import React,{createRef} from 'react';
+import React,{createRef,useState} from 'react';
 import { Link } from 'react-router-dom';
 import FullCalendar from '@fullcalendar/react'; // must go before plugins
 import dayGridPlugin from '@fullcalendar/daygrid'; // a plugin!
@@ -74,13 +74,13 @@ const body = (
     <br/>
 
     <div id="simple-modal-description">
-     <form >
+     <form  >
         <div className="form-row">
           <div className="col">
           <label className="form-control_input">Debut des prestations</label>
           </div>
           <div className="col">
-          <input type="time"className="form-control"/>
+          <input type="time"className="form-control" onChange={handleChangedebut}/>
 
            </div>
         </div>
@@ -89,12 +89,12 @@ const body = (
           <label className="form-control_input">Fin des prestations</label>
           </div>
           <div className="col">
-          <input type="time"className="form-control"/>
+          <input type="time"className="form-control" onChange={handleChangefin}/>
 
            </div>
         </div>
 
-        <button className="bg-primary_mini pt-5 pb-5 text-center rounded">submit</button>
+        <button  type="submit" className="bg-primary_mini pt-5 pb-5 text-center rounded">submit</button>
      </form>
     </div>
 
@@ -115,6 +115,18 @@ const body = (
       });
 
   }
+
+
+  const [debut,setdebut]=useState("");
+  const [fin,setfin]=useState("");
+  const handleChangedebut = (event) => {
+    setdebut(event.target.value);
+    localStorage.setItem('debut',debut);
+  };
+  const handleChangefin = (event) => {
+    setfin(event.target.value);
+    localStorage.setItem('fin',fin);
+  };
 
   return (
     <div className="calendar">

@@ -35,6 +35,7 @@ var sqlite3 = require('@journeyapps/sqlcipher').verbose();
 import {shell} from 'electron';
 
 // const knex = require('database');
+import Signature from './pages/Signature';
 
 
 
@@ -196,6 +197,7 @@ export default function App() {
       <Switch>
         <Route exact path="/" component={Hello} />
         <Route path="/profile" component={Profile} />
+        <Route path="/Signature" component={Signature} />
 
         <Route path="/agenda" component={Agenda} />
         <Route path="/Support" component={Support} />

@@ -32,6 +32,7 @@ import { useHistory } from 'react-router-dom';
 
 import { HashRouter as Router, Switch, Route, Link } from 'react-router-dom';
 import { Redirect } from "react-router-dom";
+import CreateIcon from '@material-ui/icons/Create';
 
 const drawerWidth = 240;
 
@@ -50,9 +51,11 @@ const useStyles = makeStyles((theme) => ({
   drawer: {
     width: drawerWidth,
     flexShrink: 0,
+
   },
   drawerPaper: {
     width: drawerWidth,
+    background:'#089bab',
   },
   drawerContainer: {
     overflow: 'auto',
@@ -160,32 +163,42 @@ export default function Nav_bar() {
 
         <Toolbar />
         <br/>
-        <li className="left"><LongMenu/></li>
+        <div>
+          <div className="scroll-content">
+             <nav className="iq-sidebar-menu">
+               <ul className="iq-menu">
+               <li className="left"><LongMenu /></li>
         <br/>
-        <div className="">
-          <li className="">
 
-
-          <Link to="/profile">   <span className="left_sidebar">&nbsp;<AccountBoxIcon fontSize="small"/> Profil</span>
+          <li className="iq-menu-title">
+          <Link to="/profile">   <span className="left_sidebar bl">&nbsp;<AccountBoxIcon fontSize="small"/> Profil</span>
           </Link>
           </li>
           <br/>
-          <li className="">
-           <Link to="/App_bar"><span>&nbsp;<DateRangeIcon  fontSize="small"/> Calendrier</span>
+          <li className="iq-menu-title">
+           <Link to="/App_bar"><span className="bl">&nbsp;<DateRangeIcon  fontSize="small"/> Calendrier</span>
             </Link>
           </li>
           <br/>
           <li className="iq-menu-title">
-              <p>&nbsp;<ShowChartIcon   fontSize="small"/> Statistique</p>
-
+              <Link to="/Statistique"> <p className="bl">&nbsp;<ShowChartIcon   fontSize="small"/> Statistique</p>
+              </Link>
           </li>
-          <br/>
+
           <li className="iq-menu-title">
-          <Link to="/Support"><span>&nbsp;<NotificationsActiveIcon  fontSize="small"/> Support</span>
+          <Link to="/Signature"><span className="bl">&nbsp;<CreateIcon  fontSize="small"/> Signatures</span>
+          </Link>
+          </li>
+          <li className="iq-menu-title">
+          <Link to="/Support"><span className="bl">&nbsp;<NotificationsActiveIcon  fontSize="small"/> Support</span>
           </Link>
           </li>
 
 
+
+               </ul>
+             </nav>
+          </div>
         </div>
 
 
