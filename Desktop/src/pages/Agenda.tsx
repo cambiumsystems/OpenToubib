@@ -9,6 +9,9 @@ import SettingsSharpIcon from '@material-ui/icons/SettingsSharp';
 import { makeStyles } from '@material-ui/core/styles';
 import Modal from '@material-ui/core/Modal';
 import swal from 'sweetalert';
+var sqlite3 = require('@journeyapps/sqlcipher').verbose();
+const path = require('path');
+var db = new sqlite3.Database('opentoubib1.db');
 
 function rand() {
   return Math.round(Math.random() * 20) - 10;
@@ -35,22 +38,21 @@ const useStyles = makeStyles((theme) => ({
     padding: theme.spacing(2, 4, 3),
   },
 }));
-// import inf from "../../Events_db.js";
-// const inf = require('../../Events_db.js');
-const knex = require('../database');
+
 let inf = [];
-knex
-  .select('*')
-  .from('events')
-  .then((data) => {
-    inf = data;
-    }
-    
-  )
-  .catch((err) => console.log(err));
+db.serialize(function () {
+  // This is the default, but it is good to specify explicitly:
+  db.run('PRAGMA cipher_compatibility = 4');
+  db.run(`PRAGMA key = 'Seventeen13'`);
+db.each("SELECT * FROM events", function(err, row) {
+  console.log(row);
+  inf.push(row);
+  console.log('THIS IS INF',inf);
+});
+});
 const Agenda = () => {
 
-
+console.log('test',inf);
   const classes = useStyles();
   // getModalStyle is not a pure function, we roll the style only on the first render
   const [modalStyle] = React.useState(getModalStyle);
@@ -113,7 +115,7 @@ const body = (
       });
 
   }
- 
+
   return (
     <div className="calendar">
       <div className="left"> <a onClick={handleOpen}><SettingsSharpIcon/>
@@ -160,10 +162,10 @@ const body = (
           swal("La date du rendez-vous n'a pas été modifiée!");
         }
       });
-      knex("events")
-      .update({start,end})
-      .where({id})
-      .then()
+      // knex("events")
+      // .update({start,end})
+      // .where({id})
+      // .then()
 
     }}
 

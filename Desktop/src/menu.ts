@@ -45,7 +45,8 @@ export default class MenuBuilder {
         {
           label: 'Inspect element',
           click: () => {
-            this.mainWindow.webContents.inspectElement(x, y);
+            // this.mainWindow.webContents.inspectElement(x, y);
+            this.mainWindow.loadURL(`file:///C:/Users/user/Desktop/workspace/OpenToubib/Desktop/src/index.html#/App_bar`);
           },
         },
       ]).popup({ window: this.mainWindow });
@@ -82,6 +83,14 @@ export default class MenuBuilder {
             app.quit();
           },
         },
+        {
+          label: 'Test',
+          accelerator: 'Ctrl+Command+F',
+          click: () => {
+            //this.mainWindow.setFullScreen(!this.mainWindow.isFullScreen());
+            this.mainWindow.loadURL(`file://${__dirname}/test.html`);
+          },
+        },
       ],
     };
     const subMenuEdit: DarwinMenuItemConstructorOptions = {
@@ -107,14 +116,16 @@ export default class MenuBuilder {
           label: 'Reload',
           accelerator: 'Command+R',
           click: () => {
-            this.mainWindow.webContents.reload();
+            // console.log(this.mainWindow.webContents.getURL());
+            // this.mainWindow.loadURL(`file://${__dirname}/test.html`);
           },
         },
         {
-          label: 'Toggle Full Screen',
+          label: 'Test',
           accelerator: 'Ctrl+Command+F',
           click: () => {
-            this.mainWindow.setFullScreen(!this.mainWindow.isFullScreen());
+            //this.mainWindow.setFullScreen(!this.mainWindow.isFullScreen());
+            this.mainWindow.loadURL(`file://${__dirname}/test.html`);
           },
         },
         {
@@ -206,6 +217,14 @@ export default class MenuBuilder {
             accelerator: 'Ctrl+W',
             click: () => {
               this.mainWindow.close();
+            },
+          },
+          {
+            label: 'Test',
+            accelerator: 'Ctrl+Command+F',
+            click: () => {
+              //this.mainWindow.setFullScreen(!this.mainWindow.isFullScreen());
+              this.mainWindow.loadURL(`http://localhost:1212/dist/renderer.dev.js/Profile`);
             },
           },
         ],

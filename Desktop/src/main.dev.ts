@@ -89,17 +89,28 @@ const createWindow = async () => {
     }
     if (process.env.START_MINIMIZED) {
       mainWindow.minimize();
+      console.log(mainWindow.webContents.getURL());
     } else {
+      console.log(mainWindow.webContents.getURL());
       mainWindow.show();
       mainWindow.focus();
     }
+  });
+
+  const menuBuilder = new MenuBuilder(mainWindow);
+  menuBuilder.buildMenu();
+
+  // Open urls in the user's browser
+  mainWindow.webContents.on('new-window', (event, url) => {
+    event.preventDefault();
+    shell.openExternal(url);
   });
 
   mainWindow.on('closed', () => {
     mainWindow = null;
   });
 
-  
+
   // Remove this if your app does not use auto updates
   // eslint-disable-next-line
   new AppUpdater();
@@ -119,15 +130,6 @@ app.on('window-all-closed', () => {
 
 app.whenReady().then(function(){
   createWindow()
-  const template=[
-    {
-     label :'Parametre',
-     
-  }
-    
-  ]
- const menu= Menu.buildFromTemplate(template)
- Menu.setApplicationMenu(menu)
 }).catch(console.log);
 
 app.on('activate', () => {

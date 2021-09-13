@@ -58,9 +58,9 @@ const useStyles = makeStyles((theme) => ({
   color_white : {
     background: '#089bab',
     color: '#fff',
-    
+
   },
-  
+
   content: {
     flexGrow: 1,
     padding: theme.spacing(3),
@@ -90,7 +90,7 @@ const useStyless = makeStyles((theme) => ({
     position: 'absolute',
     width: 400,
     backgroundColor: theme.palette.background.paper,
-    
+
     boxShadow: theme.shadows[5],
     padding: theme.spacing(2, 4, 3),
   },
@@ -135,7 +135,7 @@ export default function App_bar() {
               <option > vert</option>
               <option >orange</option>
               <option >gris</option>
-              
+
             </select>
              </div>
           </div>
@@ -166,7 +166,7 @@ export default function App_bar() {
           <button className="bg-primary pt-5 pb-5 text-center rounded">submit</button>
        </form>
       </div>
-      
+
     </div>
   );
 
@@ -188,15 +188,15 @@ export default function App_bar() {
           paper: classes.drawerPaper,
         }}
       >
-        
+
         <Toolbar />
         <br/>
         <li className="left"><LongMenu/></li>
         <br/>
         <div className="">
           <li className="">
-            
-      
+
+
           <Link to="/profile"><span className="left_sidebar">&nbsp;<AccountBoxIcon fontSize="small"/> Profil</span>
           </Link>
           </li>
@@ -207,20 +207,20 @@ export default function App_bar() {
           </li>
           <br/>
           <li className="iq-menu-title">
-             <Link to="/Statistique"> <p>&nbsp;<ShowChartIcon   fontSize="small"/> Statistique</p>
-              </Link>
-            
+              <p>&nbsp;<ShowChartIcon   fontSize="small"/> Statistique</p>
+
+
           </li>
           <br/>
           <li className="iq-menu-title">
           <Link to="/Support"><span>&nbsp;<NotificationsActiveIcon  fontSize="small"/> Support</span>
          </Link>
           </li>
-          
+
 
         </div>
-         
-        
+
+
       </Drawer>
     <div className="container-fluid">
           <div className="row">
@@ -237,7 +237,7 @@ export default function App_bar() {
                            </div>
                            <ul className="
                            doctoe-sedual d-flex align-items-center
-                           justify-content-between 
+                           justify-content-between
                            p-0 mt-4 mb-0
                            ">
                              <li className="text-center">
@@ -251,8 +251,8 @@ export default function App_bar() {
                            </ul>
                        </div>
                    </div>
-              </div>  
-             
+              </div>
+
            </div>
 
 
@@ -269,7 +269,7 @@ export default function App_bar() {
                          <div className="d-flex align-items-center justify-content-between">
                              <p className="mb-0"> La Consultation sera dans --:-- </p>
                              <div className="rounded iq-card-icon ">
-                               <div className="img-fluid"><DuoIcon/></div> 
+                               <div className="img-fluid"><DuoIcon/></div>
                              </div>
                          </div>
                         </div>
@@ -280,13 +280,13 @@ export default function App_bar() {
                         </div>
                         <div className="iq-card-body pl-0 pr-0 pb-0 ">
                             <div className="row ">
-                             <div className="col-md-4"> 
+                             <div className="col-md-4">
                                 <div className="training-block d-flex
                              align-items-center">
                                   <div className="rounded-circle iq-card-icon iq-bg-primary">
                                       <div className="img-fluid">icon</div>
                                   </div>
-                                  <div className="ml-3"> 
+                                  <div className="ml-3">
                                   <h5> Diabette</h5>
                                   <p className="mb-0">1.05g</p>
                                   </div>
@@ -298,7 +298,7 @@ export default function App_bar() {
                                   <div className="rounded-circle iq-card-icon iq-bg-primary">
                                       <div className="img-fluid">icon</div>
                                   </div>
-                                  <div className="ml-3"> 
+                                  <div className="ml-3">
                                   <h5> Diabette</h5>
                                   <p className="mb-0">1.05g</p>
                                   </div>
@@ -309,16 +309,16 @@ export default function App_bar() {
                                   <div className="rounded-circle iq-card-icon iq-bg-primary">
                                       <div className="img-fluid">icon</div>
                                   </div>
-                                  <div className="ml-3"> 
+                                  <div className="ml-3">
                                   <h5> Diabette</h5>
                                   <p className="mb-0">1.05g</p>
                                   </div>
                                </div></div>
-                            
+
                             </div>
                         </div>
                     </div>
-               
+
                 </div>
                 <div className="col-lg-88">
                     <div className="iq-card">
@@ -341,8 +341,8 @@ export default function App_bar() {
                              </thead>
                               <tbody>
                                 <tr>
-                                   <th>pff </th> 
-                                   <th>prr</th></tr> 
+                                   <th>pff </th>
+                                   <th>prr</th></tr>
                               </tbody>
                             </table>
                         </div>
@@ -352,19 +352,19 @@ export default function App_bar() {
                     <div className="iq-card mb-0">
                        <div className="iq-card-headerr d-flex justify-content-between p-0 bg-white">
                          <div className="iq-card-body p-0">
-                           
+
                          </div>
                        </div>
                     </div>
                 </div>
                 <div className="col-md-6"></div>
                 <div className="col-md-6"></div>
-              
+
                </div>
               </div>
             </div>
            </div>
-           
+
           </div>
       </div>
       </div>

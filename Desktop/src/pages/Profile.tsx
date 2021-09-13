@@ -37,45 +37,27 @@ import ShowChartIcon from '@material-ui/icons/ShowChart';
 import NotificationsActiveIcon from '@material-ui/icons/NotificationsActive';
 import Nav_bar from './Nav_bar';
 const drawerWidth = 240;
-const crypto = require('crypto');
-const knex = require('../database');
+var sqlite3 = require('@journeyapps/sqlcipher').verbose();
+const path = require('path');
+import { secretkey } from './Login';
+//const dbPath = path.resolve(__dirname, 'dbPath');
 
-const algorithm = 'aes-256-cbc';
+let inf=[];
+var db = new sqlite3.Database('opentoubib1.db');
+db.serialize(function () {
+  // This is the default, but it is good to specify explicitly:
+  db.run('PRAGMA cipher_compatibility = 4');
 
-// generate 16 bytes of random data
-const initVector = Buffer.alloc(16, 0);
+  // To open a database created with SQLCipher 3.x, use this:
+  // db.run("PRAGMA cipher_compatibility = 3");
 
-// secret key generate 32 bytes of random data
-const Securitykey = crypto.scryptSync('bncaskdbvasbvlaslslasfhjazerfgty', 'GfG', 32)
-const Decrypt = (data)=>{
-  const decipher = crypto.createDecipheriv(algorithm, Securitykey, initVector);
+  db.run(`PRAGMA key = 'Seventeen13'`);
 
-let decryptedData = decipher.update(data, "hex", "utf-8");
-
-decryptedData += decipher.final("utf8");
-return decryptedData;
-}
-let inf=[]
-knex
-.select('*')
-.from('doctor')
-.then((values) => {inf={
-  firstName: Decrypt( values[0].firstName),
-      lastName: Decrypt( values[0].lastName),
-      password: Decrypt( values[0].password),
-      email: Decrypt( values[0].email),
-      gender: Decrypt( values[0].gender),
-      dateOfBirth: Decrypt(values[0].dateOfBirth),
-      city: Decrypt(values[0].city),
-      region: Decrypt(values[0].region),
-      country: Decrypt(values[0].country),
-      address: Decrypt(values[0].address),
-      speciality: Decrypt(values[0].speciality),
-} ;
-  console.log( "voila ",inf);})
-
-.catch((err) => console.log(err));
-
+  db.each("SELECT * FROM doctor", function(err, row) {
+      console.log(row);
+      inf=row;
+  });
+});
 
 
 const useStyles = makeStyles((theme) => ({
@@ -214,8 +196,7 @@ export default function Profile() {
   return (
     <div className={classes.root}>
       <Nav_bar/>
-         
-         
+
       <main className="container-fluid">
       <div className="iq-card">
         <div className="iq-card-body pl-0 pr-0 pt-0">
@@ -248,7 +229,7 @@ export default function Profile() {
                   <label className="d-block">Gender:</label>
 
                   <Radio
-        checked={selectedValue === 'Male'}
+        checked={inf.gender === 'Male'}
         onChange={handleChange}
         value="Male"
         name="radio-button-demo"
@@ -256,7 +237,7 @@ export default function Profile() {
       />
       <label className="custom-control-label">Male</label>
       <Radio
-        checked={selectedValue === 'Female'}
+        checked={inf.gender === 'Female'}
         onChange={handleChange}
         value="Female"
         name="radio-button-demo"
@@ -270,11 +251,11 @@ export default function Profile() {
                 </div>
                 <div className="form-group col-sm-6">
                   <label>Country</label>
-                  <input type="text" className="form-control_P"id="lname" value="--" readOnly/>
+                  <input type="text" className="form-control_P"id="lname" value={inf.country} readOnly/>
                 </div>
                 <div className="form-group col-sm-6">
                   <label>State</label>
-                  <input type="text" className="form-control_P"id="lname" value="--" readOnly/>
+                  <input type="text" className="form-control_P"id="lname" value={inf.region} readOnly/>
                 </div>
                 <div className="form-group col-sm-6">
                   <label>Specialité</label>
@@ -285,7 +266,7 @@ export default function Profile() {
                   <textarea className="form-control_P"id="lname" value={inf.address} readOnly></textarea>
                 </div>
                 <div className="form-group center_element">
-                <button type="submit" className="btn btn-primary btn_width mr-2">Modifier</button>
+                <button type="submit" className="btn btn-primary btn_width mr-2">Edit</button>
                 </div>
               </form>
             </div>

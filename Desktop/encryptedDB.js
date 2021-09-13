@@ -1,28 +1,41 @@
+//import { secretkey } from './src/pages/Login';
 var sqlite3 = require('@journeyapps/sqlcipher').verbose();
 const path = require('path');
-const dbPath = path.resolve(__dirname, 'dbPath');
-var db = new sqlite3.Database('dbPath1.db');
+var db = new sqlite3.Database('opentoubib1.db');
 
-db.serialize(function() {
-  // This is the default, but it is good to specify explicitly:
-  db.run("PRAGMA cipher_compatibility = 4");
 
-  // To open a database created with SQLCipher 3.x, use this:
-  // db.run("PRAGMA cipher_compatibility = 3");
+ //if(secretkey!=null){
+   db.serialize(function () {
+    // This is the default, but it is good to specify explicitly:
+    db.run('PRAGMA cipher_compatibility = 4');
 
-  db.run("PRAGMA key = 'mysecret'");
-  db.run("CREATE TABLE lorem (info TEXT)");
+    // To open a database created with SQLCipher 3.x, use this:
+    // db.run("PRAGMA cipher_compatibility = 3");
 
-  var stmt = db.prepare("INSERT INTO lorem VALUES (?)");
-  for (var i = 0; i < 10; i++) {
-      stmt.run("Ipsum " + i);
-  }
-  stmt.finalize();
+    db.run(`PRAGMA key = 'Seventeen13'`)
+      .run(
+        'CREATE TABLE  IF NOT EXISTS doctor ( firstName TEXT NOT NULL, lastName TEXT NOT NULL, email TEXT NOT NULL UNIQUE, phone TEXT NOT NULL UNIQUE, password TEXT NOT NULL, gender TEXT NOT NULL, dateOfBirth TEXT NOT NULL, city TEXT NOT NULL, region TEXT NOT NULL, country TEXT NOT NULL, address TEXT NOT NULL, postalCode TEXT NOT NULL, secretQuest TEXT NOT NULL, answerScrtQuest TEXT NOT NULL, description TEXT NOT NULL, officeName TEXT NOT NULL, speciality TEXT NOT NULL, professionalID TEXT NOT NULL, rdvGap INTEGER NOT NULL, minFee INTEGER NOT NULL, maxFee INTEGER NOT NULL, minTeleFee INTEGER NOT NULL, maxTeleFee INTEGER NOT NULL, privateKey TEXT, publicKey TEXT, days TEXT)'
+      )
+      .run(
+        'CREATE TABLE  IF NOT EXISTS events (start TEXT NOT NULL, end TEXT NOT NULL, title TEXT NOT NULL, categorie TEXT)'
+      )
+      .run('CREATE TABLE  IF NOT EXISTS schedule (days TEXT)');
 
-  db.each("SELECT rowid AS id, info FROM lorem", function(err, row) {
-      console.log(row.id + ": " + row.info);
+    //  var stmt=db.prepare(`INSERT INTO events VALUES (?,?,?,?)`);
+    // // // // //db.run("INSERT INTO lorem VALUES ('j',${kiki})");
+    // // // // // for (var i = 0; i < 10; i++) {
+    //       stmt.run('2021-09-13 18:10:00','2021-09-13 19:00:00','Consultation Mr Nacer', '1');
+    // }
+    // stmt.finalize();
+     //db.run("DROP TABLE doctor");
+     db.run('UPDATE doctor SET dateOfBirth = ? WHERE rowid = ?', '26/03/1999', 1);
+
+    db.each("SELECT * FROM doctor", function(err, row) {
+        console.log(row);
+    });
+    db.each("SELECT rowid AS id, start, end, title FROM events", function(err, row) {
+      console.log(row);
   });
-});
-
-db.close();
-
+  });
+//}
+//db.close();

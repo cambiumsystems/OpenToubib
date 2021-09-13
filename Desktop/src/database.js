@@ -146,25 +146,35 @@ knex
   .then((data) => console.log('data:', data))
   .catch((err) => console.log(err));
 
-// Export the database
-knex('events')
-.insert({
-  // insert new record, a book
-  start: "2021-09-08 12:34:36",
- end: "2021-09-08 12:50:36",
-  title: "Mr XY"
-})
-// eslint-disable-next-line promise/always-return
-.then(() => {
-  // Send a success message in response
-  // eslint-disable-next-line no-console
-  console.log('AN event object created!!');
-})
-.catch((err) => {
-  // Send a error message in response
-  // eslint-disable-next-line no-console
-  console.log(err);
-});
+// // Export the database
+// knex('events')
+// .insert([{
+//   // insert new record, a book
+//   start: "2021-09-09 18:06:36",
+//  end: "2021-09-09 18:10:36",
+//   title: "Mlle Oumaima"
+// },{
+//   // insert new record, a book
+//   start: "2021-09-09 18:13:36",
+//  end: "2021-09-09 18:15:36",
+//   title: "Mme NORE"
+// },{
+//   // insert new record, a book
+//   start: "2021-08-26 12:34:36",
+//  end: "2021-08-26 12:50:36",
+//   title: "event"
+// }])
+// // eslint-disable-next-line promise/always-return
+// .then(() => {
+//   // Send a success message in response
+//   // eslint-disable-next-line no-console
+//   console.log('AN event object created!!');
+// })
+// .catch((err) => {
+//   // Send a error message in response
+//   // eslint-disable-next-line no-console
+//   console.log(err);
+// });
 knex
   .select('*')
   .from('events')

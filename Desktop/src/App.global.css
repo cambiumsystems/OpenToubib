@@ -681,7 +681,7 @@
   font-size: 2.300em;
  }
  .iq-card-info {
- 
+
   border-radius: 25px;
   margin-bottom: 30px;
   border: none;
@@ -782,7 +782,7 @@
   height: 100%;
 }
 .sign-in-detail {
- 
+
   border-radius: 40px;
 }
 .sign-in-logo {
@@ -794,7 +794,7 @@ sign-in-logo img {
 }
 .img-fluid {
   max-width: 100%;
- 
+
 }
 
 
@@ -1039,7 +1039,7 @@ pr-2, .px-2 {
    padding: 50px 20px;
 
  }
- 
+
  sign-in-detail {
 padding: 100px;
    border-radius: 40px;
@@ -1052,7 +1052,7 @@ padding: 100px;
  width: 100%;
    z-index: 1;
  }
- 
+
 .img-fluid {
   max-width: 80%;
   align-items: center!important;

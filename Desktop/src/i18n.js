@@ -19,10 +19,6 @@ i18n
     resources: {
       en: {
         translation: {
-          description: {
-            part1: 'Edit <1>src/App.js</1> and save to reload.',
-            part2: 'Learn React'
-          },
           form: {
             next: 'Next',
             back: 'Back',
@@ -41,6 +37,9 @@ i18n
             step2: "Address",
             step3:"Professional Infos",
             step4:"Bank account"
+          },
+          inscription: {
+            
           }
         }
       },
@@ -67,14 +66,6 @@ i18n
           }
         }
       },
-      de: {
-        translation: {
-          description: {
-            part1: 'Ändere <1>src/App.js</1> und speichere um neu zu laden.',
-            part2: 'Lerne React'
-          }
-        }
-      }
     },
 );
 

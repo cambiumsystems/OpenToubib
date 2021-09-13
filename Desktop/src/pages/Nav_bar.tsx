@@ -60,10 +60,10 @@ const useStyles = makeStyles((theme) => ({
   color_white : {
     background: '#089bab',
     color: '#fff',
-    
+
   },
-  
-  
+
+
   content: {
     flexGrow: 1,
     padding: theme.spacing(3),
@@ -93,7 +93,7 @@ const useStyless = makeStyles((theme) => ({
     position: 'absolute',
     width: 400,
     backgroundColor: theme.palette.background.paper,
-    
+
     boxShadow: theme.shadows[5],
     padding: theme.spacing(2, 4, 3),
   },
@@ -102,13 +102,14 @@ const useStyless = makeStyles((theme) => ({
 
 export default function Nav_bar() {
   const classes = useStyles();
+  const history = useHistory();
 
 
 
   const classess = useStyless();
   // getModalStyle is not a pure function, we roll the style only on the first render
     const [modalStyle] = React.useState(getModalStyle);
- 
+
   const [open, setOpen] = React.useState(false);
 
   const handleOpen = () => {
@@ -123,11 +124,11 @@ export default function Nav_bar() {
     localStorage.setItem('user','loggout');
    history.push('/');
   }
-  
+
   return (
-    
+
     <div className={classes.root}>
-     
+
       <CssBaseline />
       <AppBar position="fixed" className={classes.appBar}>
         <Toolbar>
@@ -137,17 +138,17 @@ export default function Nav_bar() {
           </Typography>
           <IconButton
               className={classes.menuButton}
-              
+
               color="inherit"
               aria-label="Menu"
-              
+
             >
               <AccountCircle onClick={Logout} />
             </IconButton>
-          
-           
+
+
         </Toolbar>
-        
+
       </AppBar>
       <Drawer
         className={classes.drawer}
@@ -156,15 +157,15 @@ export default function Nav_bar() {
           paper: classes.drawerPaper,
         }}
       >
-        
+
         <Toolbar />
         <br/>
         <li className="left"><LongMenu/></li>
         <br/>
         <div className="">
           <li className="">
-            
-      
+
+
           <Link to="/profile">   <span className="left_sidebar">&nbsp;<AccountBoxIcon fontSize="small"/> Profil</span>
           </Link>
           </li>
@@ -175,19 +176,19 @@ export default function Nav_bar() {
           </li>
           <br/>
           <li className="iq-menu-title">
-              <Link to="/Statistique"> <p>&nbsp;<ShowChartIcon   fontSize="small"/> Statistique</p>
-              </Link>
+              <p>&nbsp;<ShowChartIcon   fontSize="small"/> Statistique</p>
+
           </li>
           <br/>
           <li className="iq-menu-title">
           <Link to="/Support"><span>&nbsp;<NotificationsActiveIcon  fontSize="small"/> Support</span>
           </Link>
           </li>
-          
+
 
         </div>
-         
-        
+
+
       </Drawer>
       </div>
       );

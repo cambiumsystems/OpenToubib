@@ -9,8 +9,7 @@ import {
   Step,
   StepLabel,
   Stepper,
-  InputLabel,
-  ButtonGroup,
+  InputLabel
 } from '@material-ui/core';
 import Snackbar from '@material-ui/core/Snackbar';
 import MuiAlert from '@material-ui/lab/Alert';
@@ -24,9 +23,15 @@ import Select from 'react-select';
 import React, { useEffect, useState } from 'react';
 import { CountryDropdown, RegionDropdown } from 'react-country-region-selector';
 import * as Yup from 'yup';
-
 const crypto = require('crypto');
-const knex = require('../database');
+var sqlite3 = require('@journeyapps/sqlcipher').verbose();
+const path = require('path');
+//const dbPath = path.resolve(__dirname, 'dbPath');
+var db = new sqlite3.Database('opentoubib1.db');
+
+
+export let secretkey=null;
+// const knex = require('../database');
 
 const algorithm = 'aes-256-cbc';
 
@@ -225,7 +230,7 @@ export default function Home() {
   // const notify = () => toast("Wow so easy !");
   const [flag1, setFlag1] = React.useState(true);
   const [flag2, setFlag2] = React.useState(true);
-  const [selectedtimeMM, setSelectedtimeMM] = useState(null);
+  const [selectedtimeMM, setSelectedtimeMM] = useState();
   const [selectedtimeMAf, setSelectedtimeMAf] = useState(null);
 
   const [selectedtimeTM, setSelectedtimeTM] = useState(null);
@@ -251,6 +256,22 @@ export default function Home() {
     setFlag2(!flag2);
     setFlag1(true);
   };
+  const [disabledM, setDisabledM] = useState(true);
+  const [disabledT, setDisabledT] = useState(true);
+  const [disabledW, setDisabledW] = useState(true);
+  const [disabledTh, setDisabledTh] = useState(true);
+  const [disabledF, setDisabledF] = useState(true);
+  const [disabledS, setDisabledS] = useState(true);
+
+  const handleChange = (e, setDisabled) => {
+    let isChecked = e.target.checked;
+    setDisabled(!isChecked);
+  }
+  const handleChangeMM = (e,time) => {
+    setSelectedtimeMM(time);
+    //console.log(e,time);
+    console.log(selectedtimeMM);
+  }
 
   const [open, setOpen] = useState(true);
   const handleClose = (event, reason) => {
@@ -295,10 +316,11 @@ export default function Home() {
             dobDay: '',
             dobMonth: '',
             dobYear: '',
-            workDay: false,
             privateKey: '',
             publicKey: '',
             isDistantNode: false,
+            days: [],
+            morningTime: [],
           }}
           onSubmit={async (values) => {
             // await sleep(3000);
@@ -384,29 +406,16 @@ export default function Home() {
                 passe!
               </Alert>
             </Box>
-            <ButtonGroup>
               <Field
                 name="gender"
-                component={ButtonComponent}
+                component={ButtonGroup}
+                type="button"
                 variant="contained"
-                value="male"
-                onClick={handleClick1}
-                color={flag1 ? 'default' : 'primary'}
+                buttons={[t('form.female'), t('form.male')]}
+                // onClick={handleClick1}
+                // color={flag1 ? 'default' : 'primary'}
                 style={{ marginLeft: '50px' }}
-              >
-                {t('form.male')}
-              </Field>
-              <Field
-                name="gender"
-                component={ButtonComponent}
-                variant="contained"
-                value="female"
-                onClick={handleClick2}
-                color={flag2 ? 'default' : 'secondary'}
-              >
-                {t('form.female')}
-              </Field>
-            </ButtonGroup>
+              />
             <Field
               name="dobDay"
               component={TextField}
@@ -453,12 +462,8 @@ export default function Home() {
             </Snackbar>
             <Box paddingBottom={2}>
               <Field
-                name="country"
                 component={CountryDropdownComponent}
-                // value={country}
-                // onChange={(val: React.SetStateAction<string>) => {
-                //   setCountry(val);
-                // }}
+                name="country"
                 style={{
                   marginLeft: '70px',
                   height: '55px',
@@ -467,18 +472,14 @@ export default function Home() {
                 }}
               />
               <Field
-                name="region"
                 component={RegionDropdownComponent}
-                // country={country}
-                // value={region}
-                // onChange={(val: React.SetStateAction<string>) => setRegion(val)}
+                name="region"
                 style={{ marginRight: '25px', height: '55px' }}
               />
               <Field
                 name="city"
                 component={TextField}
                 label="city"
-                value={country}
                 style={{
                   width: '110px',
                 }}
@@ -584,7 +585,6 @@ export default function Home() {
                 style={{ width: '90px' }}
               />
             </Box>
-
             <Box paddingBottom={2}>
               <div className="wrapper">
                 <div className="select_size_spec one ">
@@ -613,7 +613,7 @@ export default function Home() {
           </FormikStep>
           <FormikStep
             label="Operating days"
-            //validationSchema={validationSchemaStep1}
+            // validationSchema={validationSchemaStep1}
           >
             <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
               <Alert onClose={handleClose} severity="info">
@@ -623,39 +623,63 @@ export default function Home() {
             <div className="center_element">
               <Box>
                 <p>RDV Gap</p>
-                <ButtonGroup>
-                  {rdvGaps.map((rdvGap, i) => (
-                    <Field
-                      name="rdvGap"
-                      key={i}
-                      value={rdvGap}
-                      component={ButtonComponent}
-                    >
-                      {rdvGap + 'mins'}
-                    </Field>
-                  ))}
-                </ButtonGroup>
+                <Field
+                name="rdGap"
+                component={ButtonGroup}
+                type="button"
+                variant="contained"
+                buttons={rdvGaps}
+              />
               </Box>
-              <Checkbox>monday</Checkbox>
-              <TimePicker.RangePicker
+              <label>
+                <Field
+                  name="days"
+                  type="checkbox"
+                  component={Checkbox}
+                  onChange={e => handleChange(e,setDisabledM)}
+                  value="Monday"
+                />
+                Monday
+              </label>
+              <Field
+                    name="morningTime"
+                    component={TimePickerComponent}
+                    format="HH:mm"
+                allowClear="true"
+                disabledHours={() => [1, 2, 3]}
+                className="timepicker"
+                disabled={disabledM}
+                  />
+              {/* <TimePicker.RangePicker
                 format="HH:mm"
                 allowClear="true"
                 disabledHours={() => [1, 2, 3]}
                 className="timepicker"
                 selected={selectedtimeMM}
-                onchange={(timemm) => setSelectedtimeMM(timemm)}
-              />
+                onChange={(timemm, time) => handleChangeMM(timemm,time)}
+                disabled={disabledM}
+              /> */}
               <label className="text">And</label>
               <TimePicker.RangePicker
                 format="HH:mm"
                 allowClear="true"
                 disabledHours={() => [1, 2, 3]}
                 className="timepicker"
+                disabled={disabledM}
               />
             </div>
             <br />
             <div className="center_element">
-              <Checkbox>Tuesday</Checkbox>
+            <label>
+                <Field
+                  name="days"
+                  type="checkbox"
+                  component={Checkbox}
+                  onChange={e => handleChange(e,setDisabledT)}
+                  value="Tuesday"
+                />
+                Tuesday
+              </label>
               <TimePicker.RangePicker
                 format="HH:mm"
                 allowClear="true"
@@ -663,6 +687,7 @@ export default function Home() {
                 className="timepicker"
                 selected={selectedtimeMAf}
                 onChange={(timema) => setSelectedtimeMAf(timema)}
+                disabled={disabledT}
               />
               <label className="text">And</label>
               <TimePicker.RangePicker
@@ -670,16 +695,27 @@ export default function Home() {
                 allowClear="true"
                 disabledHours={() => [1, 2, 3]}
                 className="timepicker"
+                disabled={disabledT}
               />
             </div>
             <br />
             <div className="center_element">
-              <Checkbox>Wednesday</Checkbox>
+            <label>
+                <Field
+                  name="days"
+                  type="checkbox"
+                  component={Checkbox}
+                  onChange={e => handleChange(e,setDisabledW)}
+                  value="Wednesday"
+                />
+                Wednesday
+              </label>
               <TimePicker.RangePicker
                 format="HH:mm"
                 allowClear="true"
                 disabledHours={() => [1, 2, 3]}
                 className="timepicker"
+                disabled={disabledW}
               />
               <label className="text">And</label>
               <TimePicker.RangePicker
@@ -687,16 +723,27 @@ export default function Home() {
                 allowClear="true"
                 disabledHours={() => [1, 2, 3]}
                 className="timepicker"
+                disabled={disabledW}
               />
             </div>
             <br />
             <div className="center_element">
-              <Checkbox>Thuesday</Checkbox>
+            <label>
+                <Field
+                  name="days"
+                  type="checkbox"
+                  component={Checkbox}
+                  onChange={e => handleChange(e,setDisabledTh)}
+                  value="Thursday"
+                />
+                Thursday
+              </label>
               <TimePicker.RangePicker
                 format="HH:mm"
                 allowClear="true"
                 disabledHours={() => [1, 2, 3]}
                 className="timepicker"
+                disabled={disabledTh}
               />
               <label className="text">And</label>
               <TimePicker.RangePicker
@@ -704,16 +751,27 @@ export default function Home() {
                 allowClear="true"
                 disabledHours={() => [1, 2, 3]}
                 className="timepicker"
+                disabled={disabledTh}
               />
             </div>
             <br />
             <div className="center_element">
-              <Checkbox>Friday</Checkbox>
+            <label>
+                <Field
+                  name="days"
+                  type="checkbox"
+                  component={Checkbox}
+                  onChange={e => handleChange(e,setDisabledF)}
+                  value="Friday"
+                />
+                Friday
+              </label>
               <TimePicker.RangePicker
                 format="HH:mm"
                 allowClear="true"
                 disabledHours={() => [1, 2, 3]}
                 className="timepicker"
+                disabled={disabledF}
               />
               <label className="text">And</label>
               <TimePicker.RangePicker
@@ -721,16 +779,27 @@ export default function Home() {
                 allowClear="true"
                 disabledHours={() => [1, 2, 3]}
                 className="timepicker"
+                disabled={disabledF}
               />
             </div>
             <br />
             <div className="center_element">
-              <Checkbox>Sunday</Checkbox>
+            <label>
+                <Field
+                  name="days"
+                  type="checkbox"
+                  component={Checkbox}
+                  onChange={e => handleChange(e,setDisabledS)}
+                  value="Saturday"
+                />
+                Saturday
+              </label>
               <TimePicker.RangePicker
                 format="HH:mm"
                 allowClear="true"
                 disabledHours={() => [1, 2, 3]}
                 className="timepicker"
+                disabled={disabledS}
               />
               <label className="text">And</label>
               <TimePicker.RangePicker
@@ -738,6 +807,7 @@ export default function Home() {
                 allowClear="true"
                 disabledHours={() => [1, 2, 3]}
                 className="timepicker"
+                disabled={disabledS}
               />
             </div>
           </FormikStep>
@@ -829,7 +899,37 @@ const SelectComponent = ({
     />
   );
 };
-const ButtonComponent = ({
+const TimePickerComponent = ({
+  field, // { name, value, onChange, onBlur }
+  form: {
+  touched,
+  errors,
+  isValid,
+  handleBlur,
+  handleChange,
+  values,
+  setFieldValue,
+  }, // also values, setXXXX, handleXXXX, dirty, isValid, status, etc.
+  ...props
+}) => {
+  const [select, setSelect] = useState('');
+  let arr=[];
+  return (
+  <TimePicker.RangePicker
+      {...field}
+      {...props}
+      value={arr}
+      onChange={(moment, time) => {
+        arr=moment;
+      let inf=time.toString();
+      //setFieldValue(field.name, inf);
+      console.log(time, inf);
+       // calling custom onChangeText
+      }}
+  />
+  );
+};
+const ButtonGroup = ({ buttons,
   field, // { name, value, onChange, onBlur }
   form: {
     touched,
@@ -840,28 +940,30 @@ const ButtonComponent = ({
     values,
     setFieldValue,
   }, // also values, setXXXX, handleXXXX, dirty, isValid, status, etc.
-  ...props
-}) => {
-  const [flag, setFlag] = React.useState(true);
-  const handleClick = (e) => {
-    setFlag(!flag);
+  ...props }) => {
+  const [clickedId, setClickedId] = useState(-1);
+
+  const handleClick = (event, id) => {
+    setClickedId(id);
   };
-  const handleInput = (e) => {
-    console.log(e.target.innerHTML);
-    console.log(e);
-    handleClick(e);
-  };
+
   return (
-    <Button
-      {...field}
-      {...props}
-      onBlur={handleBlur(field.name)}
-      variant={flag ? 'contained' : 'outlined'}
-      onClick={(e) => {
-        handleInput(e);
-        setFieldValue(field.name, e.target.innerHTML);
-      }}
-    />
+    <>
+      {buttons.map((buttonLabel, i) => (
+        <Button
+          {...field}
+          {...props}
+          key={i}
+          name={field.name}
+          onClick={(event) => {handleClick(event, i);
+              setFieldValue(field.name, buttonLabel);}}
+          variant={i === clickedId ? 'contained' : 'outlined'}
+          color={i === clickedId ? 'primary' : 'default'}
+        >
+          {buttonLabel}
+        </Button>
+      ))}
+    </>
   );
 };
 const CountryDropdownComponent = ({
@@ -882,7 +984,6 @@ const CountryDropdownComponent = ({
     <CountryDropdown
       {...field}
       {...props}
-      onBlur={handleBlur(field.name)}
       value={country1}
       onChange={(value) => {
         setFieldValue(field.name, value); // calling custom onChangeText
@@ -911,7 +1012,6 @@ const RegionDropdownComponent = ({
     <RegionDropdown
       {...field}
       {...props}
-      onBlur={handleBlur(field.name)}
       country={country}
       region={region}
       onChange={(value) => {
@@ -921,6 +1021,35 @@ const RegionDropdownComponent = ({
     />
   );
 };
+// const createDB = function (secretKey) {
+//   db.serialize(function () {
+//     // This is the default, but it is good to specify explicitly:
+//     db.run('PRAGMA cipher_compatibility = 4');
+
+//     // To open a database created with SQLCipher 3.x, use this:
+//     // db.run("PRAGMA cipher_compatibility = 3");
+
+//     db.run(`PRAGMA key = ${secretKey}`)
+//       .run(
+//         'CREATE TABLE  IF NOT EXISTS doctor ( firstName TEXT NOT NULL, lastName TEXT NOT NULL, email TEXT NOT NULL UNIQUE, phone TEXT NOT NULL UNIQUE, password TEXT NOT NULL, gender TEXT NOT NULL, dateOfBirth TEXT NOT NULL, city TEXT NOT NULL, region TEXT NOT NULL, country TEXT NOT NULL, address TEXT NOT NULL, postalCode TEXT NOT NULL, secretQuest TEXT NOT NULL, answerScrtQuest TEXT NOT NULL, description TEXT NOT NULL, officeName TEXT NOT NULL, speciality TEXT NOT NULL, professionalID TEXT NOT NULL, rdvGap INTEGER NOT NULL, minFee INTEGER NOT NULL, maxFee INTEGER NOT NULL, minTeleFee INTEGER NOT NULL, maxTeleFee INTEGER NOT NULL, privateKey TEXT, publicKey TEXT, days TEXT)'
+//       )
+//       .run(
+//         'CREATE TABLE  IF NOT EXISTS events (start TEXT NOT NULL, end TEXT NOT NULL, title TEXT NOT NULL, categorie TEXT)'
+//       )
+//       .run('CREATE TABLE  IF NOT EXISTS schedule (days TEXT)');
+
+//     //db.run(`INSERT INTO ${aha} VALUES (?,?)`, 'haah', 'bb');
+//     //db.run("INSERT INTO lorem VALUES ('j',${kiki})");
+//     // for (var i = 0; i < 10; i++) {
+//     //     stmt.run("Ipsum " + i, "haha");
+//     // }
+//     // stmt.finalize();
+
+//     // db.each("SELECT rowid AS id, info, test FROM lorem", function(err, row) {
+//     //     console.log(row.id + ": " + row.info+' '+ row.test);
+//     // });
+//   });
+// };
 
 export interface FormikStepProps
   extends Pick<FormikConfig<FormikValues>, 'children' | 'validationSchema'> {
@@ -970,11 +1099,40 @@ export function FormikStepper({
         onSubmit={async (values, helpers) => {
           if (isLastStep()) {
             await props.onSubmit(values, helpers);
-            handleDoctorCreate(values);
+            //handleDoctorCreate(values);
             setCompleted(true);
+            db.serialize(function () {
+              // This is the default, but it is good to specify explicitly:
+              db.run('PRAGMA cipher_compatibility = 4');
+
+              // To open a database created with SQLCipher 3.x, use this:
+              // db.run("PRAGMA cipher_compatibility = 3");
+              secretkey= values.password.replace(/[^a-zA-Z0-9]/g, "");
+              db.run(`PRAGMA key = ${secretkey}`)
+                .run(
+                  'CREATE TABLE  IF NOT EXISTS doctor ( firstName TEXT NOT NULL, lastName TEXT NOT NULL, email BLOB NOT NULL UNIQUE, phone TEXT NOT NULL UNIQUE, password TEXT NOT NULL, gender TEXT NOT NULL, dateOfBirth TEXT NOT NULL, city TEXT NOT NULL, region TEXT NOT NULL, country TEXT NOT NULL, address TEXT NOT NULL, postalCode TEXT NOT NULL, secretQuest TEXT NOT NULL, answerScrtQuest TEXT NOT NULL, description TEXT NOT NULL, officeName TEXT NOT NULL, speciality TEXT NOT NULL, professionalID TEXT NOT NULL, rdvGap INTEGER NOT NULL, minFee INTEGER NOT NULL, maxFee INTEGER NOT NULL, minTeleFee INTEGER NOT NULL, maxTeleFee INTEGER NOT NULL, privateKey TEXT, publicKey TEXT, days TEXT)'
+                )
+                .run(
+                  'CREATE TABLE  IF NOT EXISTS events (start TEXT NOT NULL, end TEXT NOT NULL, title TEXT NOT NULL, categorie TEXT)'
+                )
+                .run('CREATE TABLE  IF NOT EXISTS schedule (days TEXT)');
+                var stmt=db.prepare(`INSERT INTO doctor VALUES (?, ?, ?, ?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)`);
+                stmt.run(values.firstName, values.lastName, values.email, values.phoneNumber,values.password,values.gender, `${values.dobYear}-${values.dobMonth}-${values.dobDay}`,values.city,values.region,values.country,values.address,values.postalCode,values.secretQuest,values.answerScrtQuest,values.description,values.officeName,values.speciality,values.professionalID,values.rdvGap,values.minFee,values.maxFee,values.minTeleFee,values.maxTeleFee,values.privateKey,values.publicKey,values.days);
+              // db.run(`INSERT INTO ${aha} VALUES (?,?)`, 'haah', 'bb');
+              //db.run("INSERT INTO lorem VALUES ('j',${kiki})");
+              // for (var i = 0; i < 10; i++) {
+              //     stmt.run("Ipsum " + i, "haha");
+              // }
+              // stmt.finalize();
+
+              // db.each("SELECT rowid AS id, info, test FROM lorem", function(err, row) {
+              //     console.log(row.id + ": " + row.info+' '+ row.test);
+              // });
+            });
             // this.props.history.push('/moneyform');
             // <Redirect to="/agenda" />;
             localStorage.setItem('user','logged');
+
             history.push('/profile');
           } else {
             setStep((s) => s + 1);

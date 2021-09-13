@@ -1,4 +1,4 @@
-import React , { Component } from 'react';
+import React , { useState, useEffect } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Drawer from '@material-ui/core/Drawer';
 import AppBar from '@material-ui/core/AppBar';
@@ -33,6 +33,11 @@ import { useHistory } from 'react-router-dom';
 import { HashRouter as Router, Switch, Route, Link } from 'react-router-dom';
 import { Redirect } from "react-router-dom";
 import Nav_bar from './Nav_bar';
+import { secretkey } from './Login';
+
+var sqlite3 = require('@journeyapps/sqlcipher').verbose();
+const path = require('path');
+var db = new sqlite3.Database('opentoubib1.db');
 
 
 const drawerWidth = 240;
@@ -62,10 +67,10 @@ const useStyles = makeStyles((theme) => ({
   color_white : {
     background: '#089bab',
     color: '#fff',
-    
+
   },
-  
-  
+
+
   content: {
     flexGrow: 1,
     padding: theme.spacing(3),
@@ -95,7 +100,7 @@ const useStyless = makeStyles((theme) => ({
     position: 'absolute',
     width: 400,
     backgroundColor: theme.palette.background.paper,
-    
+
     boxShadow: theme.shadows[5],
     padding: theme.spacing(2, 4, 3),
   },
@@ -110,7 +115,7 @@ export default function App_bar() {
   const classess = useStyless();
   // getModalStyle is not a pure function, we roll the style only on the first render
     const [modalStyle] = React.useState(getModalStyle);
- 
+
   const [open, setOpen] = React.useState(false);
 
   const handleOpen = () => {
@@ -120,7 +125,55 @@ export default function App_bar() {
   const handleClose = () => {
     setOpen(false);
   };
+  let inf=[];
+    let todayRdvs = [];
+  let indice=0;
+  const [prochainRdv, setprochainRdv] = useState();
+  // knex
+  //   .select('*')
+  //   .from('events')
+  //   .then((data) => {
+  //     inf = data;
+  //     console.log('Data ', data);
+  //     for (var i = 0; i < inf.length; i++) {
+  //      let test = new Date(inf[i].start).setHours(0, 0, 0, 0);
+  //      let today= new Date().setHours(0, 0, 0, 0);
+  //       if(test==today){
+  //         console.log("TODAY S RDV", inf[i].title);
+  //         todayRdvs.push(inf[i]);
+  //       }
+  //     }
+  //   })
+  //   .catch((err) => console.log(err));
+  db.serialize(function () {
+    // This is the default, but it is good to specify explicitly:
+    db.run('PRAGMA cipher_compatibility = 4');
+    db.run(`PRAGMA key = 'Seventeen13'`);
+  db.each("SELECT rowid as id, start, end, title FROM events", function(err, row) {
+    let test = new Date(row.start).setHours(0, 0, 0, 0);
+    let today= new Date().setHours(0, 0, 0, 0);
+    let tod = new Date().getTime();
+    let date= new Date(row.start).getTime();
+    console.log(test==today);
+    console.log(date>tod);
+    if(date>tod && test==today){
+        inf.push(row);
+        console.log('today rdvs',row);
+    }
+  });
+  });
+  useEffect(() => {
+      let secTimer = setInterval( () => {
+      if (indice != inf.length) {
+        console.log('khra',inf.length, inf[indice].title);
+        setprochainRdv(inf[indice].title);
+        indice++;}
+        else
+        setprochainRdv("No next rdv")
+      },5000)
 
+      return () => clearInterval(secTimer);
+  }, []);
 
   const body = (
     <div style={modalStyle} className={classess.paper}>
@@ -138,7 +191,7 @@ export default function App_bar() {
               <option className="orangee"> Orange</option>
               <option className="greenn" >vert</option>
               <option className="bleuu" >bleu</option>
-              
+
             </select>
              </div>
           </div>
@@ -173,7 +226,7 @@ export default function App_bar() {
           <button className="bg-primary_mini pt-5 pb-5 text-center rounded">Enregistrer</button>
        </form>
       </div>
-      
+
     </div>
   );
   const history = useHistory();
@@ -181,13 +234,13 @@ export default function App_bar() {
     localStorage.setItem('user','loggout');
    history.push('/');
   }
-  
+
   return (
-    
+
     <div className={classes.root}>
-     
+
       <Nav_bar/>
-      
+
       <main className="container-fluid">
         <div className="row">
           <div className="col-md-3">
@@ -198,9 +251,9 @@ export default function App_bar() {
                 </div>
                 <div className="iq-card-header-toolbar d-flex align-items-center">
                  <a onClick={handleOpen}>
-                
+
                  <BorderColorIcon/>
-               
+
                  </a>
                 </div>
               </div>
@@ -233,21 +286,21 @@ export default function App_bar() {
       </Modal>
               <div className="iq-card-body">
                 <ul className="m-0 p-0 job-classification">
-                  <li>  Mme :  XY &nbsp; À &nbsp; --:--</li>
+                  <li>{prochainRdv}</li>
                   <li>
-                  
+
                   </li>
                  <Link to="/Medical_file"> <li> <a>Dossier medicale</a></li></Link>
                 </ul>
               </div>
             </div>
-          
+
           </div>
           <div className="col-md-9">
-           
-        
+
+
          <Agenda/>
-        
+
         </div>
         </div>
       </main>

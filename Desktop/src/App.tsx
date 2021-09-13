@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   HashRouter as Router,
   Switch,
@@ -31,9 +31,12 @@ import Typography from '@material-ui/core/Typography';
 import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
 
+var sqlite3 = require('@journeyapps/sqlcipher').verbose();
+import {shell} from 'electron';
+
+// const knex = require('database');
 
 
-const knex = require('database');
 
 const useStyles = makeStyles({
   root: {
@@ -53,44 +56,41 @@ const useStyles = makeStyles({
 });
 
 
+let user=[];
+var db = new sqlite3.Database('opentoubib1.db');
+db.serialize(function () {
+  // This is the default, but it is good to specify explicitly:
+  db.run('PRAGMA cipher_compatibility = 4');
 
-const crypto = require('crypto');
+  // To open a database created with SQLCipher 3.x, use this:
+  // db.run("PRAGMA cipher_compatibility = 3");
+
+  db.run(`PRAGMA key = 'Seventeen13'`);
 
 
-const algorithm = 'aes-256-cbc';
+  db.each("SELECT email, password FROM doctor", function(err, row) {
+      console.log('APP TSX USER', row);
+      user=row;
+  });
+});
+// knex
+// .select('*')
+// .from('doctor')
+// .then((values) => {user={
+//      password: Decrypt( values[0].password),
+//       email: Decrypt( values[0].email)
 
-// generate 16 bytes of random data
-const initVector = Buffer.alloc(16, 0);
+// } ;
+//   console.log( "voila ",user);})
 
-// secret key generate 32 bytes of random data
-const Securitykey = crypto.scryptSync('bncaskdbvasbvlaslslasfhjazerfgty', 'GfG', 32)
-const Decrypt = (data)=>{
-  const decipher = crypto.createDecipheriv(algorithm, Securitykey, initVector);
-
-let decryptedData = decipher.update(data, "hex", "utf-8");
-
-decryptedData += decipher.final("utf8");
-return decryptedData;
-}
-let user=[]
-knex
-.select('*')
-.from('doctor')
-.then((values) => {user={
-     password: Decrypt( values[0].password),
-      email: Decrypt( values[0].email)
-      
-} ;
-  console.log( "voila ",user);})
-
-.catch((err) => console.log(err));
+// .catch((err) => console.log(err));
 
 
 
 
 
 const Hello = () => {
- 
+
   const[error,setError]=useState("");
   const[User,setUser]=useState("");
   const Loginn= details =>{
@@ -99,9 +99,9 @@ const Hello = () => {
     console.log("logged in")
     setUser({
       email:details.email
-   }); 
+   });
    localStorage.setItem('user','logged');
-  
+
   }else{
     console.log("details do not match");
     setError("details do not match");
@@ -113,14 +113,24 @@ const Hello = () => {
     localStorage.setItem('user','loggout');
   }
   const classes = useStyles();
+  const [dt, setDt] = useState(new Date().toLocaleString());
+  const date= new Date('2021-09-09 00:37:00');
+
+useEffect(() => {
+    let secTimer = setInterval( () => {
+      setDt(((date- Date.now())/(60000)).toLocaleString());
+    },1000)
+
+    return () => clearInterval(secTimer);
+}, []);
   return (
     <div>
-      
+
       {/* <p className="preference">Preferences</p> */}
       <div className="Hello">
-     
+
          <div>
-           
+
         <Link to="/Support">
           <span role="img" aria-label="books"
             style={{ position: 'absolute', bottom: '25px', right: '45%' }} className=" gris">
@@ -131,14 +141,14 @@ const Hello = () => {
        {
           ( localStorage.getItem('user')=="logged")?(
             <div>
-               
+
                <Redirect to="/App_bar" />
                {/* <button onClick={Logout}>Logout</button> */}
             </div>
           )
           : (( localStorage.getItem('user')=="loggout")?(
-          
-             <LoginForm Loginn={Loginn} error={error}>Login</LoginForm> 
+
+             <LoginForm Loginn={Loginn} error={error}>Login</LoginForm>
           )
           :(
             <div>
@@ -154,18 +164,22 @@ const Hello = () => {
             in full confidentiality and security with Opentoubib</p>
             <Link to="/Login">
                 <button type="button" className="btn btn-primary">
-              
+
               Inscription
             </button>
           </Link>
+                <button type="button" className="btn btn-primary" style={{marginLeft: '15px'}} onClick={()=>shell.openExternal('http://localhost:3000/')}>
+
+              En savoir plus
+            </button>
                 </div>
               </div>
              </div>
-            
+
             </div>
-           
+
             </div>
-            
+
           ))
 }
        </div>
@@ -175,33 +189,14 @@ const Hello = () => {
   );
 };
 
-const Home = () => {
-  const [isLoggedIn, setisLoggedIn] = useState();
-  const history = useHistory();
-  knex
-    .select('*')
-    .from('doctor')
-    .then((data) => {
-      console.log('data:', data);
-      data==[]?
-      setisLoggedIn(false):setisLoggedIn(true);
-    })
-    .catch((err) => console.log(err));
-  // if (isLoggedIn) {
-  //   history.push('/profile');
-  //   return <Profile />;
-  // }
-  // history.push('/');
-  return <Hello />;
-};
 
 export default function App() {
   return (
     <Router>
       <Switch>
-        <Route exact path="/" component={Home} />
+        <Route exact path="/" component={Hello} />
         <Route path="/profile" component={Profile} />
-      
+
         <Route path="/agenda" component={Agenda} />
         <Route path="/Support" component={Support} />
         <Route path="/App_bar" component={App_bar} />
