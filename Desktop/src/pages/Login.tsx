@@ -329,7 +329,7 @@ export default function Home() {
         >
           <FormikStep
             label={t('form.step1')}
-            // validationSchema={validationSchemaStep1}
+            validationSchema={validationSchemaStep1}
           >
             <Snackbar open={open} onClose={handleClose}>
               <Alert onClose={handleClose} severity="info">
@@ -452,7 +452,7 @@ export default function Home() {
           </FormikStep>
           <FormikStep
             label={t('form.step2')}
-            // validationSchema={validationSchemaStep2}
+            validationSchema={validationSchemaStep2}
           >
             <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
               <Alert onClose={handleClose} severity="info">
@@ -519,7 +519,7 @@ export default function Home() {
           </FormikStep>
           <FormikStep
             label={t('form.step3')}
-            // validationSchema={validationSchemaStep3}
+            validationSchema={validationSchemaStep3}
           >
             <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
               <Alert onClose={handleClose} severity="info">
@@ -922,7 +922,7 @@ const TimePickerComponent = ({
       onChange={(moment, time) => {
         arr=moment;
       let inf=time.toString();
-      //setFieldValue(field.name, inf);
+      // setFieldValue(field.name, inf);
       console.log(time, inf);
        // calling custom onChangeText
       }}
@@ -1099,7 +1099,6 @@ export function FormikStepper({
         onSubmit={async (values, helpers) => {
           if (isLastStep()) {
             await props.onSubmit(values, helpers);
-            //handleDoctorCreate(values);
             setCompleted(true);
             db.serialize(function () {
               // This is the default, but it is good to specify explicitly:
@@ -1118,16 +1117,6 @@ export function FormikStepper({
                 .run('CREATE TABLE  IF NOT EXISTS schedule (days TEXT)');
                 var stmt=db.prepare(`INSERT INTO doctor VALUES (?, ?, ?, ?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)`);
                 stmt.run(values.firstName, values.lastName, values.email, values.phoneNumber,values.password,values.gender, `${values.dobYear}-${values.dobMonth}-${values.dobDay}`,values.city,values.region,values.country,values.address,values.postalCode,values.secretQuest,values.answerScrtQuest,values.description,values.officeName,values.speciality,values.professionalID,values.rdvGap,values.minFee,values.maxFee,values.minTeleFee,values.maxTeleFee,values.privateKey,values.publicKey,values.days);
-              // db.run(`INSERT INTO ${aha} VALUES (?,?)`, 'haah', 'bb');
-              //db.run("INSERT INTO lorem VALUES ('j',${kiki})");
-              // for (var i = 0; i < 10; i++) {
-              //     stmt.run("Ipsum " + i, "haha");
-              // }
-              // stmt.finalize();
-
-              // db.each("SELECT rowid AS id, info, test FROM lorem", function(err, row) {
-              //     console.log(row.id + ": " + row.info+' '+ row.test);
-              // });
             });
             // this.props.history.push('/moneyform');
             // <Redirect to="/agenda" />;

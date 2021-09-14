@@ -21,14 +21,14 @@ var db = new sqlite3.Database('opentoubib1.db');
       )
       .run('CREATE TABLE  IF NOT EXISTS schedule (days TEXT)');
 
-    //  var stmt=db.prepare(`INSERT INTO events VALUES (?,?,?,?)`);
-    // // // // //db.run("INSERT INTO lorem VALUES ('j',${kiki})");
-    // // // // // for (var i = 0; i < 10; i++) {
-    //       stmt.run('2021-09-13 18:10:00','2021-09-13 19:00:00','Consultation Mr Nacer', '1');
+    //   var stmt=db.prepare(`INSERT INTO events VALUES (?,?,?,?)`);
+    // // // // // //db.run("INSERT INTO lorem VALUES ('j',${kiki})");
+    // // // // // // for (var i = 0; i < 10; i++) {
+    //        stmt.run('2021-09-28 08:22:00','2021-09-28 09:00:00','Controle', '1');
     // }
     // stmt.finalize();
      //db.run("DROP TABLE doctor");
-     db.run('UPDATE doctor SET dateOfBirth = ? WHERE rowid = ?', '26/03/1999', 1);
+     db.run('DELETE FROM doctor WHERE rowid = ?', 1);
 
     db.each("SELECT * FROM doctor", function(err, row) {
         console.log(row);

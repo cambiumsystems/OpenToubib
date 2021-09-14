@@ -169,18 +169,24 @@ export default function App_bar() {
     if(date>tod && test==today){
         inf.push(row);
         console.log('today rdvs',row);
+        todayRdvs.push(row.start);
     }
   });
   });
   useEffect(() => {
       let secTimer = setInterval( () => {
-      if (indice != inf.length) {
-        console.log('khra',inf.length, inf[indice].title);
+      let tod = new Date().getTime();
+      let date= new Date(todayRdvs[indice]).getTime();
+      if (indice != inf.length)
+       { if(date>tod){
+        console.log('dates',inf.length, inf[indice].title);
         setprochainRdv(inf[indice].title);
-        indice++;}
+        setDt(((date- tod)/(60000)).toLocaleString());
+        }
+        else indice++;}
         else
-        setprochainRdv("No next rdv")
-      },5000)
+        setprochainRdv("No next rdv");
+      },1000)
 
       return () => clearInterval(secTimer);
   }, []);
@@ -252,13 +258,13 @@ export default function App_bar() {
 //this is a test
   const date= new Date('2021-09-09 11:00:00');
 
-useEffect(() => {
-    let secTimer = setInterval( () => {
-      setDt(((date- Date.now())/(60000)).toLocaleString());
-    },1000)
+// useEffect(() => {
+//     let secTimer = setInterval( () => {
+//       setDt(((date- Date.now())/(60000)).toLocaleString());
+//     },1000)
 
-    return () => clearInterval(secTimer);
-}, []);
+//     return () => clearInterval(secTimer);
+// }, []);
 
 
   return (
@@ -313,7 +319,7 @@ useEffect(() => {
               <div className="iq-card-body">
                 <ul className="m-0 p-0 job-classification">
                   <li> Type : Consultation video </li>
-                  <li> Mme :  XY </li>
+                  <li> {prochainRdv} </li>
                   <Link to="/Medical_file"> <li className="color_important"> Dossier medicale</li></Link>
 
                   <li> Restant :{parseInt(dt)} min</li>

@@ -152,7 +152,7 @@ const body = (
     slotMinTime= "08:00:00"
     editable={true}
     selectable
-    weekends
+    // weekends
     eventColor='#00FA9A'
     eventChange={function(ev){
       const start = ev.event.start;

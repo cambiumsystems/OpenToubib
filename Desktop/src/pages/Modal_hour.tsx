@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from "react-router-dom";
 import { makeStyles, Theme, createStyles } from '@material-ui/core/styles';
 import Modal from '@material-ui/core/Modal';
 import NotificationImportantIcon from '@material-ui/icons/NotificationImportant';
@@ -17,6 +18,19 @@ function getModalStyle() {
     transform: `translate(-${top}%, -${left}%)`,
   };
 }
+const ButtonMailto = ({ mailto, label }) => {
+  return (
+      <Link
+          to='#'
+          onClick={(e) => {
+              window.location = mailto;
+              e.preventDefault();
+          }}
+      >
+          {label}
+      </Link>
+  );
+};
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -24,7 +38,7 @@ const useStyles = makeStyles((theme: Theme) =>
       position: 'absolute',
       width: 400,
       backgroundColor: theme.palette.background.paper,
-     
+
       boxShadow: theme.shadows[5],
       padding: theme.spacing(2, 4, 3),
     },
@@ -35,15 +49,15 @@ function Modal_hour() {
     // getModalStyle is not a pure function, we roll the style only on the first render
     const [modalStyle] = React.useState(getModalStyle);
     const [open, setOpen] = React.useState(false);
-  
+
     const handleOpen = () => {
       setOpen(true);
     };
-  
+
     const handleClose = () => {
       setOpen(false);
     };
-  
+
     const body = (
       <div style={modalStyle} className={classes.paper}>
         <h2 id="simple-modal-title"className="h_txt" >Retard :</h2>
@@ -59,23 +73,33 @@ function Modal_hour() {
               <option > 10min </option>
               <option > 15min</option>
               <option >20min</option>
-              
-              
+
+
             </select>
-            <button className="bg-primary_mini pt-5 pb-5 text-center rounded left">Prevenir</button>
+            <Link
+                to='#'
+                onClick={(e) => {
+                    window.location = "mailto:no-reply@example.com";
+                    e.preventDefault();
+                }}
+            >
+              <button className="bg-primary_mini pt-5 pb-5 text-center rounded left">
+          Prévenir
+          </button>
+      </Link>
              </div>
           </div>
-         
-      
+
+
           </form>
           </div>
-        
+
       </div>
     );
-  
+
     return (
         <div>
-     
+
       <button type="submit" onClick={handleOpen} className="btn iq-bg-danger "> <NotificationImportantIcon fontSize="small"/>Prevenir d'un retard</button>
       <Modal
         open={open}

@@ -13,6 +13,7 @@ import ListItemText from '@material-ui/core/ListItemText';
 import InboxIcon from '@material-ui/icons/MoveToInbox';
 import AccountBoxIcon from '@material-ui/icons/AccountBox';
 import DateRangeIcon from '@material-ui/icons/DateRange';
+import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import MailIcon from '@material-ui/icons/Mail';
 import Agenda from './Agenda';
 import DuoIcon from '@material-ui/icons/Duo';
@@ -146,9 +147,8 @@ export default function Nav_bar() {
               aria-label="Menu"
 
             >
-              <AccountCircle onClick={Logout} />
+              <ExitToAppIcon onClick={Logout} />
             </IconButton>
-
 
         </Toolbar>
 
