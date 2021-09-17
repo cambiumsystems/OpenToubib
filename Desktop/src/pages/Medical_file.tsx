@@ -47,6 +47,7 @@ import {Image} from "semantic-ui-react";
 import AttachFileIcon from '@material-ui/icons/AttachFile';
 import DescriptionIcon from '@material-ui/icons/Description';
 import TextField from '@material-ui/core/TextField';
+import Modal_prescription from './Modal_prescription'
 
 const drawerWidth = 240;
 
@@ -323,6 +324,7 @@ export default function Medical_file() {
                             <input type="file" className="upload-box" />
                           </div>
                           <br/>
+                          <Modal_prescription/>
                           <br/>
                          
                          <ul className="

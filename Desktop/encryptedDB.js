@@ -21,10 +21,10 @@ var db = new sqlite3.Database('opentoubib1.db');
       )
       .run('CREATE TABLE  IF NOT EXISTS schedule (days TEXT)');
 
-   var stmt=db.prepare(`INSERT INTO events VALUES (?,?,?,?,?)`);
+  // var stmt=db.prepare(`INSERT INTO events VALUES (?,?,?,?,?)`);
     // // // // // //db.run("INSERT INTO lorem VALUES ('j',${kiki})");
     // // // // // // for (var i = 0; i < 10; i++) {
-    stmt.run('2021-09-17 17:20:00','2021-09-17 17:25:00','Consultation', '1','1');
+    //stmt.run('2021-09-17 23:20:00','2021-09-17 23:25:00','Consultation', '1','1');
 
    //db.run("DELETE FROM events WHERE start='2021-09-14 12:50:00'");
     // }

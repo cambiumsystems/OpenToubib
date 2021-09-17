@@ -80,6 +80,9 @@
    padding: 20px;
    border: 2px solid white;
  }
+ f-right{
+   float:right;
+ }
  .Border_col{
 
  }
@@ -548,6 +551,9 @@
  }
  select.form-control {
    margin-bottom: 10px;
+ }
+ .padding_input{
+  padding: 30px;
  }
  .container-fluid,
  .container-lg,
@@ -1025,6 +1031,9 @@ align-items: center!important;
 }
 .rounded {
   border-radius: 25px!important;
+}
+.rounded_m {
+  border-radius: 5px!important;
 }
 .bg-white {
   background-color: #fff!important;
