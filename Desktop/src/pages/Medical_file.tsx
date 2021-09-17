@@ -47,6 +47,7 @@ import {Image} from "semantic-ui-react";
 import AttachFileIcon from '@material-ui/icons/AttachFile';
 import DescriptionIcon from '@material-ui/icons/Description';
 import TextField from '@material-ui/core/TextField';
+
 const drawerWidth = 240;
 
 const useStyless = makeStyles((theme) => ({
@@ -318,25 +319,30 @@ export default function Medical_file() {
 
                           <div className="col-md-60">
 
-                          <button className="text-primary ms"><AttachFileIcon />joindre un fichier</button>
+                          <div className="container_file">
+                            <input type="file" className="upload-box" />
+                          </div>
+                          <br/>
+                          <br/>
+                         
                          <ul className="
                            doctoe-seduall d-flex
                            p-0 mt-4 mb-0
                            ">
                              <li className="text-center">
                              <TableContainer component={Paper}>
-      <Table className={classesss.table} aria-label="simple table">
-        <TableHead>
-          <TableRow>
-            <TableCell>Patologie</TableCell>
+            <Table className={classesss.table} aria-label="simple table">
+            <TableHead>
+            <TableRow>
+            <TableCell>Patologies</TableCell>
             <TableCell align="right">Date</TableCell>
             <TableCell align="right">Documents</TableCell>
 
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {rows.map((row) => (
-            <TableRow key={row.name}>
+            </TableRow>
+            </TableHead>
+           <TableBody>
+            {rows.map((row) => (
+              <TableRow key={row.name}>
               <TableCell component="th" scope="row">
                 {row.name}
               </TableCell>

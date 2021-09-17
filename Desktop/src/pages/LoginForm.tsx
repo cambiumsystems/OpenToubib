@@ -12,14 +12,17 @@ function LoginForm({Loginn ,error}) {
     let user = [];
 const submitHandler=e=>{
         e.preventDefault();
-        if(localStorage.getItem('checked')=='true'){
+
+        if(details.email==''&& localStorage.getItem('email')!=""){
             details.email=localStorage.getItem('email');
         }
+        
+           
         Loginn(details);
         // db.serialize(function () {
         //   // This is the default, but it is good to specify explicitly:
         //   db.run('PRAGMA cipher_compatibility = 4');
-        //   db.run(`PRAGMA key = 'Seventeen13'`);
+        //   db.run(`PRAGMA key = 'Nore1234'`);
         // db.each("SELECT email, password FROM doctor", function(err, row) {
         //   console.log(row);
         //   user=row;
@@ -27,28 +30,28 @@ const submitHandler=e=>{
         // });
         // });
 
-        if(localStorage.getItem('checked')!='false' && localStorage.getItem('checked') != null){
-            localStorage.setItem('email',details.email);
-        }
+       // if(localStorage.getItem('checked')!='false' && localStorage.getItem('checked') != null){
+        //    localStorage.setItem('email',details.email);
+        //}
     }
 
-
-    const [checkedOne, setCheckedOne] = useState(false);
-    const updateOne = () => {
-        setCheckedOne(!checkedOne);
-        if(checkedOne==true){
-            localStorage.setItem('checked','false');
+    const[email,setEmail]=useState("")
+    const handlechangesemail=(event)=>{
+        
+        if(localStorage.getItem('email')==null ||localStorage.getItem('email')==''){
+        
+        details.email=event.target.value;
+        localStorage.setItem('email',event.target.value);
         }
-        if(checkedOne==false){
-            localStorage.setItem('checked','true');
+        else{
+            let emailuser=localStorage.getItem('email')
+            details.email=emailuser;
+         }
         }
-        if(localStorage.getItem('checked')!='false'){
-            setCheckedOne(true);
-        }
-        if(localStorage.getItem('checked')=='false'){
-            setCheckedOne(false);
-        }
-    };
+    
+    
+    
+  
 
 
     return (
@@ -81,7 +84,8 @@ const submitHandler=e=>{
                    <input  className="form-control mb-0" type= "text"
 
                    name="email" id="email" onChange={e=>setDetails({...details,email: e.target.value})}
-                    placeholder={(localStorage.getItem('email')!=null)? localStorage.getItem('email'):(details.email)} />
+                   placeholder={(localStorage.getItem('email')!=null)? localStorage.getItem('email'):(details.email)}
+                    />
                </div>
                <div className="form-group">
                    <label>Password</label>
@@ -90,32 +94,7 @@ const submitHandler=e=>{
                <div className="d-inline-block w-100">
                  <div className="custom-control custom-checkbox d-inline-block mt-2 pt-1">
 
-                   <FormControlLabel
-
-        control={
-
-            (localStorage.getItem('checked')!='false')?(
-            <Checkbox
-            name="checked_remember"
-            color="primary"
-            id="rememberMe"
-            // disabled={true}
-            checked={checkedOne}
-            onChange={updateOne}
-          />):(
-            <Checkbox
-            name="checked_remember"
-            color="primary"
-            id="rememberMe"
-            checked={checkedOne}
-            onChange={updateOne}
-          />
-          )
-        }
-        label="Remember me!"
-      />
-
-
+                 
                  </div>
                </div>
                <input className="btn btn-primary float-right"type="submit" value="Login" />

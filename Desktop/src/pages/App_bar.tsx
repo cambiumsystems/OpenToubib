@@ -49,6 +49,11 @@ import swal from 'sweetalert';
 import NotificationImportantIcon from '@material-ui/icons/NotificationImportant';
 import VideoCallIcon from '@material-ui/icons/VideoCall';
 import Modal_hour from './Modal_hour';
+import DescriptionIcon from '@material-ui/icons/Description';
+import Tooltip from '@material-ui/core/Tooltip';
+import Button from '@material-ui/core/Button';
+import {shell} from 'electron';
+
 
 const drawerWidth = 240;
 
@@ -138,7 +143,10 @@ export default function App_bar() {
   let inf=[];
     let todayRdvs = [];
   let indice=0;
+  let name_doc=localStorage.getItem('email').toString();
+  console.log(typeof name_doc);
   const [prochainRdv, setprochainRdv] = useState();
+  const [typeRdv, settype] = useState();
   // knex
   //   .select('*')
   //   .from('events')
@@ -158,7 +166,7 @@ export default function App_bar() {
   db.serialize(function () {
     // This is the default, but it is good to specify explicitly:
     db.run('PRAGMA cipher_compatibility = 4');
-    db.run(`PRAGMA key = 'Seventeen13'`);
+    db.run(`PRAGMA key = 'Nore1234'`);
   db.each("SELECT rowid as id, start, end, title FROM events", function(err, row) {
     let test = new Date(row.start).setHours(0, 0, 0, 0);
     let today= new Date().setHours(0, 0, 0, 0);
@@ -170,18 +178,24 @@ export default function App_bar() {
         inf.push(row);
         console.log('today rdvs',row);
         todayRdvs.push(row.start);
+        console.log(date);
     }
   });
+  
   });
   useEffect(() => {
       let secTimer = setInterval( () => {
       let tod = new Date().getTime();
       let date= new Date(todayRdvs[indice]).getTime();
+     
+     
       if (indice != inf.length)
        { if(date>tod){
         console.log('dates',inf.length, inf[indice].title);
         setprochainRdv(inf[indice].title);
+        settype(inf[indice].isTeleconsultation);
         setDt(((date- tod)/(60000)).toLocaleString());
+        setstartDt(date.toLocaleString());
         }
         else indice++;}
         else
@@ -191,7 +205,7 @@ export default function App_bar() {
       return () => clearInterval(secTimer);
   }, []);
 
-
+const name=localStorage.getItem('')
 
   const body = (
     <div style={modalStyle} className={classess.paper}>
@@ -255,6 +269,7 @@ export default function App_bar() {
 
 
   const [dt, setDt] = useState(new Date().toLocaleString());
+  const [startdt, setstartDt] = useState(new Date().toLocaleString());
 //this is a test
   const date= new Date('2021-09-09 11:00:00');
 
@@ -316,16 +331,48 @@ export default function App_bar() {
       >
         {body}
       </Modal>
+             
               <div className="iq-card-body">
+             
                 <ul className="m-0 p-0 job-classification">
-                  <li> Type : Consultation video </li>
+                
+              {(prochainRdv=="No next rdv")?
+                (<li></li>)
+              :(<li> Type :{typeRdv?'consultation':'teleconsultation' } 
+              
+              </li>)
+              }    
                   <li> {prochainRdv} </li>
-                  <Link to="/Medical_file"> <li className="color_important"> Dossier medicale</li></Link>
-
-                  <li> Restant :{parseInt(dt)} min</li>
-
-                 <li className="row"><div className="col-md-66 space"><Modal_hour/></div>
-                 <div className="col-lg-30 space_right"><button type="submit" className="btn iq-bg-primary "> <VideoCallIcon  fontSize="small"/>Demarer</button> </div></li>
+                  {(prochainRdv=="No next rdv")?  
+                  (<li></li>)
+                 :(
+                   <>
+                   <li> Restant :{parseInt(dt)} min</li>
+                 <Tooltip title="clicker pour visualiser le dossier medicale" arrow>
+                 <div  className=""> 
+                    <Link to="/Medical_file">
+                    <li ><a className="bleu_text"> Dossier medicale ></a></li></Link>
+                  </div>
+                  </Tooltip>
+                  <li className="row">
+                
+                  <div className="col-md-66 space"><Modal_hour/></div>
+                  <div className="col-lg-30 space_right">
+                  {typeRdv?
+                  
+                   <div></div>
+                   :
+                   <button type="submit" className="btn iq-bg-primary"
+                   onClick={()=>shell.openExternal('https://meet.jit.si/'+name_doc+startdt.toString())}
+                   >
+                    <VideoCallIcon  fontSize="small"/>Demarer</button>}
+                   
+                   
+                     </div></li>
+                     </>
+                 )}
+                 
+                     
                 </ul>
               </div>
             </div>

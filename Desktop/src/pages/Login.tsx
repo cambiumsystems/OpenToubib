@@ -150,6 +150,15 @@ const validationSchemaStep5 = Yup.object().shape({
     then: Yup.number().required(),
   }),
 });
+const devices = [
+  { value: 'USD', label: 'USD' },
+  { value: 'EUR', label: 'EUR' },
+  { value: 'GBP', label: 'GBP' },
+  { value: 'JPY', label: 'JPY' },
+  { value: 'CAD', label: 'CAD' },
+  { value: 'DH', label: 'DH' },
+  { value: 'DHS', label: 'CAD' },
+];
 const specialities = [
   { value: 'Gastro', label: 'Gastro' },
   { value: 'Pneumo', label: 'Pneumo' },
@@ -329,7 +338,7 @@ export default function Home() {
         >
           <FormikStep
             label={t('form.step1')}
-            validationSchema={validationSchemaStep1}
+            //validationSchema={validationSchemaStep1}
           >
             <Snackbar open={open} onClose={handleClose}>
               <Alert onClose={handleClose} severity="info">
@@ -452,7 +461,7 @@ export default function Home() {
           </FormikStep>
           <FormikStep
             label={t('form.step2')}
-            validationSchema={validationSchemaStep2}
+          //  validationSchema={validationSchemaStep2}
           >
             <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
               <Alert onClose={handleClose} severity="info">
@@ -519,7 +528,7 @@ export default function Home() {
           </FormikStep>
           <FormikStep
             label={t('form.step3')}
-            validationSchema={validationSchemaStep3}
+           // validationSchema={validationSchemaStep3}
           >
             <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
               <Alert onClose={handleClose} severity="info">
@@ -560,6 +569,7 @@ export default function Home() {
                   width: '85px',
                 }}
               />
+              
               <Field
                 variant="outlined"
                 name="maxFee"
@@ -596,6 +606,7 @@ export default function Home() {
                     // placeholder="Select your specialities"
                   />
                 </div>
+                
                 <div className="two">
                   <Field
                     multiline
@@ -609,7 +620,9 @@ export default function Home() {
                   />
                 </div>
               </div>
+              
             </Box>
+           
           </FormikStep>
           <FormikStep
             label="Operating days"
@@ -1121,6 +1134,8 @@ export function FormikStepper({
             // this.props.history.push('/moneyform');
             // <Redirect to="/agenda" />;
             localStorage.setItem('user','logged');
+            localStorage.setItem('email',values.email);
+          
 
             history.push('/profile');
           } else {

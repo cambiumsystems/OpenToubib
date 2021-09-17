@@ -51,7 +51,7 @@ db.serialize(function () {
   // To open a database created with SQLCipher 3.x, use this:
   // db.run("PRAGMA cipher_compatibility = 3");
 
-  db.run(`PRAGMA key = 'Seventeen13'`);
+  db.run(`PRAGMA key = 'Nore1234'`);
 
   db.each("SELECT * FROM doctor", function(err, row) {
       console.log(row);
@@ -263,7 +263,10 @@ export default function Profile() {
                 </div>
                 <div className="form-group col-sm-6">
                   <label>Full Address</label>
-                  <textarea className="form-control_P"id="lname" value={inf.address} readOnly></textarea>
+                  <textarea className="form-control_adress" id="lname" rows="3"
+                  cols="20"
+                  
+                  value={inf.address} readOnly></textarea>
                 </div>
                 <div className="form-group center_element">
                 <button type="submit" className="btn btn-primary btn_width mr-2">Edit</button>
@@ -273,7 +276,7 @@ export default function Profile() {
           </div>
         </div>
          </div>
-        <Link to="/">Go back to home</Link>
+        
         <div>
 
         </div>

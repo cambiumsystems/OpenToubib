@@ -43,7 +43,7 @@ let inf = [];
 db.serialize(function () {
   // This is the default, but it is good to specify explicitly:
   db.run('PRAGMA cipher_compatibility = 4');
-  db.run(`PRAGMA key = 'Seventeen13'`);
+  db.run(`PRAGMA key = 'Nore1234'`);
 db.each("SELECT * FROM events", function(err, row) {
   console.log(row);
   inf.push(row);

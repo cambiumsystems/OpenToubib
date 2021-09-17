@@ -30,15 +30,59 @@ import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
+import LanguageIcon from '@material-ui/icons/Language';
+import InputLabel from '@material-ui/core/InputLabel';
+import MenuItem from '@material-ui/core/MenuItem';
+import FormControl from '@material-ui/core/FormControl';
+import Select from '@material-ui/core/Select';
+import NativeSelect from '@material-ui/core/NativeSelect';
+import InputBase from '@material-ui/core/InputBase';
+import { createStyles, withStyles, Theme } from '@material-ui/core/styles';
 
 var sqlite3 = require('@journeyapps/sqlcipher').verbose();
 import {shell} from 'electron';
 
 // const knex = require('database');
 import Signature from './pages/Signature';
+import { useTranslation } from 'react-i18next';
 
 
-
+const BootstrapInput = withStyles((theme: Theme) =>
+  createStyles({
+    root: {
+      'label + &': {
+        marginTop: theme.spacing(3),
+      },
+    },
+    input: {
+      borderRadius: 4,
+      position: 'relative',
+      backgroundColor: theme.palette.background.paper,
+      border: '1px solid #ced4da',
+      fontSize: 16,
+      padding: '10px 26px 10px 12px',
+      transition: theme.transitions.create(['border-color', 'box-shadow']),
+      // Use the system font instead of the default Roboto font.
+      fontFamily: [
+        '-apple-system',
+        'BlinkMacSystemFont',
+        '"Segoe UI"',
+        'Roboto',
+        '"Helvetica Neue"',
+        'Arial',
+        'sans-serif',
+        '"Apple Color Emoji"',
+        '"Segoe UI Emoji"',
+        '"Segoe UI Symbol"',
+      ].join(','),
+      '&:focus': {
+        borderRadius: 4,
+        borderColor: '#80bdff',
+        boxShadow: '0 0 0 0.2rem rgba(0,123,255,.25)',
+      },
+    },
+  }),
+)(InputBase);
 const useStyles = makeStyles({
   root: {
     width: '350px',
@@ -66,7 +110,7 @@ db.serialize(function () {
   // To open a database created with SQLCipher 3.x, use this:
   // db.run("PRAGMA cipher_compatibility = 3");
 
-  db.run(`PRAGMA key = 'Seventeen13'`);
+  db.run(`PRAGMA key = 'Nore1234'`);
 
 
   db.each("SELECT email, password FROM doctor", function(err, row) {
@@ -87,10 +131,17 @@ db.serialize(function () {
 // .catch((err) => console.log(err));
 
 
-
+const lngs = {
+  en: { nativeName: 'English' },
+  fr: { nativeName: 'Français' },
+};
 
 
 const Hello = () => {
+  const [langue, setlangue] = React.useState('');
+  const handleChange = (event: React.ChangeEvent<{ value: unknown }>) => {
+    setlangue(event.target.value as string);
+  };
 
   const[error,setError]=useState("");
   const[User,setUser]=useState("");
@@ -124,6 +175,7 @@ useEffect(() => {
 
     return () => clearInterval(secTimer);
 }, []);
+const { t, i18n } = useTranslation();
   return (
     <div>
 
@@ -153,6 +205,40 @@ useEffect(() => {
           )
           :(
             <div>
+              <div className="top_langue">
+                <div className="row">
+                  <div className="col-md-6">
+                  
+                  </div>
+                  <div className="col-md-6">
+                  
+                  <FormControl variant="outlined" style={{
+      minWidth: 120}}>
+        <InputLabel id="demo-simple-select-outlined-label">Langue</InputLabel>
+        <Select
+          labelId="demo-simple-select-outlined-label"
+          id="demo-simple-select-outlined"
+          value={i18n.language}
+          onChange={(e) => i18n.changeLanguage(e.target.value)}
+         label="Langue"
+         
+        >
+          {Object.keys(lngs).map((lng) => (
+          
+          <MenuItem value= {lngs[lng].nativeName} > {lngs[lng].nativeName}</MenuItem>
+          ))}
+        </Select>
+      </FormControl>
+      
+     
+       
+      
+      
+                  </div>
+                </div>
+              
+              
+                </div>
             <div className="container-fluid">
              <div className="row justify-content-center">
               <div className="col-sm-8 text-center">

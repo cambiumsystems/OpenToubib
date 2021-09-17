@@ -2,6 +2,7 @@ import React from 'react'
 import { useState } from 'react';
 import Nav_bar from './Nav_bar';
 import {Image} from "semantic-ui-react";
+import BackupIcon from '@material-ui/icons/Backup';
 function Signature() {
     const[origImage,setOrigImage]=useState("");
     const[origImageFile,setOrigImageFile]=useState("");
@@ -39,12 +40,15 @@ function Signature() {
            
             <div className="col-md-6 ">
                 {
-                   origImageFile?<Image  className="img_signature" src={origImageFile}></Image>: <Image className="img_signature"   src="http://navparivartan.in/wp-content/uploads/2018/11/placeholder.png"></Image>
+                   origImageFile?<Image  className="img_signature" src={origImageFile}></Image>: <div className="drag-area">
+                   <div className="icon"><BackupIcon fontSize="large"/></div>
+                    <header>Upload file</header>
+                    </div>
            
                 }
             </div>
             <div className="col-md-6 ">
-            <input type="file"  onChange={(e)=>handle(e)}/>
+            <input type="file" className="upload-box"  onChange={(e)=>handle(e)}/>
             </div>
             </div> 
            <br/>
@@ -54,12 +58,15 @@ function Signature() {
            
            <div className="col-md-6 ">
                 {
-                   origImageFile_Cachet?<Image  className="img_signature" src={origImageFile_Cachet}></Image>: <Image className="img_signature"   src="http://navparivartan.in/wp-content/uploads/2018/11/placeholder.png"></Image>
+                   origImageFile_Cachet?<Image  className="img_signature" src={origImageFile_Cachet}></Image>: <div className="drag-area">
+                   <div className="icon"><BackupIcon fontSize="large"/></div>
+                    <header>Upload file</header>
+                    </div>
            
                 }
             </div>
             <div className="col-md-6 ">
-            <input type="file"  onChange={(e)=>handle_Cachet(e)}/>
+            <input type="file" className="upload-box" onChange={(e)=>handle_Cachet(e)}/>
             </div>
             </div> 
         

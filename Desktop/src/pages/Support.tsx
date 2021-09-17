@@ -1,4 +1,4 @@
-import React , { Component } from 'react';
+import React , { Component ,useState} from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Drawer from '@material-ui/core/Drawer';
 import AppBar from '@material-ui/core/AppBar';
@@ -157,14 +157,16 @@ export default function Support() {
       
     </div>
   );
-  const slideValue=document.querySelector("span");
-  const inputSlider=document.querySelector("input");
-  inputSlider.oninput=(()=>{
-   let value=inputSlider.value;
-   slideValue.textContent=value;
-   slideValue.style.left=(value/2)+"%";
-   
-    });
+
+   const [value,setValue]= useState("");
+  const[slider,setSlider]=useState("")
+ 
+   const Handlechanges=()=>{
+     setSlider()
+     console.log(slider);
+    setValue(slider+"€/Mounth");
+   }
+ 
    
    
  return (
@@ -178,84 +180,68 @@ export default function Support() {
         </Toolbar>
       </AppBar>
       
-      <main className="container-fluid">
+      <main className="container-fluid ">
       <div className="container-fluid">
 <div className="row">
   <div className=" col-md-6 ">
-      <div className="iq-card line-height-4 bg-primaryy text-white">
+      <div className="iq-card line-height-4 background_support text-white">
+        
+      </div>
+  </div>
+  <div className=" col-md-6 ">
+    <div className="row_column">
+      <div className="col-md-6 ">
+
         <div className="iq-card-body w_card  border text-center rounded">
-            <p className="font-size-16 text-uppercase">Support</p>
-             <h2 className="mb-4 display-3 font-weight-bolder text-white or" >
+           
+             <h2 className="mb-4 display-3 font-weight-bolder text-gris or" >
              solution solidaire 
              </h2>
             <ul className="list-unstyled  mb-0">
             <br/>
-              <li><p>creer votre propre communoté fermé pour un meilleur 
-                service.</p>
+            <li><p className="gris"> Supportez ce projet !</p></li>
+              <li><p><b>creer votre propre communoté fermé pour un meilleur 
+                service</b>.</p>
                 
-              </li><li><p> Supportez ce projet !</p></li> <li> <p>
+              </li> <li> <p className="gris">
 Pour assurer une décentralisation totale du côté des patients, nous avons besoin de votre aide !
 Anisi vous contribuerez dans notre mouvement social et solidaire. </p> </li>
- <li> <p>Vous pourriez faire des dons mensuels, ou mieux encore acheter un nœud distant propre à vous pour l’utiliser afin de se connecter au réseau des médecins au lieu de votre propre machine.
+ <li> <p >Vous pourriez faire des dons mensuels, ou mieux encore acheter un nœud distant propre à vous pour l’utiliser afin de se connecter au réseau des médecins au lieu de votre propre machine.
 Votre soutien permettra aussi de décentraliser l’application du côté des patients afin de leur fournir des nœuds qui joueront le rôle de passerelle. </p>
               </li>
                 
-              <li><p>100% sécurisé et décentralisé dons vos donnée seront stoquées localement sur vos pc  , 
+              <li><p className="gris">100% sécurisé et décentralisé dons vos donnée seront stoquées localement sur vos pc  , 
 
 Nous avons besoin de votre aide pour assurer des noeuds
 qui joueront le rôle de passerelle/gateway
                 </p>
               </li>
-             <li><p>Faites le choix de nous encourager  .</p></li> 
+             <li><p className="gris">Faites le choix de nous encourager  .</p></li> 
           </ul>
-          
+          <div className="box center_e_support">
+         <div className="row">
+
+           <div className="col-md-25-support">
+           <input type="number" className="input_support" />
+           </div>
+           <div className="col-md-25-spp">
+           <p className="gris m-tp" >Euro/mounth</p>
+           </div>
+
+         </div>
+         <button type="button" className="btn btn-primary center_e right_btn">Don</button>
+         
+         
+       </div>
+               <br/>
+              <p  className="mb-4 display-3 font-weight-bolder text-gris or center_e_support" style={{float:'right'}}>Merci !</p>         
        </div>
       </div>
-  </div>
-  <div className=" col-md-6 ">
-      <div className="iq-card  Border_col ">
-        <div className="iq-card-body ">
-           <div class="table-responsive">
-               <table class="table">
-                <thead className="thead">
-                    <tr className="tr">
-                    <th className="text-center th"></th>  
-                      
-                      <th className="text-center th">Gestion d'agenda</th>  
-                      <th className="text-center th">Gestion de teleconsultation</th>
-                      <th className="text-center th">Decentralisation</th>    
-                    </tr>
-                 </thead>
-                <tbody className="tbody">
-                   <tr>
-                       <th className="text center">
-                           OPEN-TOUBIB</th>
-                      <th className="text center"><VerifiedUserIcon style={{ color: "orange" }}/></th>
-                      <th className="text center"><VerifiedUserIcon style={{ color: "orange" }}/></th>
-                      <th className="text center"><VerifiedUserIcon style={{ color: "orange" }}/></th>
-                  </tr>
-                  
-                </tbody>
-                
-               </table>
-               <div className=" pl center_e">
-                  <div class="range ">
-                   <div class="sliderValue">
-                     <span>100</span>
-                   </div>
-                   <div class="field">
-                     <div class="value leftt">Euro/month</div>
-                      <input type="range" min="0" max="200"   steps="1"/>
-                   </div>
-                 </div>
-                           <button type="button"className="btn btn-primary  right_btn">Don</button>
-          
-                           <Link to="/">Go back to home</Link> </div>
-           </div> 
-           
-         </div>
-         
-      </div>
+      
+    </div>
+     
+        
+      
       
   </div>
   
