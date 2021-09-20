@@ -19,40 +19,19 @@ import { useTranslation } from 'react-i18next';
 import { Field, Form, Formik, FormikConfig, FormikValues } from 'formik';
 import { Link, Redirect, useHistory } from 'react-router-dom';
 import { CheckboxWithLabel, TextField } from 'formik-material-ui';
-import Select from 'react-select';
+import Select from '@material-ui/core/Select';
+import MenuItem from '@material-ui/core/MenuItem';
 import React, { useEffect, useState } from 'react';
 import { CountryDropdown, RegionDropdown } from 'react-country-region-selector';
 import * as Yup from 'yup';
-const crypto = require('crypto');
-var sqlite3 = require('@journeyapps/sqlcipher').verbose();
-const path = require('path');
-//const dbPath = path.resolve(__dirname, 'dbPath');
-var db = new sqlite3.Database('opentoubib1.db');
+const model = require('../db');
+
+export let secretKey=null;
 
 
-export let secretkey=null;
-// const knex = require('../database');
 
-const algorithm = 'aes-256-cbc';
 
-// generate 16 bytes of random data
-const initVector = Buffer.alloc(16, 0);
-
-// secret key generate 32 bytes of random data
-const Securitykey = crypto.scryptSync('bncaskdbvasbvlaslslasfhjazerfgty', 'GfG', 32);
-
-// the cipher function
-//const cipher = crypto.createCipheriv(algorithm, Securitykey, initVector);
-
-const Encrypt = (message) => {
-  let cipher = crypto.createCipheriv(algorithm, Securitykey, initVector);
-  let encryptedData = cipher.update(message, 'utf-8', 'hex');
-
-  encryptedData += cipher.final('hex');
-  return encryptedData;
-};
-
-// const sleep = (time) => new Promise((acc) => setTimeout(acc, time));
+ const sleep = (time) => new Promise((acc) => setTimeout(acc, time));
 const lngs = {
   en: { nativeName: 'English' },
   fr: { nativeName: 'Français' },
@@ -150,15 +129,6 @@ const validationSchemaStep5 = Yup.object().shape({
     then: Yup.number().required(),
   }),
 });
-const devices = [
-  { value: 'USD', label: 'USD' },
-  { value: 'EUR', label: 'EUR' },
-  { value: 'GBP', label: 'GBP' },
-  { value: 'JPY', label: 'JPY' },
-  { value: 'CAD', label: 'CAD' },
-  { value: 'DH', label: 'DH' },
-  { value: 'DHS', label: 'CAD' },
-];
 const specialities = [
   { value: 'Gastro', label: 'Gastro' },
   { value: 'Pneumo', label: 'Pneumo' },
@@ -181,56 +151,6 @@ const secretQuests = [
 ];
 const rdvGaps = ['15', '20', '25', '30', '35', '40'];
 
-const handleDoctorCreate = (values) => {
-  knex('doctor')
-    .insert({
-      firstName: Encrypt( values.firstName),
-      lastName: Encrypt( values.lastName),
-      password: Encrypt( values.password),
-      email: Encrypt( values.email),
-      gender: Encrypt( values.gender),
-      dateOfBirth: Encrypt(
-         `${values.dobYear}-${values.dobMonth}-${values.dobDay}`
-       ),
-      city: Encrypt(values.city),
-      region: Encrypt(values.region),
-      country: Encrypt(values.country),
-      address: Encrypt(values.address),
-      // postalCode: Encrypt(cipher, values.postalCode),
-      // secretQuest: Encrypt(cipher, values.secretQuest),
-      // answerScrtQuest: Encrypt(cipher, values.answerScrtQuest),
-      // description: Encrypt(cipher, values.description),
-      // officeName: Encrypt(cipher, values.officeName),
-      speciality: Encrypt(values.speciality),
-      // professionalID: Encrypt(cipher, values.professionalID),
-      // phoneNumber: Encrypt(cipher, values.phoneNumber),
-      // rdvGap: Encrypt(cipher, values.rdvGap),
-      // minFee: Encrypt(cipher, values.minFee),
-      // maxFee: Encrypt(cipher, values.maxFee),
-      // minTeleFee: Encrypt(cipher, values.minTeleFee),
-      // maxTeleFee: Encrypt(cipher, values.maxTeleFee),
-      // privateKey: Encrypt(cipher, values.privateKey),
-      // publicKey: Encrypt(cipher, values.publicKey),
-    })
-    // eslint-disable-next-line promise/always-return
-    .then(() => {
-      // Send a success message in response
-      // eslint-disable-next-line no-console
-      console.log('AN object created!!');
-    })
-    .catch((err: any) => {
-      // Send a error message in response
-      // eslint-disable-next-line no-console
-      console.log(err);
-    });
-  knex
-    .select('*')
-    .from('doctor')
-    // eslint-disable-next-line no-console
-    .then((data: any) => console.log('data:', data))
-    // eslint-disable-next-line no-console
-    .catch((err: any) => console.log(err));
-};
 let country: string;
 function Alert(props) {
   return <MuiAlert elevation={6} variant="filled" {...props} />;
@@ -332,13 +252,12 @@ export default function Home() {
             morningTime: [],
           }}
           onSubmit={async (values) => {
-            // await sleep(3000);
             console.log('values', values);
           }}
         >
           <FormikStep
             label={t('form.step1')}
-            //validationSchema={validationSchemaStep1}
+            // validationSchema={validationSchemaStep1}
           >
             <Snackbar open={open} onClose={handleClose}>
               <Alert onClose={handleClose} severity="info">
@@ -461,7 +380,7 @@ export default function Home() {
           </FormikStep>
           <FormikStep
             label={t('form.step2')}
-          //  validationSchema={validationSchemaStep2}
+            // validationSchema={validationSchemaStep2}
           >
             <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
               <Alert onClose={handleClose} severity="info">
@@ -528,7 +447,7 @@ export default function Home() {
           </FormikStep>
           <FormikStep
             label={t('form.step3')}
-           // validationSchema={validationSchemaStep3}
+            // validationSchema={validationSchemaStep3}
           >
             <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
               <Alert onClose={handleClose} severity="info">
@@ -569,7 +488,6 @@ export default function Home() {
                   width: '85px',
                 }}
               />
-              
               <Field
                 variant="outlined"
                 name="maxFee"
@@ -606,7 +524,6 @@ export default function Home() {
                     // placeholder="Select your specialities"
                   />
                 </div>
-                
                 <div className="two">
                   <Field
                     multiline
@@ -620,9 +537,7 @@ export default function Home() {
                   />
                 </div>
               </div>
-              
             </Box>
-           
           </FormikStep>
           <FormikStep
             label="Operating days"
@@ -935,7 +850,7 @@ const TimePickerComponent = ({
       onChange={(moment, time) => {
         arr=moment;
       let inf=time.toString();
-      // setFieldValue(field.name, inf);
+      //setFieldValue(field.name, inf);
       console.log(time, inf);
        // calling custom onChangeText
       }}
@@ -1034,35 +949,6 @@ const RegionDropdownComponent = ({
     />
   );
 };
-// const createDB = function (secretKey) {
-//   db.serialize(function () {
-//     // This is the default, but it is good to specify explicitly:
-//     db.run('PRAGMA cipher_compatibility = 4');
-
-//     // To open a database created with SQLCipher 3.x, use this:
-//     // db.run("PRAGMA cipher_compatibility = 3");
-
-//     db.run(`PRAGMA key = ${secretKey}`)
-//       .run(
-//         'CREATE TABLE  IF NOT EXISTS doctor ( firstName TEXT NOT NULL, lastName TEXT NOT NULL, email TEXT NOT NULL UNIQUE, phone TEXT NOT NULL UNIQUE, password TEXT NOT NULL, gender TEXT NOT NULL, dateOfBirth TEXT NOT NULL, city TEXT NOT NULL, region TEXT NOT NULL, country TEXT NOT NULL, address TEXT NOT NULL, postalCode TEXT NOT NULL, secretQuest TEXT NOT NULL, answerScrtQuest TEXT NOT NULL, description TEXT NOT NULL, officeName TEXT NOT NULL, speciality TEXT NOT NULL, professionalID TEXT NOT NULL, rdvGap INTEGER NOT NULL, minFee INTEGER NOT NULL, maxFee INTEGER NOT NULL, minTeleFee INTEGER NOT NULL, maxTeleFee INTEGER NOT NULL, privateKey TEXT, publicKey TEXT, days TEXT)'
-//       )
-//       .run(
-//         'CREATE TABLE  IF NOT EXISTS events (start TEXT NOT NULL, end TEXT NOT NULL, title TEXT NOT NULL, categorie TEXT)'
-//       )
-//       .run('CREATE TABLE  IF NOT EXISTS schedule (days TEXT)');
-
-//     //db.run(`INSERT INTO ${aha} VALUES (?,?)`, 'haah', 'bb');
-//     //db.run("INSERT INTO lorem VALUES ('j',${kiki})");
-//     // for (var i = 0; i < 10; i++) {
-//     //     stmt.run("Ipsum " + i, "haha");
-//     // }
-//     // stmt.finalize();
-
-//     // db.each("SELECT rowid AS id, info, test FROM lorem", function(err, row) {
-//     //     console.log(row.id + ": " + row.info+' '+ row.test);
-//     // });
-//   });
-// };
 
 export interface FormikStepProps
   extends Pick<FormikConfig<FormikValues>, 'children' | 'validationSchema'> {
@@ -1092,7 +978,7 @@ export function FormikStepper({
 
   return (
     <div>
-      <div>
+      {/* <div>
         {Object.keys(lngs).map((lng) => (
           <button
             key={lng}
@@ -1103,7 +989,17 @@ export function FormikStepper({
             {lngs[lng].nativeName}
           </button>
         ))}
-      </div>
+      </div> */}
+      <Select
+          labelId="demo-customized-select-label"
+          id="demo-customized-select"
+          value={i18n.language}
+          onChange={(e) => i18n.changeLanguage(e.target.value)}
+        >
+          {Object.keys(lngs).map((lng) => (
+          <MenuItem value={lng}>{lngs[lng].nativeName}</MenuItem>
+          ))}
+        </Select>
       <Link to="/">Go back to home</Link>
       <Formik
         // eslint-disable-next-line react/jsx-props-no-spreading
@@ -1112,31 +1008,19 @@ export function FormikStepper({
         onSubmit={async (values, helpers) => {
           if (isLastStep()) {
             await props.onSubmit(values, helpers);
+            //handleDoctorCreate(values);
             setCompleted(true);
-            db.serialize(function () {
-              // This is the default, but it is good to specify explicitly:
-              db.run('PRAGMA cipher_compatibility = 4');
-
-              // To open a database created with SQLCipher 3.x, use this:
-              // db.run("PRAGMA cipher_compatibility = 3");
-              secretkey= values.password.replace(/[^a-zA-Z0-9]/g, "");
-              db.run(`PRAGMA key = ${secretkey}`)
-                .run(
-                  'CREATE TABLE  IF NOT EXISTS doctor ( firstName TEXT NOT NULL, lastName TEXT NOT NULL, email BLOB NOT NULL UNIQUE, phone TEXT NOT NULL UNIQUE, password TEXT NOT NULL, gender TEXT NOT NULL, dateOfBirth TEXT NOT NULL, city TEXT NOT NULL, region TEXT NOT NULL, country TEXT NOT NULL, address TEXT NOT NULL, postalCode TEXT NOT NULL, secretQuest TEXT NOT NULL, answerScrtQuest TEXT NOT NULL, description TEXT NOT NULL, officeName TEXT NOT NULL, speciality TEXT NOT NULL, professionalID TEXT NOT NULL, rdvGap INTEGER NOT NULL, minFee INTEGER NOT NULL, maxFee INTEGER NOT NULL, minTeleFee INTEGER NOT NULL, maxTeleFee INTEGER NOT NULL, privateKey TEXT, publicKey TEXT, days TEXT)'
-                )
-                .run(
-                  'CREATE TABLE  IF NOT EXISTS events (start TEXT NOT NULL, end TEXT NOT NULL, title TEXT NOT NULL, categorie TEXT)'
-                )
-                .run('CREATE TABLE  IF NOT EXISTS schedule (days TEXT)');
-                var stmt=db.prepare(`INSERT INTO doctor VALUES (?, ?, ?, ?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)`);
-                stmt.run(values.firstName, values.lastName, values.email, values.phoneNumber,values.password,values.gender, `${values.dobYear}-${values.dobMonth}-${values.dobDay}`,values.city,values.region,values.country,values.address,values.postalCode,values.secretQuest,values.answerScrtQuest,values.description,values.officeName,values.speciality,values.professionalID,values.rdvGap,values.minFee,values.maxFee,values.minTeleFee,values.maxTeleFee,values.privateKey,values.publicKey,values.days);
-            });
+            secretKey= values.password.replace(/[^a-zA-Z0-9]/g, "");
+             model.insertDb(secretKey, values);
             // this.props.history.push('/moneyform');
             // <Redirect to="/agenda" />;
-            localStorage.setItem('user','logged');
-            localStorage.setItem('email',values.email);
-          
+             await sleep(3000);
 
+            localStorage.setItem('user','logged');
+            localStorage.setItem('email', values.email);
+            // let doc =model.getDoctor(secretKey);
+          //while(doc==undefined)model.getDoctor(secretKey);
+            // console.log(doc);
             history.push('/profile');
           } else {
             setStep((s) => s + 1);

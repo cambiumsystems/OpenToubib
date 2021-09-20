@@ -1,7 +1,7 @@
 import React,{useState} from 'react'
 import { Link } from "react-router-dom";
 import Checkbox from '@material-ui/core/Checkbox';
-import icon from '../../assets/logo.png';
+import icon from '../../assets/icon.png';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import {shell} from 'electron';
 
@@ -16,19 +16,9 @@ const submitHandler=e=>{
         if(details.email==''&& localStorage.getItem('email')!=""){
             details.email=localStorage.getItem('email');
         }
-        
-           
+
+
         Loginn(details);
-        // db.serialize(function () {
-        //   // This is the default, but it is good to specify explicitly:
-        //   db.run('PRAGMA cipher_compatibility = 4');
-        //   db.run(`PRAGMA key = 'Nore1234'`);
-        // db.each("SELECT email, password FROM doctor", function(err, row) {
-        //   console.log(row);
-        //   user=row;
-        //   console.log('THIS IS INF',inf);
-        // });
-        // });
 
        // if(localStorage.getItem('checked')!='false' && localStorage.getItem('checked') != null){
         //    localStorage.setItem('email',details.email);
@@ -37,9 +27,9 @@ const submitHandler=e=>{
 
     const[email,setEmail]=useState("")
     const handlechangesemail=(event)=>{
-        
+
         if(localStorage.getItem('email')==null ||localStorage.getItem('email')==''){
-        
+
         details.email=event.target.value;
         localStorage.setItem('email',event.target.value);
         }
@@ -48,10 +38,10 @@ const submitHandler=e=>{
             details.email=emailuser;
          }
         }
-    
-    
-    
-  
+
+
+
+
 
 
     return (
@@ -94,7 +84,7 @@ const submitHandler=e=>{
                <div className="d-inline-block w-100">
                  <div className="custom-control custom-checkbox d-inline-block mt-2 pt-1">
 
-                 
+
                  </div>
                </div>
                <input className="btn btn-primary float-right"type="submit" value="Login" />

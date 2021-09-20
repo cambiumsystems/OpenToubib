@@ -1,64 +1,14 @@
-import React , { Component } from 'react';
+import React , { useState, useEffect } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import Drawer from '@material-ui/core/Drawer';
-import AppBar from '@material-ui/core/AppBar';
-import CssBaseline from '@material-ui/core/CssBaseline';
-import Toolbar from '@material-ui/core/Toolbar';
-import List from '@material-ui/core/List';
-import Typography from '@material-ui/core/Typography';
-import Divider from '@material-ui/core/Divider';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemIcon from '@material-ui/core/ListItemIcon';
-import ListItemText from '@material-ui/core/ListItemText';
-import InboxIcon from '@material-ui/icons/MoveToInbox';
-import AccountBoxIcon from '@material-ui/icons/AccountBox';
-import DateRangeIcon from '@material-ui/icons/DateRange';
-import MailIcon from '@material-ui/icons/Mail';
-import Agenda from './Agenda';
-import DuoIcon from '@material-ui/icons/Duo';
-import HdrStrongIcon from '@material-ui/icons/HdrStrong';
-import green from "@material-ui/core/colors/green";
-import red from "@material-ui/core/colors/red";
-import BorderColorIcon from '@material-ui/icons/BorderColor';
-import ArrowForwardIosIcon from '@material-ui/icons/ArrowForwardIos';
-import { OffCanvas, OffCanvasMenu, OffCanvasBody } from "react-offcanvas";
 import FiberManualRecordIcon from '@material-ui/icons/FiberManualRecord';
-import Modal from '@material-ui/core/Modal';
 import doctor_img from '../images/doctor_img.png'
 import { Link } from "react-router-dom";
-import { Height } from "@material-ui/icons";
 import Radio from '@material-ui/core/Radio';
-import RadioGroup from '@material-ui/core/RadioGroup';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import FormControl from '@material-ui/core/FormControl';
-import FormLabel from '@material-ui/core/FormLabel';
-import LongMenu from './LongMenu';
-import ShowChartIcon from '@material-ui/icons/ShowChart';
-import NotificationsActiveIcon from '@material-ui/icons/NotificationsActive';
 import Nav_bar from './Nav_bar';
 const drawerWidth = 240;
-var sqlite3 = require('@journeyapps/sqlcipher').verbose();
-const path = require('path');
-import { secretkey } from './Login';
-//const dbPath = path.resolve(__dirname, 'dbPath');
-
-let inf=[];
-var db = new sqlite3.Database('opentoubib1.db');
-db.serialize(function () {
-  // This is the default, but it is good to specify explicitly:
-  db.run('PRAGMA cipher_compatibility = 4');
-
-  // To open a database created with SQLCipher 3.x, use this:
-  // db.run("PRAGMA cipher_compatibility = 3");
-
-  db.run(`PRAGMA key = 'Nore1234'`);
-
-  db.each("SELECT * FROM doctor", function(err, row) {
-      console.log(row);
-      inf=row;
-  });
-});
-
+import { secretKey } from './Login';
+import { secretKeyLogin } from '../App.tsx';
+const model = require('../db');
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -121,13 +71,23 @@ const useStyless = makeStyles((theme) => ({
 
 export default function Profile() {
   const classes = useStyles();
+  const [doctor, setDoctor]=useState(undefined);
 
+useEffect(() => {
+  const fetchDoctor = ()=>{
+    if(secretKey!=null)
+    model.getDoctor(secretKey, setDoctor);
+    else model.getDoctor(secretKeyLogin, setDoctor);
+}
+  fetchDoctor();
+}, [])
 
+  // const inf= model.getDoctor(secretKey) ;
 
   const classess = useStyless();
   // getModalStyle is not a pure function, we roll the style only on the first render
-  const [modalStyle] = React.useState(getModalStyle);
-  const [open, setOpen] = React.useState(false);
+  const [modalStyle] = useState(getModalStyle);
+  const [open, setOpen] = useState(false);
 
   const handleOpen = () => {
     setOpen(true);
@@ -141,58 +101,10 @@ export default function Profile() {
   const handleChange = (event) => {
     setSelectedValue(event.target.value);
   };
-  const body = (
-    <div style={modalStyle} className={classess.paper}>
-      <h2 id="simple-modal-title"className="h_txt" >Code couleurs</h2>
-      <div id="simple-modal-description">
-       <form >
-          <div className="form-row">
-            <div className="col">
-            <label className="form-control">1ere consultation</label>
-            </div>
-            <div className="col">
-            <select className="form-control">
-              <option selected>Couleur attribuée</option>
-              <option ><FiberManualRecordIcon style={{ color: "red" }}/> rouge</option>
-              <option > vert</option>
-              <option >orange</option>
-              <option >gris</option>
-
-            </select>
-             </div>
-          </div>
-          <div className="form-row">
-            <div className="col">
-            <label className="form-control">Controle</label>
-            </div>
-            <div className="col">
-            <select className="form-control">
-              <option selected>Couleur attribuée</option>
-              <option>col1</option>
-              <option>col2</option>
-            </select>
-             </div>
-          </div>
-          <div className="form-row">
-            <div className="col">
-            <label className="form-control">Deja consulté</label>
-            </div>
-            <div className="col">
-            <select className="form-control">
-              <option selected>Couleur attribuée</option>
-              <option>col1</option>
-              <option>col2</option>
-            </select>
-             </div>
-          </div>
-          <button className="bg-primary pt-5 pb-5 text-center rounded">submit</button>
-       </form>
-      </div>
-
-    </div>
-  );
 
 
+
+  if(doctor==undefined)return <div>Loading</div>
   return (
     <div className={classes.root}>
       <Nav_bar/>
@@ -206,30 +118,30 @@ export default function Profile() {
               <img src={doctor_img}className="avatar-130 img-fluid img_size"/>
             </div>
             <div className="text-center mt-3 pl-3 pr-3">
-              <h4>{inf.firstName}</h4>
+              <h4>{doctor.firstName}</h4>
               <p></p>
               <form className="form-row center_element">
                 <div className="form-group col-sm-6">
                   <label>First name</label>
-                  <input type="text" className="form-control_P"id="fname" value={inf.firstName} readOnly/>
+                  <input type="text" className="form-control_P"id="fname" value={doctor.firstName} readOnly/>
                 </div>
                 <div className="form-group col-sm-6">
                   <label>Last name</label>
-                  <input type="text" className="form-control_P"id="lname" value={inf.lastName} readOnly/>
+                  <input type="text" className="form-control_P"id="lname" value={doctor.lastName} readOnly/>
                 </div>
                 <div className="form-group col-sm-6">
                   <label>Email</label>
-                  <input type="text" className="form-control_P"id="lname" value={inf.email} readOnly/>
+                  <input type="text" className="form-control_P"id="lname" value={doctor.email} readOnly/>
                 </div>
                 <div className="form-group col-sm-6">
                   <label>City</label>
-                  <input type="text" className="form-control_P"id="lname" value={inf.city} readOnly/>
+                  <input type="text" className="form-control_P"id="lname" value={doctor.city} readOnly/>
                 </div>
                 <div className="form-group col-sm-6">
                   <label className="d-block">Gender:</label>
 
                   <Radio
-        checked={inf.gender === 'Male'}
+        checked={doctor.gender === 'Male'}
         onChange={handleChange}
         value="Male"
         name="radio-button-demo"
@@ -237,7 +149,7 @@ export default function Profile() {
       />
       <label className="custom-control-label">Male</label>
       <Radio
-        checked={inf.gender === 'Female'}
+        checked={doctor.gender === 'Female'}
         onChange={handleChange}
         value="Female"
         name="radio-button-demo"
@@ -247,26 +159,23 @@ export default function Profile() {
                 </div>
                 <div className="form-group col-sm-6">
                   <label>Date of birth</label>
-                  <input type="Date" className="form-control_P"id="lname" value={inf.dateOfBirth} readOnly/>
+                  <input type="Date" className="form-control_P"id="lname" value={doctor.dateOfBirth} readOnly/>
                 </div>
                 <div className="form-group col-sm-6">
                   <label>Country</label>
-                  <input type="text" className="form-control_P"id="lname" value={inf.country} readOnly/>
+                  <input type="text" className="form-control_P"id="lname" value={doctor.country} readOnly/>
                 </div>
                 <div className="form-group col-sm-6">
                   <label>State</label>
-                  <input type="text" className="form-control_P"id="lname" value={inf.region} readOnly/>
+                  <input type="text" className="form-control_P"id="lname" value={doctor.region} readOnly/>
                 </div>
                 <div className="form-group col-sm-6">
                   <label>Specialité</label>
-                  <input type="text" className="form-control_P"id="lname" value={inf.speciality} readOnly/>
+                  <input type="text" className="form-control_P"id="lname" value={doctor.speciality} readOnly/>
                 </div>
                 <div className="form-group col-sm-6">
                   <label>Full Address</label>
-                  <textarea className="form-control_adress" id="lname" rows="3"
-                  cols="20"
-                  
-                  value={inf.address} readOnly></textarea>
+                  <textarea className="form-control_P"id="lname" value={doctor.address} readOnly></textarea>
                 </div>
                 <div className="form-group center_element">
                 <button type="submit" className="btn btn-primary btn_width mr-2">Edit</button>
@@ -276,7 +185,7 @@ export default function Profile() {
           </div>
         </div>
          </div>
-        
+        <Link to="/">Go back to home</Link>
         <div>
 
         </div>

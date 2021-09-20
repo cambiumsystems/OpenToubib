@@ -14,9 +14,8 @@ import path from 'path';
 import { app, BrowserWindow, shell } from 'electron';
 import { autoUpdater } from 'electron-updater';
 import log from 'electron-log';
-import MenuBuilder from './menu';
 const electron=require("electron");
-const Menu=electron.Menu
+const { dialog } = require('electron');
 
 export default class AppUpdater {
   constructor() {
@@ -97,14 +96,27 @@ const createWindow = async () => {
     }
   });
 
-  const menuBuilder = new MenuBuilder(mainWindow);
-  menuBuilder.buildMenu();
-
   // Open urls in the user's browser
   mainWindow.webContents.on('new-window', (event, url) => {
     event.preventDefault();
     shell.openExternal(url);
   });
+  var hasConfirmedClose = false;
+  mainWindow.on('close', (e) => {
+    if (!hasConfirmedClose) {
+        e.preventDefault(); // Prevent default no matter what.
+        var choice = dialog.showMessageBoxSync(mainWindow, {
+            type:    'question',
+            buttons: ['Yes', 'No'],
+            title:   'Confirm',
+            message: 'Are you sure you want to quit?'
+        });
+        if (choice == 0) {
+            hasConfirmedClose = true;
+           mainWindow.close();
+        }
+    }
+});
 
   mainWindow.on('closed', () => {
     mainWindow = null;

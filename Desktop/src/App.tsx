@@ -6,7 +6,7 @@ import {
   Link,
   useHistory,
 } from 'react-router-dom';
-import icon from '../assets/logo.png';
+import icon from '../assets/icon.png';
 import './App.global.css';
 import Profile from './pages/Profile';
 import Agenda from './pages/Agenda';
@@ -18,18 +18,15 @@ import Medical_file from './pages/Medical_file';
 import Menuappbar from './pages/Menuappbar';
 import Statistique from "./pages/Statistique";
 import LoginForm from './pages/LoginForm';
-import { Redirect } from "react-router-dom";
+
+const model = require('./db');
 
 
 import { makeStyles } from '@material-ui/core/styles';
-import Card from '@material-ui/core/Card';
-import CardContent from '@material-ui/core/CardContent';
 
-import AppBar from '@material-ui/core/AppBar';
-import Toolbar from '@material-ui/core/Toolbar';
-import Typography from '@material-ui/core/Typography';
-import IconButton from '@material-ui/core/IconButton';
-import MenuIcon from '@material-ui/icons/Menu';
+import {shell} from 'electron';
+
+import Signature from './pages/Signature';
 import LanguageIcon from '@material-ui/icons/Language';
 import InputLabel from '@material-ui/core/InputLabel';
 import MenuItem from '@material-ui/core/MenuItem';
@@ -38,15 +35,10 @@ import Select from '@material-ui/core/Select';
 import NativeSelect from '@material-ui/core/NativeSelect';
 import InputBase from '@material-ui/core/InputBase';
 import { createStyles, withStyles, Theme } from '@material-ui/core/styles';
-
-var sqlite3 = require('@journeyapps/sqlcipher').verbose();
-import {shell} from 'electron';
-
-// const knex = require('database');
-import Signature from './pages/Signature';
 import { useTranslation } from 'react-i18next';
 
-
+export let secretKeyLogin=null;
+const sleep = (time) => new Promise((acc) => setTimeout(acc, time));
 const BootstrapInput = withStyles((theme: Theme) =>
   createStyles({
     root: {
@@ -100,82 +92,41 @@ const useStyles = makeStyles({
   },
 });
 
-
-let user=[];
-var db = new sqlite3.Database('opentoubib1.db');
-db.serialize(function () {
-  // This is the default, but it is good to specify explicitly:
-  db.run('PRAGMA cipher_compatibility = 4');
-
-  // To open a database created with SQLCipher 3.x, use this:
-  // db.run("PRAGMA cipher_compatibility = 3");
-
-  db.run(`PRAGMA key = 'Nore1234'`);
-
-
-  db.each("SELECT email, password FROM doctor", function(err, row) {
-      console.log('APP TSX USER', row);
-      user=row;
-  });
-});
-// knex
-// .select('*')
-// .from('doctor')
-// .then((values) => {user={
-//      password: Decrypt( values[0].password),
-//       email: Decrypt( values[0].email)
-
-// } ;
-//   console.log( "voila ",user);})
-
-// .catch((err) => console.log(err));
-
-
 const lngs = {
   en: { nativeName: 'English' },
   fr: { nativeName: 'Français' },
 };
-
-
 const Hello = () => {
-  const [langue, setlangue] = React.useState('');
-  const handleChange = (event: React.ChangeEvent<{ value: unknown }>) => {
-    setlangue(event.target.value as string);
-  };
 
+  const { t, i18n } = useTranslation();
   const[error,setError]=useState("");
   const[User,setUser]=useState("");
-  const Loginn= details =>{
+  const[isKey,setisKey]=useState();
+  const[SecretKey,setSecretKey]=useState(null);
+  const history = useHistory();
+  const Loginn= async details =>{
   console.log(details);
-  if(details.email==user.email && details.password==user.password){
+  if(localStorage.getItem('email')==''){
+model.Login(details.password, setisKey, setSecretKey);
+await sleep(3000);
+if(isKey){
     console.log("logged in")
     setUser({
       email:details.email
    });
+   secretKeyLogin=SecretKey;
    localStorage.setItem('user','logged');
-
+   history.push('/App_bar')
+}else{
+  console.log("Wrong Password!");
+  setError("Wrong Password!");
+}
   }else{
-    console.log("details do not match");
-    setError("details do not match");
+    console.log("Wrong Email!");
+    setError("Wrong email!");
   }
   }
-  const Logout=()=>{
-    console.log("Logout");
-    setUser({email:""});
-    localStorage.setItem('user','loggout');
-  }
-  const classes = useStyles();
-  const [dt, setDt] = useState(new Date().toLocaleString());
-  const date= new Date('2021-09-09 00:37:00');
 
-useEffect(() => {
-    let secTimer = setInterval( () => {
-      setDt(((date- Date.now())/(60000)).toLocaleString());
-    },1000)
-
-    return () => clearInterval(secTimer);
-}, []);
-const { t, i18n } = useTranslation();
   return (
     <div>
 
@@ -192,53 +143,48 @@ const { t, i18n } = useTranslation();
         </Link>
        <div>
        {
-          ( localStorage.getItem('user')=="logged")?(
+          ( localStorage.getItem('user')=="logged" || ( localStorage.getItem('user')=="loggout"))?
+          (
             <div>
-
-               <Redirect to="/App_bar" />
-               {/* <button onClick={Logout}>Logout</button> */}
-            </div>
-          )
-          : (( localStorage.getItem('user')=="loggout")?(
-
              <LoginForm Loginn={Loginn} error={error}>Login</LoginForm>
+          </Link>
+             </div>
           )
           :(
-            <div>
-              <div className="top_langue">
-                <div className="row">
-                  <div className="col-md-6">
-                  
-                  </div>
-                  <div className="col-md-6">
-                  
-                  <FormControl variant="outlined" style={{
-      minWidth: 120}}>
-        <InputLabel id="demo-simple-select-outlined-label">Langue</InputLabel>
-        <Select
-          labelId="demo-simple-select-outlined-label"
-          id="demo-simple-select-outlined"
-          value={i18n.language}
-          onChange={(e) => i18n.changeLanguage(e.target.value)}
-         label="Langue"
-         
-        >
-          {Object.keys(lngs).map((lng) => (
-          
-          <MenuItem value= {lngs[lng].nativeName} > {lngs[lng].nativeName}</MenuItem>
-          ))}
-        </Select>
-      </FormControl>
-      
-     
-       
-      
-      
-                  </div>
-                </div>
-              
-              
-                </div>
+            <div> <div className="top_langue">
+            <div className="row">
+              <div className="col-md-6">
+
+              </div>
+              <div className="col-md-6">
+
+              <FormControl variant="outlined" style={{
+  minWidth: 120}}>
+    <InputLabel id="demo-simple-select-outlined-label">Langue</InputLabel>
+    <Select
+      labelId="demo-simple-select-outlined-label"
+      id="demo-simple-select-outlined"
+      value={i18n.language}
+      onChange={(e) => i18n.changeLanguage(e.target.value)}
+     label="Langue"
+
+    >
+      {Object.keys(lngs).map((lng) => (
+
+      <MenuItem key={lng} value= {lngs[lng].nativeName} > {lngs[lng].nativeName}</MenuItem>
+      ))}
+    </Select>
+  </FormControl>
+
+
+
+
+
+              </div>
+            </div>
+
+
+            </div>
             <div className="container-fluid">
              <div className="row justify-content-center">
               <div className="col-sm-8 text-center">
@@ -266,8 +212,7 @@ const { t, i18n } = useTranslation();
             </div>
 
             </div>
-
-          ))
+          )
 }
        </div>
         </div>
@@ -284,8 +229,6 @@ export default function App() {
         <Route exact path="/" component={Hello} />
         <Route path="/profile" component={Profile} />
         <Route path="/Signature" component={Signature} />
-
-        <Route path="/agenda" component={Agenda} />
         <Route path="/Support" component={Support} />
         <Route path="/App_bar" component={App_bar} />
         <Route path="/Medical_file" component={Medical_file} />

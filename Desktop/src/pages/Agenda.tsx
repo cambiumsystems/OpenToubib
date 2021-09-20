@@ -1,17 +1,15 @@
-import React,{createRef,useState} from 'react';
-import { Link } from 'react-router-dom';
+import React, {createRef, useState, useEffect} from 'react';
 import FullCalendar from '@fullcalendar/react'; // must go before plugins
 import dayGridPlugin from '@fullcalendar/daygrid'; // a plugin!
 import timeGridPlugin from '@fullcalendar/timegrid';
 import interactionPlugin from '@fullcalendar/interaction';
-import { red } from '@material-ui/core/colors';
-import SettingsSharpIcon from '@material-ui/icons/SettingsSharp';
 import { makeStyles } from '@material-ui/core/styles';
 import Modal from '@material-ui/core/Modal';
 import swal from 'sweetalert';
-var sqlite3 = require('@journeyapps/sqlcipher').verbose();
-const path = require('path');
-var db = new sqlite3.Database('opentoubib1.db');
+import { secretKey } from './Login';
+import { secretKeyLogin } from '../App.tsx';
+
+const model = require('../db');
 
 function rand() {
   return Math.round(Math.random() * 20) - 10;
@@ -39,20 +37,11 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-let inf = [];
-db.serialize(function () {
-  // This is the default, but it is good to specify explicitly:
-  db.run('PRAGMA cipher_compatibility = 4');
-  db.run(`PRAGMA key = 'Nore1234'`);
-db.each("SELECT * FROM events", function(err, row) {
-  console.log(row);
-  inf.push(row);
-  console.log('THIS IS INF',inf);
-});
-});
+
 const Agenda = () => {
 
-console.log('test',inf);
+    // This is the default, but it is good to specify explicitly:
+
   const classes = useStyles();
   // getModalStyle is not a pure function, we roll the style only on the first render
   const [modalStyle] = React.useState(getModalStyle);
@@ -100,7 +89,6 @@ const body = (
 
   </div>
 );
-
   const calendarRef=createRef()
   const handleDateSelect=(selectInfo)=>{
     let calendarApi =selectInfo.view.calendar;
@@ -115,7 +103,7 @@ const body = (
       });
 
   }
-
+  const [events,setEvents]=useState(undefined);
 
   const [debut,setdebut]=useState("");
   const [fin,setfin]=useState("");
@@ -127,10 +115,18 @@ const body = (
     setfin(event.target.value);
     localStorage.setItem('fin',fin);
   };
-
+useEffect(() => {
+  const fetchEvents = ()=>{
+    if(secretKey!=null)
+    model.getEvents(secretKey, setEvents);
+  else model.getEvents(secretKeyLogin, setEvents);
+}
+  fetchEvents();
+}, [])
+if(events==undefined)return <div>Loading</div>
   return (
     <div className="calendar">
-      <div className="left"> <a onClick={handleOpen}><SettingsSharpIcon/>
+      <div className="left"> <a onClick={handleOpen}>
       </a></div>
 
       <Modal
@@ -181,7 +177,7 @@ const body = (
 
     }}
 
-   events={inf}
+   events={events}
 
 
 

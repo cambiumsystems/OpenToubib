@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import { Link } from "react-router-dom";
 import { makeStyles, Theme, createStyles } from '@material-ui/core/styles';
 import Modal from '@material-ui/core/Modal';
@@ -18,19 +18,6 @@ function getModalStyle() {
     transform: `translate(-${top}%, -${left}%)`,
   };
 }
-const ButtonMailto = ({ mailto, label }) => {
-  return (
-      <Link
-          to='#'
-          onClick={(e) => {
-              window.location = mailto;
-              e.preventDefault();
-          }}
-      >
-          {label}
-      </Link>
-  );
-};
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -49,6 +36,11 @@ function Modal_hour() {
     // getModalStyle is not a pure function, we roll the style only on the first render
     const [modalStyle] = React.useState(getModalStyle);
     const [open, setOpen] = React.useState(false);
+    const [delay, setDelay] = useState('5')
+
+function handleDelayChange(e) {
+    setDelay(e.target.value);
+}
 
     const handleOpen = () => {
       setOpen(true);
@@ -68,18 +60,18 @@ function Modal_hour() {
             <label className="form-control_input">Prevenir ce patient d'un retard de :</label>
             </div>
             <div className="col">
-            <select className="form-control">
-              <option selected>5min</option>
-              <option > 10min </option>
-              <option > 15min</option>
-              <option >20min</option>
+            <select className="form-control" onChange={handleDelayChange}>
+              <option selected value="5">5min</option>
+              <option value="10"> 10min </option>
+              <option value="15"> 15min</option>
+              <option value="20">20min</option>
 
 
             </select>
             <Link
                 to='#'
                 onClick={(e) => {
-                    window.location = "mailto:no-reply@example.com";
+                    window.location = `mailto:no-reply@example.com?subject=delay of appointment&body=Dear Patient,%0D%0A This is to inform you that due to some unavoidable circumstances Doctor has decided to delay the appointment by ${delay} mins. %0D%0A Thank you for your understanding.%0D%0A OPENTOUBIB`;
                     e.preventDefault();
                 }}
             >

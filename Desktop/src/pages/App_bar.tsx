@@ -41,9 +41,6 @@ import { Redirect } from "react-router-dom";
 import Nav_bar from './Nav_bar';
 import { secretkey } from './Login';
 
-var sqlite3 = require('@journeyapps/sqlcipher').verbose();
-const path = require('path');
-var db = new sqlite3.Database('opentoubib1.db');
 
 import swal from 'sweetalert';
 import NotificationImportantIcon from '@material-ui/icons/NotificationImportant';
@@ -141,69 +138,48 @@ export default function App_bar() {
     setOpen(false);
   };
   let inf=[];
-    let todayRdvs = [];
+  let todayRdvs = [];
+  let events = [];
   let indice=0;
   let name_doc=localStorage.getItem('email').toString();
   console.log(typeof name_doc);
-  const [prochainRdv, setprochainRdv] = useState();
+  const [prochainRdv, setprochainRdv] = useState('No next rdv');
   const [typeRdv, settype] = useState();
-  // knex
-  //   .select('*')
-  //   .from('events')
-  //   .then((data) => {
-  //     inf = data;
-  //     console.log('Data ', data);
-  //     for (var i = 0; i < inf.length; i++) {
-  //      let test = new Date(inf[i].start).setHours(0, 0, 0, 0);
-  //      let today= new Date().setHours(0, 0, 0, 0);
-  //       if(test==today){
-  //         console.log("TODAY S RDV", inf[i].title);
-  //         todayRdvs.push(inf[i]);
-  //       }
-  //     }
-  //   })
-  //   .catch((err) => console.log(err));
-  db.serialize(function () {
-    // This is the default, but it is good to specify explicitly:
-    db.run('PRAGMA cipher_compatibility = 4');
-    db.run(`PRAGMA key = 'Nore1234'`);
-  db.each("SELECT rowid as id, start, end, title FROM events", function(err, row) {
-    let test = new Date(row.start).setHours(0, 0, 0, 0);
-    let today= new Date().setHours(0, 0, 0, 0);
-    let tod = new Date().getTime();
-    let date= new Date(row.start).getTime();
-    console.log(test==today);
-    console.log(date>tod);
-    if(date>tod && test==today){
-        inf.push(row);
-        console.log('today rdvs',row);
-        todayRdvs.push(row.start);
-        console.log(date);
-    }
-  });
-  
-  });
-  useEffect(() => {
-      let secTimer = setInterval( () => {
-      let tod = new Date().getTime();
-      let date= new Date(todayRdvs[indice]).getTime();
-     
-     
-      if (indice != inf.length)
-       { if(date>tod){
-        console.log('dates',inf.length, inf[indice].title);
-        setprochainRdv(inf[indice].title);
-        settype(inf[indice].isTeleconsultation);
-        setDt(((date- tod)/(60000)).toLocaleString());
-        setstartDt(date.toLocaleString());
-        }
-        else indice++;}
-        else
-        setprochainRdv("No next rdv");
-      },1000)
+  // db.each("SELECT rowid as id, start, end, title FROM events", function(err, row) {
+  //   let test = new Date(row.start).setHours(0, 0, 0, 0);
+  //   let today= new Date().setHours(0, 0, 0, 0);
+  //   let tod = new Date().getTime();
+  //   let date= new Date(row.start).getTime();
+  //   console.log(test==today);
+  //   console.log(date>tod);
+  //   if(date>tod && test==today){
+  //       inf.push(row);
+  //       console.log('today rdvs',row);
+  //       todayRdvs.push(row.start);
+  //       console.log(date);
+  //   }
+  // });
+  // useEffect(() => {
+  //     let secTimer = setInterval( () => {
+  //     let tod = new Date().getTime();
+  //     let date= new Date(todayRdvs[indice]).getTime();
 
-      return () => clearInterval(secTimer);
-  }, []);
+
+  //     if (indice != inf.length)
+  //      { if(date>tod){
+  //       console.log('dates',inf.length, inf[indice].title);
+  //       setprochainRdv(inf[indice].title);
+  //       settype(inf[indice].isTeleconsultation);
+  //       setDt(((date- tod)/(60000)).toLocaleString());
+  //       setstartDt(date.toLocaleString());
+  //       }
+  //       else indice++;}
+  //       else
+  //       setprochainRdv("No next rdv");
+  //     },1000)
+
+  //     return () => clearInterval(secTimer);
+  // }, []);
 
 const name=localStorage.getItem('')
 
@@ -266,21 +242,8 @@ const name=localStorage.getItem('')
     localStorage.setItem('user','loggout');
    history.push('/');
   }
-
-
   const [dt, setDt] = useState(new Date().toLocaleString());
   const [startdt, setstartDt] = useState(new Date().toLocaleString());
-//this is a test
-  const date= new Date('2021-09-09 11:00:00');
-
-// useEffect(() => {
-//     let secTimer = setInterval( () => {
-//       setDt(((date- Date.now())/(60000)).toLocaleString());
-//     },1000)
-
-//     return () => clearInterval(secTimer);
-// }, []);
-
 
   return (
 
@@ -331,56 +294,54 @@ const name=localStorage.getItem('')
       >
         {body}
       </Modal>
-             
+
               <div className="iq-card-body">
-             
+
                 <ul className="m-0 p-0 job-classification">
-                
+
               {(prochainRdv=="No next rdv")?
                 (<li></li>)
-              :(<li> Type :{typeRdv?'consultation':'teleconsultation' } 
-              
+              :(<li> Type :{typeRdv?'consultation':'teleconsultation' }
+
               </li>)
-              }    
+              }
                   <li> {prochainRdv} </li>
-                  {(prochainRdv=="No next rdv")?  
+                  {(prochainRdv=="No next rdv")?
                   (<li></li>)
                  :(
                    <>
                    <li> Restant :{parseInt(dt)} min</li>
                  <Tooltip title="clicker pour visualiser le dossier medicale" arrow>
-                 <div  className=""> 
+                 <div  className="">
                     <Link to="/Medical_file">
                     <li ><a className="bleu_text"> Dossier medicale ></a></li></Link>
                   </div>
                   </Tooltip>
                   <li className="row">
-                
+
                   <div className="col-md-66 space"><Modal_hour/></div>
                   <div className="col-lg-30 space_right">
                   {typeRdv?
-                  
+
                    <div></div>
                    :
                    <button type="submit" className="btn iq-bg-primary"
                    onClick={()=>shell.openExternal('https://meet.jit.si/'+name_doc+startdt.toString())}
                    >
                     <VideoCallIcon  fontSize="small"/>Demarer</button>}
-                   
-                   
+
+
                      </div></li>
                      </>
                  )}
-                 
-                     
+
+
                 </ul>
               </div>
             </div>
 
           </div>
           <div className="col-md-9">
-
-
          <Agenda/>
 
         </div>
