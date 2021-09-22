@@ -19,7 +19,7 @@ import { useTranslation } from 'react-i18next';
 import { Field, Form, Formik, FormikConfig, FormikValues } from 'formik';
 import { Link, Redirect, useHistory } from 'react-router-dom';
 import { CheckboxWithLabel, TextField } from 'formik-material-ui';
-import Select from '@material-ui/core/Select';
+import Select from 'react-select';
 import MenuItem from '@material-ui/core/MenuItem';
 import React, { useEffect, useState } from 'react';
 import { CountryDropdown, RegionDropdown } from 'react-country-region-selector';
@@ -156,6 +156,15 @@ function Alert(props) {
   return <MuiAlert elevation={6} variant="filled" {...props} />;
 }
 export default function Home() {
+const specialities = [
+  { value: 'Gastro', label: 'Gastro' },
+  { value: 'Pneumo', label: 'Pneumo' },
+  { value: 'Psychiatrie', label: 'Psychiatrie' },
+  { value: 'Orl', label: 'Orl' },
+  { value: 'Dermato', label: 'Dermato' },
+  { value: 'Ophtalmo', label: 'Ophtalmo' },
+  { value: 'Généraliste', label: 'Généraliste' },
+];
   // const notify = () => toast("Wow so easy !");
   const [flag1, setFlag1] = React.useState(true);
   const [flag2, setFlag2] = React.useState(true);
@@ -209,6 +218,12 @@ export default function Home() {
     }
     setOpen(false);
   };
+  useEffect(() => {
+    console.log("ENTERD");
+    return function cleanup() {
+        console.log('GOODBYE');
+    }
+})
 
   const { t, i18n } = useTranslation();
   return (
@@ -250,6 +265,7 @@ export default function Home() {
             isDistantNode: false,
             days: [],
             morningTime: [],
+            afternoonTime: [],
           }}
           onSubmit={async (values) => {
             console.log('values', values);
@@ -257,7 +273,7 @@ export default function Home() {
         >
           <FormikStep
             label={t('form.step1')}
-            // validationSchema={validationSchemaStep1}
+            validationSchema={validationSchemaStep1}
           >
             <Snackbar open={open} onClose={handleClose}>
               <Alert onClose={handleClose} severity="info">
@@ -380,7 +396,7 @@ export default function Home() {
           </FormikStep>
           <FormikStep
             label={t('form.step2')}
-            // validationSchema={validationSchemaStep2}
+            validationSchema={validationSchemaStep2}
           >
             <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
               <Alert onClose={handleClose} severity="info">
@@ -447,7 +463,7 @@ export default function Home() {
           </FormikStep>
           <FormikStep
             label={t('form.step3')}
-            // validationSchema={validationSchemaStep3}
+            validationSchema={validationSchemaStep3}
           >
             <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
               <Alert onClose={handleClose} severity="info">
@@ -517,11 +533,12 @@ export default function Home() {
               <div className="wrapper">
                 <div className="select_size_spec one ">
                   <Field
+                    variant="outlined"
                     name="speciality"
                     component={SelectComponent}
                     label="Specialities"
                     options={specialities}
-                    // placeholder="Select your specialities"
+                    placeholder="Select your specialities"
                   />
                 </div>
                 <div className="two">
@@ -539,7 +556,7 @@ export default function Home() {
               </div>
             </Box>
           </FormikStep>
-          <FormikStep
+          {/* <FormikStep
             label="Operating days"
             // validationSchema={validationSchemaStep1}
           >
@@ -570,25 +587,18 @@ export default function Home() {
                 Monday
               </label>
               <Field
-                    name="morningTime"
-                    component={TimePickerComponent}
-                    format="HH:mm"
+                name="morningTime"
+                component={TimePickerComponent}
+                format="HH:mm"
                 allowClear="true"
                 disabledHours={() => [1, 2, 3]}
                 className="timepicker"
                 disabled={disabledM}
                   />
-              {/* <TimePicker.RangePicker
-                format="HH:mm"
-                allowClear="true"
-                disabledHours={() => [1, 2, 3]}
-                className="timepicker"
-                selected={selectedtimeMM}
-                onChange={(timemm, time) => handleChangeMM(timemm,time)}
-                disabled={disabledM}
-              /> */}
               <label className="text">And</label>
-              <TimePicker.RangePicker
+              <Field
+                name="afternoonTime"
+                component={TimePickerComponent}
                 format="HH:mm"
                 allowClear="true"
                 disabledHours={() => [1, 2, 3]}
@@ -608,17 +618,19 @@ export default function Home() {
                 />
                 Tuesday
               </label>
-              <TimePicker.RangePicker
+              <Field
+                name="morningTime"
+                component={TimePickerComponent}
                 format="HH:mm"
                 allowClear="true"
                 disabledHours={() => [1, 2, 3]}
                 className="timepicker"
-                selected={selectedtimeMAf}
-                onChange={(timema) => setSelectedtimeMAf(timema)}
                 disabled={disabledT}
               />
               <label className="text">And</label>
-              <TimePicker.RangePicker
+              <Field
+                name="afternoonTime"
+                component={TimePickerComponent}
                 format="HH:mm"
                 allowClear="true"
                 disabledHours={() => [1, 2, 3]}
@@ -638,7 +650,9 @@ export default function Home() {
                 />
                 Wednesday
               </label>
-              <TimePicker.RangePicker
+              <Field
+                name="morningTime"
+                component={TimePickerComponent}
                 format="HH:mm"
                 allowClear="true"
                 disabledHours={() => [1, 2, 3]}
@@ -646,7 +660,9 @@ export default function Home() {
                 disabled={disabledW}
               />
               <label className="text">And</label>
-              <TimePicker.RangePicker
+              <Field
+                name="afternoonTime"
+                component={TimePickerComponent}
                 format="HH:mm"
                 allowClear="true"
                 disabledHours={() => [1, 2, 3]}
@@ -666,7 +682,9 @@ export default function Home() {
                 />
                 Thursday
               </label>
-              <TimePicker.RangePicker
+              <Field
+                name="morningTime"
+                component={TimePickerComponent}
                 format="HH:mm"
                 allowClear="true"
                 disabledHours={() => [1, 2, 3]}
@@ -674,7 +692,9 @@ export default function Home() {
                 disabled={disabledTh}
               />
               <label className="text">And</label>
-              <TimePicker.RangePicker
+              <Field
+                name="afternoonTime"
+                component={TimePickerComponent}
                 format="HH:mm"
                 allowClear="true"
                 disabledHours={() => [1, 2, 3]}
@@ -694,7 +714,9 @@ export default function Home() {
                 />
                 Friday
               </label>
-              <TimePicker.RangePicker
+              <Field
+                name="morningTime"
+                component={TimePickerComponent}
                 format="HH:mm"
                 allowClear="true"
                 disabledHours={() => [1, 2, 3]}
@@ -702,7 +724,9 @@ export default function Home() {
                 disabled={disabledF}
               />
               <label className="text">And</label>
-              <TimePicker.RangePicker
+              <Field
+                name="afternoonTime"
+                component={TimePickerComponent}
                 format="HH:mm"
                 allowClear="true"
                 disabledHours={() => [1, 2, 3]}
@@ -722,7 +746,9 @@ export default function Home() {
                 />
                 Saturday
               </label>
-              <TimePicker.RangePicker
+              <Field
+                name="morningTime"
+                component={TimePickerComponent}
                 format="HH:mm"
                 allowClear="true"
                 disabledHours={() => [1, 2, 3]}
@@ -730,7 +756,9 @@ export default function Home() {
                 disabled={disabledS}
               />
               <label className="text">And</label>
-              <TimePicker.RangePicker
+              <Field
+                name="afternoonTime"
+                component={TimePickerComponent}
                 format="HH:mm"
                 allowClear="true"
                 disabledHours={() => [1, 2, 3]}
@@ -738,11 +766,11 @@ export default function Home() {
                 disabled={disabledS}
               />
             </div>
-          </FormikStep>
+          </FormikStep> */}
 
           <FormikStep
             label={t('form.step4')}
-            // validationSchema={validationSchemaStep5}
+            validationSchema={validationSchemaStep5}
             // validationSchema={Yup.object({
             //   fee: Yup.mixed().when('teleconsultation', {
             //     is: true,
@@ -840,17 +868,18 @@ const TimePickerComponent = ({
   }, // also values, setXXXX, handleXXXX, dirty, isValid, status, etc.
   ...props
 }) => {
-  const [select, setSelect] = useState('');
-  let arr=[];
+  const [arr, setArr] = useState([]);
+
   return (
   <TimePicker.RangePicker
       {...field}
       {...props}
+      onBlur={handleBlur(arr)}
       value={arr}
       onChange={(moment, time) => {
-        arr=moment;
+        setArr(moment);
       let inf=time.toString();
-      //setFieldValue(field.name, inf);
+      setFieldValue(field.name, inf);
       console.log(time, inf);
        // calling custom onChangeText
       }}
@@ -978,28 +1007,6 @@ export function FormikStepper({
 
   return (
     <div>
-      {/* <div>
-        {Object.keys(lngs).map((lng) => (
-          <button
-            key={lng}
-            style={{ fontWeight: i18n.language === lng ? 'bold' : 'normal' }}
-            type="submit"
-            onClick={() => i18n.changeLanguage(lng)}
-          >
-            {lngs[lng].nativeName}
-          </button>
-        ))}
-      </div> */}
-      <Select
-          labelId="demo-customized-select-label"
-          id="demo-customized-select"
-          value={i18n.language}
-          onChange={(e) => i18n.changeLanguage(e.target.value)}
-        >
-          {Object.keys(lngs).map((lng) => (
-          <MenuItem value={lng}>{lngs[lng].nativeName}</MenuItem>
-          ))}
-        </Select>
       <Link to="/">Go back to home</Link>
       <Formik
         // eslint-disable-next-line react/jsx-props-no-spreading

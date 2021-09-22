@@ -35,6 +35,10 @@ import { HashRouter as Router, Switch, Route, Link } from 'react-router-dom';
 import { Redirect } from "react-router-dom";
 import CreateIcon from '@material-ui/icons/Create';
 
+import { secretKey } from './Login';
+import { secretKeyLogin } from '../App.tsx';
+const model = require('../db');
+
 const drawerWidth = 240;
 
 const useStyles = makeStyles((theme) => ({
@@ -126,6 +130,9 @@ export default function Nav_bar() {
 
   const Logout=()=>{
     localStorage.setItem('user','loggout');
+    //if(secretKey!=null)
+    //model.closeDB(secretKey);
+  //else model.closeDB(secretKeyLogin);
    history.push('/');
   }
 
@@ -180,10 +187,6 @@ export default function Nav_bar() {
             </Link>
           </li>
           <br/>
-          <li className="iq-menu-title">
-              <Link to="/Statistique"> <p className="bl">&nbsp;<ShowChartIcon   fontSize="small"/> Statistique</p>
-              </Link>
-          </li>
 
           <li className="iq-menu-title">
           <Link to="/Signature"><span className="bl">&nbsp;<CreateIcon  fontSize="small"/> Signatures</span>

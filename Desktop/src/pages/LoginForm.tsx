@@ -10,7 +10,7 @@ function LoginForm({Loginn ,error}) {
 
     const [details,setDetails]=useState({email:"",password:""});
     let user = [];
-const submitHandler=e=>{
+const submitHandler=async e=>{
         e.preventDefault();
 
         if(details.email==''&& localStorage.getItem('email')!=""){
@@ -18,7 +18,7 @@ const submitHandler=e=>{
         }
 
 
-        Loginn(details);
+        await Loginn(details);
 
        // if(localStorage.getItem('checked')!='false' && localStorage.getItem('checked') != null){
         //    localStorage.setItem('email',details.email);

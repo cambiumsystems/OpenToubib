@@ -243,7 +243,7 @@ const name=localStorage.getItem('')
    history.push('/');
   }
   const [dt, setDt] = useState(new Date().toLocaleString());
-  const [startdt, setstartDt] = useState(new Date().toLocaleString());
+  const [startdt, setstartDt] = useState(new Date().getTime());
 
   return (
 
@@ -299,18 +299,16 @@ const name=localStorage.getItem('')
 
                 <ul className="m-0 p-0 job-classification">
 
-              {(prochainRdv=="No next rdv")?
+              {(prochainRdv!="No next rdv")?
                 (<li></li>)
               :(<li> Type :{typeRdv?'consultation':'teleconsultation' }
 
               </li>)
               }
-                  <li> {prochainRdv} </li>
-                  {(prochainRdv=="No next rdv")?
+                  {(prochainRdv!="No next rdv")?
                   (<li></li>)
                  :(
                    <>
-                   <li> Restant :{parseInt(dt)} min</li>
                  <Tooltip title="clicker pour visualiser le dossier medicale" arrow>
                  <div  className="">
                     <Link to="/Medical_file">
@@ -326,7 +324,7 @@ const name=localStorage.getItem('')
                    <div></div>
                    :
                    <button type="submit" className="btn iq-bg-primary"
-                   onClick={()=>shell.openExternal('https://meet.jit.si/'+name_doc+startdt.toString())}
+                   onClick={()=>shell.openExternal('https://meet.jit.si/'+startdt.toString())}
                    >
                     <VideoCallIcon  fontSize="small"/>Demarer</button>}
 
