@@ -1,42 +1,20 @@
-import React , { Component } from 'react';
+import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Drawer from '@material-ui/core/Drawer';
 import AppBar from '@material-ui/core/AppBar';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Toolbar from '@material-ui/core/Toolbar';
-import List from '@material-ui/core/List';
 import Typography from '@material-ui/core/Typography';
-import Divider from '@material-ui/core/Divider';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemIcon from '@material-ui/core/ListItemIcon';
-import ListItemText from '@material-ui/core/ListItemText';
-import InboxIcon from '@material-ui/icons/MoveToInbox';
 import AccountBoxIcon from '@material-ui/icons/AccountBox';
 import DateRangeIcon from '@material-ui/icons/DateRange';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
-import MailIcon from '@material-ui/icons/Mail';
-import Agenda from './Agenda';
-import DuoIcon from '@material-ui/icons/Duo';
-import HdrStrongIcon from '@material-ui/icons/HdrStrong';
-import green from "@material-ui/core/colors/green";
-import red from "@material-ui/core/colors/red";
-import BorderColorIcon from '@material-ui/icons/BorderColor';
-import ArrowForwardIosIcon from '@material-ui/icons/ArrowForwardIos';
-import FiberManualRecordIcon from '@material-ui/icons/FiberManualRecord';
-import Modal from '@material-ui/core/Modal';
 import NotificationsActiveIcon from '@material-ui/icons/NotificationsActive';
-import ShowChartIcon from '@material-ui/icons/ShowChart';
-import LongMenu from './LongMenu';
-import AccountCircle from "@material-ui/icons/AccountCircle";
 import IconButton from "@material-ui/core/IconButton";
 import { useHistory } from 'react-router-dom';
 
-import { HashRouter as Router, Switch, Route, Link } from 'react-router-dom';
-import { Redirect } from "react-router-dom";
+import { Link } from 'react-router-dom';
 import CreateIcon from '@material-ui/icons/Create';
 
-import { secretKey } from './Login';
-import { secretKeyLogin } from '../App.tsx';
 const model = require('../db');
 
 const drawerWidth = 240;
@@ -174,7 +152,6 @@ export default function Nav_bar() {
           <div className="scroll-content">
              <nav className="iq-sidebar-menu">
                <ul className="iq-menu">
-               <li className="left"><LongMenu /></li>
         <br/>
 
           <li className="iq-menu-title">

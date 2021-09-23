@@ -1,4 +1,4 @@
-import {secretKey as key} from './pages/Login.tsx';
+import {secretKey as key} from './pages/RegisterForm.tsx';
 const path = require('path');
 // To get the database path defined as ExtraFiles in package.json
 const getExtraFilesPath = () => {

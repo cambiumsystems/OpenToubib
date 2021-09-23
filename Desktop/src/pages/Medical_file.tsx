@@ -1,40 +1,6 @@
-import React , { Component } from 'react';
+import React  from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import Drawer from '@material-ui/core/Drawer';
-import AppBar from '@material-ui/core/AppBar';
-import CssBaseline from '@material-ui/core/CssBaseline';
-import Toolbar from '@material-ui/core/Toolbar';
-import List from '@material-ui/core/List';
-import Typography from '@material-ui/core/Typography';
-import Divider from '@material-ui/core/Divider';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemIcon from '@material-ui/core/ListItemIcon';
-import ListItemText from '@material-ui/core/ListItemText';
-import InboxIcon from '@material-ui/icons/MoveToInbox';
-import AccountBoxIcon from '@material-ui/icons/AccountBox';
-import DateRangeIcon from '@material-ui/icons/DateRange';
-import MailIcon from '@material-ui/icons/Mail';
-import Agenda from './Agenda';
 import DuoIcon from '@material-ui/icons/Duo';
-import HdrStrongIcon from '@material-ui/icons/HdrStrong';
-import green from "@material-ui/core/colors/green";
-import red from "@material-ui/core/colors/red";
-import BorderColorIcon from '@material-ui/icons/BorderColor';
-import ArrowForwardIosIcon from '@material-ui/icons/ArrowForwardIos';
-import { OffCanvas, OffCanvasMenu, OffCanvasBody } from "react-offcanvas";
-import FiberManualRecordIcon from '@material-ui/icons/FiberManualRecord';
-import Modal from '@material-ui/core/Modal';
-import doctor_img from '../images/doctor_img.png'
-import { Link } from "react-router-dom";
-import { Height } from "@material-ui/icons";
-import Radio from '@material-ui/core/Radio';
-import RadioGroup from '@material-ui/core/RadioGroup';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import FormControl from '@material-ui/core/FormControl';
-import FormLabel from '@material-ui/core/FormLabel';
-import LongMenu from './LongMenu';
-import ShowChartIcon from '@material-ui/icons/ShowChart';
-import NotificationsActiveIcon from '@material-ui/icons/NotificationsActive';
 import Nav_bar from './Nav_bar';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
@@ -43,8 +9,6 @@ import TableContainer from '@material-ui/core/TableContainer';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
-import {Image} from "semantic-ui-react";
-import AttachFileIcon from '@material-ui/icons/AttachFile';
 import DescriptionIcon from '@material-ui/icons/Description';
 import TextField from '@material-ui/core/TextField';
 import Modal_prescription from './Modal_prescription'
@@ -326,7 +290,7 @@ export default function Medical_file() {
                           <br/>
                           <Modal_prescription/>
                           <br/>
-                         
+
                          <ul className="
                            doctoe-seduall d-flex
                            p-0 mt-4 mb-0

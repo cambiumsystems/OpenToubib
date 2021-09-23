@@ -6,7 +6,7 @@ import { Link } from "react-router-dom";
 import Radio from '@material-ui/core/Radio';
 import Nav_bar from './Nav_bar';
 const drawerWidth = 240;
-import { secretKey } from './Login';
+import { secretKey } from './RegisterForm';
 import { secretKeyLogin } from '../App.tsx';
 const model = require('../db');
 
