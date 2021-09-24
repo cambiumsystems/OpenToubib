@@ -1,6 +1,12 @@
 import React, { useState } from 'react';
 import { shell } from 'electron';
 import icon from '../../assets/icon.png';
+import FormControl from '@material-ui/core/FormControl';
+import InputLabel from '@material-ui/core/InputLabel';
+import Select from '@material-ui/core/Select';
+import { useTranslation } from 'react-i18next';
+
+import MenuItem from '@material-ui/core/MenuItem';
 
 function LoginForm({ Loginn, error }) {
   const [details, setDetails] = useState({ email: '', password: '' });
@@ -14,9 +20,45 @@ function LoginForm({ Loginn, error }) {
     // login function
     Loginn(details);
   };
+  const lngs = {
+    en: { nativeName: 'English' },
+    fr: { nativeName: 'Français' },
+  };
+  const { t, i18n } = useTranslation();
 
   return (
     <section className="sign-in-page ">
+        <div className="top_langue">
+                  <div className="row">
+                    <div className="col-md-6"></div>
+                    <div className="col-md-6">
+                      <FormControl
+                        variant="outlined"
+                        style={{
+                          minWidth: 120,
+                        }}
+                      >
+                        <InputLabel id="demo-simple-select-outlined-label">
+                          Langue
+                        </InputLabel>
+                        <Select
+                          labelId="demo-simple-select-outlined-label"
+                          id="demo-simple-select-outlined"
+                          value={i18n.language}
+                          onChange={(e) => i18n.changeLanguage(e.target.value)}
+                          label="Langue"
+                        >
+                          {Object.keys(lngs).map((lng) => (
+                            <MenuItem key={lng} value={lngs[lng].nativeName}>
+                              {' '}
+                              {lngs[lng].nativeName}
+                            </MenuItem>
+                          ))}
+                        </Select>
+                      </FormControl>
+                    </div>
+                  </div>
+                </div>
       <div className="container sign-in-page-bg mt-5 p-0">
         <div className="row no-gutters  HEII col-sm-12">
           <div className="col-md-6 text-center">

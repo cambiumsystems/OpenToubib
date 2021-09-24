@@ -111,6 +111,11 @@ export function getEvents(secretKey, setEvents) {
     let events;
     db.serialize( function () {
     db.run(`PRAGMA key = ${secretKey}`);
+  //   var stmt1 = db.prepare(`INSERT INTO events VALUES (?,?,?,?)`);
+  //  // stmt1.run('2021-09-24 08:22:00', '2021-09-24 09:00:00', 'Consultation', '1');
+  //   //stmt1.run('2021-09-25 18:22:00', '2021-09-25 19:00:00', 'Controle', '0');
+  //   //stmt1.run('2021-09-29 10:22:00', '2021-09-29 13:00:00', 'Controle', '0');
+  //   stmt1.finalize();
     db.all("SELECT rowid AS id, start, end, title FROM events", function(err, data) {
       console.log(data);
       setEvents(data);
