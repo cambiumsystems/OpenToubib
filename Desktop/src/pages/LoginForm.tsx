@@ -49,7 +49,7 @@ function LoginForm({ Loginn, error }) {
                           label="Langue"
                         >
                           {Object.keys(lngs).map((lng) => (
-                            <MenuItem key={lng} value={lngs[lng].nativeName}>
+                            <MenuItem key={lng} value={lng}>
                               {' '}
                               {lngs[lng].nativeName}
                             </MenuItem>
@@ -67,23 +67,22 @@ function LoginForm({ Loginn, error }) {
                 <img className="img-fluid" alt="icon" src={icon} />
               </a>
               <div className="owl-carousel owl-loaded owl-drag txt_b">
-                <b> Ne tardez plus tout vos avantages vous attendent </b>
+                <b> {t('login.msg')} </b>
                 <button
                   type="button"
                   className="btn btn-primary"
                   onClick={() => shell.openExternal('http://localhost:3000/')}
                 >
-                  En savoir plus
+                  {t('login.more')} 
                 </button>
               </div>
             </div>
           </div>
           <div className="col-md-6 position-relative">
             <div className="sign-in-from">
-              <h1 className="mb-0">Sign in</h1>
+              <h1 className="mb-0">{t('login.Signin')} </h1>
               <p className="gris mt-4">
-                Enter your email adress and password to access to your personal
-                account
+              {t('login.enter_email')}
               </p>
 
               <form className="mt-4" onSubmit={submitHandler}>
@@ -107,7 +106,7 @@ function LoginForm({ Loginn, error }) {
                     />
                   </div>
                   <div className="form-group">
-                    <label>Password</label>
+                    <label>{t('login.pwd')}</label>
                     <input
                       className="form-control mb-0"
                       type="password"
@@ -125,7 +124,7 @@ function LoginForm({ Loginn, error }) {
                   <input
                     className="btn btn-primary float-right"
                     type="submit"
-                    value="Login"
+                    value={t('login.login')}
                   />
                 </div>
               </form>

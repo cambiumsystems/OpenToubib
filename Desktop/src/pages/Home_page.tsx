@@ -2,7 +2,6 @@ import React  from 'react';
 import { useState, useEffect } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import { useHistory } from 'react-router-dom';
-
 import { Link } from 'react-router-dom';
 import Nav_bar from './Nav_bar';
 import VideoCallIcon from '@material-ui/icons/VideoCall';
@@ -10,6 +9,7 @@ import Prevent_delay_button from './Prevent_delay_button';
 import Tooltip from '@material-ui/core/Tooltip';
 import {shell} from 'electron';
 import Agenda from './Agenda';
+import { useTranslation } from 'react-i18next';
 
 // modalevent  styling
 const drawerWidth = 240;
@@ -87,7 +87,7 @@ const history = useHistory();
 
  const [dt, setDt] = useState(new Date().toLocaleString());
  const [startdt, setstartDt] = useState(new Date().toLocaleString());
-
+ const { t, i18n } = useTranslation();
   return (
 
     <div className={classes.root}>
@@ -101,7 +101,7 @@ const history = useHistory();
             <div className="iq-card">
               <div className="iq-card-header d-flex justify-content-between">
                 <div className="iq_header-title">
-                  <h4 className="card-title"><b>Prochaine Consultation</b></h4>
+                  <h4 className="card-title"><b>{t('agenda.rdv')}</b></h4>
                 </div>
               </div>
 
@@ -125,7 +125,7 @@ const history = useHistory();
                  <Tooltip title="clicker pour visualiser le dossier medicale" arrow>
                  <div  className="">
                     <Link to="/Medical_file">
-                    <li ><a className="bleu_text"> Dossier medicale ></a></li></Link>
+                    <li ><a className="bleu_text"> {t('agenda.medicalfile')} ></a></li></Link>
                   </div>
                   </Tooltip>
                   <li className="row">
@@ -139,7 +139,7 @@ const history = useHistory();
                    <button type="submit" className="btn iq-bg-primary"
                    onClick={()=>shell.openExternal('https://meet.jit.si/'+name_doc+startdt.toString())}
                    >
-                    <VideoCallIcon  fontSize="small"/>Demarer</button>}
+                    <VideoCallIcon  fontSize="small"/>{t('agenda.start')}</button>}
 
 
                      </div></li>

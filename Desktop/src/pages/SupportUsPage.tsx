@@ -25,6 +25,7 @@ import ArrowForwardIosIcon from '@material-ui/icons/ArrowForwardIos';
 import { OffCanvas, OffCanvasMenu, OffCanvasBody } from "react-offcanvas";
 import FiberManualRecordIcon from '@material-ui/icons/FiberManualRecord';
 import Modal from '@material-ui/core/Modal';
+import Nav_bar from './Nav_bar';
 import VerifiedUserIcon from '@material-ui/icons/VerifiedUser';
 
 const drawerWidth = 240;
@@ -171,19 +172,23 @@ export default function Support() {
    
  return (
     <div className={classes.root}>
-      <CssBaseline />
+       {
+     (localStorage.getItem('user')=='logged')?
+     (<><Nav_bar/></>):
+     (<><CssBaseline />
       <AppBar position="fixed" className={classes.appBar}>
         <Toolbar>
           <Typography variant="h6" noWrap className={classes.color_white}>
             OPEN-TOUBIB
           </Typography>
         </Toolbar>
-      </AppBar>
+      </AppBar></>)
+     }
       
-      <main className="container-fluid ">
-      <div className="container-fluid">
-<div className="row">
-  <div className=" col-md-6 ">
+      <main className=" ">
+      <div className="">
+<div className="">
+  <div className=" col-md-1">
       <div className="iq-card line-height-4 background_support text-white">
         
       </div>
@@ -198,7 +203,7 @@ export default function Support() {
              solution solidaire 
              </h2>
             <ul className="list-unstyled  mb-0">
-            <br/>
+            
             <li><p className="gris"> Supportez ce projet !</p></li>
               <li><p><b>creer votre propre communoté fermé pour un meilleur 
                 service</b>.</p>

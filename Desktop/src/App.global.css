@@ -714,6 +714,11 @@
   flex: 0 0 58%;
   max-width: 58%;
 }
+.col-md-1 {
+
+  flex: 0 0 10%;
+  max-width: 10%;
+}
  .iq-card {
    background: #ffffff;
    border-radius: 25px;
@@ -1168,6 +1173,11 @@ img {
      flex: 0 0 50%;
      max-width: 50%;
  }
+ .col-md-64 {
+  -ms-flex: 0 0 30%;
+  flex: 0 0 30%;
+  max-width: 30%;
+}
  .width_label{
    width:30px;
  }
@@ -1205,9 +1215,8 @@ img {
    padding-top: 0!important;
  }
  .container-fluid_M{
-  width: 100%;
- 
-  padding-left: 20%;
+  width: 700px;
+  padding-left: 15%;
   margin-top: 60px;
  
  }
@@ -1252,9 +1261,10 @@ width: 700px !important;
 
 .background_support{
   background-repeat: no-repeat;
-  background-image: url("./images/supportdoctors.jpg");
-  height: 540px !important;
-  width: 800px !important;
+  background-image: url("./images/CaptureSupport.jpg");
+  top:2000px;
+  height: 150px !important;
+  width: 780px !important;
 }
  .doctor-profile {
    margin-top: -70px;

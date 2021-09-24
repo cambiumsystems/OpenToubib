@@ -272,6 +272,7 @@ const specialities = [
           }}
         >
           <FormikStep
+           
             label={t('form.step1')}
             validationSchema={validationSchemaStep1}
           >

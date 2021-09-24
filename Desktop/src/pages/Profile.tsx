@@ -8,6 +8,7 @@ import Nav_bar from './Nav_bar';
 const drawerWidth = 240;
 import { secretKey } from './RegisterForm';
 import { secretKeyLogin } from '../App.tsx';
+import { useTranslation } from 'react-i18next';
 const model = require('../db');
 
 const useStyles = makeStyles((theme) => ({
@@ -103,7 +104,7 @@ useEffect(() => {
   };
 
 
-
+  const { t, i18n } = useTranslation();
   if(doctor==undefined)return <div>Loading</div>
   return (
     <div className={classes.root}>
@@ -122,23 +123,23 @@ useEffect(() => {
               <p></p>
               <form className="form-row center_element">
                 <div className="form-group col-sm-6">
-                  <label>First name</label>
+                  <label>{t('profil.firstname')}</label>
                   <input type="text" className="form-control_P"id="fname" value={doctor.firstName} readOnly/>
                 </div>
                 <div className="form-group col-sm-6">
-                  <label>Last name</label>
+                  <label>{t('profil.lastname')}</label>
                   <input type="text" className="form-control_P"id="lname" value={doctor.lastName} readOnly/>
                 </div>
                 <div className="form-group col-sm-6">
-                  <label>Email</label>
+                  <label>{t('profil.email')}</label>
                   <input type="text" className="form-control_P"id="lname" value={doctor.email} readOnly/>
                 </div>
                 <div className="form-group col-sm-6">
-                  <label>City</label>
+                  <label>{t('profil.city')}</label>
                   <input type="text" className="form-control_P"id="lname" value={doctor.city} readOnly/>
                 </div>
                 <div className="form-group col-sm-6">
-                  <label className="d-block">Gender:</label>
+                  <label className="d-block">{t('profil.gender')}:</label>
 
                   <Radio
         checked={doctor.gender === 'Male'}
@@ -158,11 +159,11 @@ useEffect(() => {
       <label className="custom-control-label">Female</label>
                 </div>
                 <div className="form-group col-sm-6">
-                  <label>Date of birth</label>
+                  <label>{t('profil.dateofbirth')}</label>
                   <input type="Date" className="form-control_P"id="lname" value={doctor.dateOfBirth} readOnly/>
                 </div>
                 <div className="form-group col-sm-6">
-                  <label>Country</label>
+                  <label>{t('profil.country')}</label>
                   <input type="text" className="form-control_P"id="lname" value={doctor.country} readOnly/>
                 </div>
                 <div className="form-group col-sm-6">
@@ -170,15 +171,15 @@ useEffect(() => {
                   <input type="text" className="form-control_P"id="lname" value={doctor.region} readOnly/>
                 </div>
                 <div className="form-group col-sm-6">
-                  <label>Specialité</label>
+                  <label>{t('profil.speciality')}</label>
                   <input type="text" className="form-control_P"id="lname" value={doctor.speciality} readOnly/>
                 </div>
                 <div className="form-group col-sm-6">
-                  <label>Full Address</label>
+                  <label>{t('profil.adress')}</label>
                   <textarea className="form-control_P"id="lname" value={doctor.address} readOnly></textarea>
                 </div>
                 <div className="form-group center_element">
-                <button type="submit" className="btn btn-primary btn_width mr-2">Edit</button>
+                <button type="submit" className="btn btn-primary btn_width mr-2">{t('profil.edit')}</button>
                 </div>
               </form>
             </div>

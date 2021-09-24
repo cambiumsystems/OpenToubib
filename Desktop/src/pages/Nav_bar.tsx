@@ -11,6 +11,7 @@ import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import NotificationsActiveIcon from '@material-ui/icons/NotificationsActive';
 import IconButton from "@material-ui/core/IconButton";
 import { useHistory } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 
 import { Link } from 'react-router-dom';
 import CreateIcon from '@material-ui/icons/Create';
@@ -113,7 +114,7 @@ export default function Nav_bar() {
   //else model.closeDB(secretKeyLogin);
    history.push('/');
   }
-
+  const { t, i18n } = useTranslation();
   return (
 
     <div className={classes.root}>
@@ -155,12 +156,12 @@ export default function Nav_bar() {
         <br/>
 
           <li className="iq-menu-title">
-          <Link to="/profile">   <span className="left_sidebar bl">&nbsp;<AccountBoxIcon fontSize="small"/> Profil</span>
+          <Link to="/profile">   <span className="left_sidebar bl">&nbsp;<AccountBoxIcon fontSize="small"/>{t('navbar.profil')} </span>
           </Link>
           </li>
           <br/>
           <li className="iq-menu-title">
-           <Link to="/App_bar"><span className="bl">&nbsp;<DateRangeIcon  fontSize="small"/> Calendrier</span>
+           <Link to="/App_bar"><span className="bl">&nbsp;<DateRangeIcon  fontSize="small"/> {t('navbar.calendar')}</span>
             </Link>
           </li>
           <br/>
@@ -170,7 +171,7 @@ export default function Nav_bar() {
           </Link>
           </li>
           <li className="iq-menu-title">
-          <Link to="/Support"><span className="bl">&nbsp;<NotificationsActiveIcon  fontSize="small"/> Support</span>
+          <Link to="/Support"><span className="bl">&nbsp;<NotificationsActiveIcon  fontSize="small"/> {t('navbar.support')}</span>
           </Link>
           </li>
 

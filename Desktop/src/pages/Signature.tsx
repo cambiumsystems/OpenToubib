@@ -3,6 +3,7 @@ import { useState ,useEffect } from 'react';
 import Nav_bar from './Nav_bar';
 import {Image} from "semantic-ui-react";
 import BackupIcon from '@material-ui/icons/Backup';
+import { useTranslation } from 'react-i18next';
 var AES = require("crypto-js/aes");
 var SHA256 = require("crypto-js/sha256");
 
@@ -50,7 +51,7 @@ function Signature() {
      setOrigImage_Cachet(imageFile_Cachet)
      setOrigImageFile_Cachet(URL.createObjectURL(imageFile_Cachet));
      //console.log('create url:::',URL.createObjectURL(imageFile_Cachet))
-     setFileName_Cachet(imageFile_Cachet.name);
+    
     }
 
     const [images, setImages] = useState([]);
@@ -97,7 +98,7 @@ function Signature() {
     };
     });
 
-    
+    const { t, i18n } = useTranslation();
     return (
         <div >
            <Nav_bar/> 
@@ -111,19 +112,19 @@ function Signature() {
                     </div>
             </div> 
             <div className="iq-card-body">
-            <p className="gris">Cette signatute electronique fera office d'une signature numerique pour cela veuiller la scanner dans une feuille blache </p>
+            <p className="gris">{t('signature.signature')}</p>
            <div className="row" >
            
             <div className="col-md-6 ">
                 {
                    origImageFile?<Image  className="img_signature" src={origImageFile}></Image>: <div className="drag-area">
                    <div className="icon"><BackupIcon fontSize="large"/></div>
-                    <header>Upload file</header>
+                    <header>{t('signature.Upload')}</header>
                     </div>
            
                 }
             </div>
-            <div className="col-md-6 ">
+            <div className="col-md-64 ">
             <input type="file" className="upload-box"    id="signature"
              onChange={(e)=>{
             addImage(e);
@@ -161,7 +162,7 @@ function Signature() {
                 {
                    origImageFile_Cachet?<Image  className="img_signature" src={origImageFile_Cachet}></Image>: <div className="drag-area">
                    <div className="icon"><BackupIcon fontSize="large"/></div>
-                    <header>Upload file</header>
+                    <header>{t('signature.Upload')}</header>
                     </div>
            
                 }
