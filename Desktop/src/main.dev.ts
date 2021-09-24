@@ -21,7 +21,6 @@ export default class AppUpdater {
   constructor() {
     log.transports.file.level = 'info';
     autoUpdater.logger = log;
-    autoUpdater.checkForUpdatesAndNotify();
   }
 }
 
@@ -101,11 +100,12 @@ const createWindow = async () => {
     event.preventDefault();
     shell.openExternal(url);
   });
-  var hasConfirmedClose = false;
+  // The prompt shown before Close
+  let hasConfirmedClose = false;
   mainWindow.on('close', (e) => {
     if (!hasConfirmedClose) {
         e.preventDefault(); // Prevent default no matter what.
-        var choice = dialog.showMessageBoxSync(mainWindow, {
+        let choice = dialog.showMessageBoxSync(mainWindow, {
             type:    'question',
             buttons: ['Yes', 'No'],
             title:   'Confirm',

@@ -9,6 +9,8 @@ import { useTranslation } from 'react-i18next';
 import MenuItem from '@material-ui/core/MenuItem';
 
 function LoginForm({ Loginn, error }) {
+  const { t, i18n } = useTranslation();
+  // Get Login inputs
   const [details, setDetails] = useState({ email: '', password: '' });
 
   const submitHandler = (e) => {
@@ -24,41 +26,39 @@ function LoginForm({ Loginn, error }) {
     en: { nativeName: 'English' },
     fr: { nativeName: 'Français' },
   };
-  const { t, i18n } = useTranslation();
 
   return (
     <section className="sign-in-page ">
-        <div className="top_langue">
-                  <div className="row">
-                    <div className="col-md-6"></div>
-                    <div className="col-md-6">
-                      <FormControl
-                        variant="outlined"
-                        style={{
-                          minWidth: 120,
-                        }}
-                      >
-                        <InputLabel id="demo-simple-select-outlined-label">
-                          Langue
-                        </InputLabel>
-                        <Select
-                          labelId="demo-simple-select-outlined-label"
-                          id="demo-simple-select-outlined"
-                          value={i18n.language}
-                          onChange={(e) => i18n.changeLanguage(e.target.value)}
-                          label="Langue"
-                        >
-                          {Object.keys(lngs).map((lng) => (
-                            <MenuItem key={lng} value={lng}>
-                              {' '}
-                              {lngs[lng].nativeName}
-                            </MenuItem>
-                          ))}
-                        </Select>
-                      </FormControl>
-                    </div>
-                  </div>
-                </div>
+      <div className="top_langue">
+        <div className="row">
+          <div className="col-md-6">
+            <FormControl
+              variant="outlined"
+              style={{
+                minWidth: 120,
+              }}
+            >
+              <InputLabel id="demo-simple-select-outlined-label">
+                Langue
+              </InputLabel>
+              <Select
+                labelId="demo-simple-select-outlined-label"
+                id="demo-simple-select-outlined"
+                value={i18n.language}
+                onChange={(e) => i18n.changeLanguage(e.target.value)}
+                label="Langue"
+              >
+                {Object.keys(lngs).map((lng) => (
+                  <MenuItem key={lng} value={lng}>
+                    {' '}
+                    {lngs[lng].nativeName}
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+          </div>
+        </div>
+      </div>
       <div className="container sign-in-page-bg mt-5 p-0">
         <div className="row no-gutters  HEII col-sm-12">
           <div className="col-md-6 text-center">
@@ -73,17 +73,16 @@ function LoginForm({ Loginn, error }) {
                   className="btn btn-primary"
                   onClick={() => shell.openExternal('http://localhost:3000/')}
                 >
-                  {t('login.more')} 
+                  {t('login.more')}
                 </button>
               </div>
             </div>
           </div>
+
           <div className="col-md-6 position-relative">
             <div className="sign-in-from">
               <h1 className="mb-0">{t('login.Signin')} </h1>
-              <p className="gris mt-4">
-              {t('login.enter_email')}
-              </p>
+              <p className="gris mt-4">{t('login.enter_email')}</p>
 
               <form className="mt-4" onSubmit={submitHandler}>
                 <div className="form-inner">
@@ -117,9 +116,6 @@ function LoginForm({ Loginn, error }) {
                       }
                       value={details.password}
                     />
-                  </div>
-                  <div className="d-inline-block w-100">
-                    <div className="custom-control custom-checkbox d-inline-block mt-2 pt-1"></div>
                   </div>
                   <input
                     className="btn btn-primary float-right"

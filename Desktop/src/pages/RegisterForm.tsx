@@ -9,33 +9,34 @@ import {
   Step,
   StepLabel,
   Stepper,
-  InputLabel
 } from '@material-ui/core';
+// For alerts that show each step informations
 import Snackbar from '@material-ui/core/Snackbar';
 import MuiAlert from '@material-ui/lab/Alert';
-import { TimePicker, Checkbox } from 'antd';
+// ANtd for TimePicker
+import { TimePicker } from 'antd';
 import 'antd/dist/antd.css';
 import { useTranslation } from 'react-i18next';
 import { Field, Form, Formik, FormikConfig, FormikValues } from 'formik';
-import { Link, Redirect, useHistory } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 import { CheckboxWithLabel, TextField } from 'formik-material-ui';
 import Select from 'react-select';
-import MenuItem from '@material-ui/core/MenuItem';
-import React, { useEffect, useState } from 'react';
+import React, {  useState } from 'react';
 import { CountryDropdown, RegionDropdown } from 'react-country-region-selector';
+// JavaScript schema builder for value parsing and validation.
 import * as Yup from 'yup';
+
+var crypto = require("crypto");
+var key = crypto.randomBytes(32).toString('hex');
 const model = require('../db');
 
+// The key that will server to open database in other pages/components
+// It is exported from here and imported in other pages
 export let secretKey=null;
 
 
-
-
  const sleep = (time) => new Promise((acc) => setTimeout(acc, time));
-const lngs = {
-  en: { nativeName: 'English' },
-  fr: { nativeName: 'Français' },
-};
+// Defining Validation schema for each step
 const validationSchemaStep1 = Yup.object().shape({
   firstName: Yup.string().required('Firstname is required'),
   lastName: Yup.string()
@@ -55,18 +56,18 @@ const validationSchemaStep1 = Yup.object().shape({
   gender: Yup.string().required('Must choose at least one option.'),
   // secretQuest: Yup.string().required('Must choose at least one question.'),
   answerScrtQuest: Yup.string().required('Answer required.'),
-  dobDay: Yup.number()
-    .required('Day required')
-    .min(1, 'Day not valid')
-    .max(31, 'Day not valid'),
-  dobMonth: Yup.number()
-    .required('Month required')
-    .min(1, 'Month not valid')
-    .max(12, 'Month not valid'),
-  dobYear: Yup.number()
-    .required('Year required')
-    .min(1990, 'Year not valid')
-    .max(2003, 'Year not valid'),
+  // dobDay: Yup.number()
+  //   .required('Day required')
+  //   .min(1, 'Day not valid')
+  //   .max(31, 'Day not valid'),
+  // dobMonth: Yup.number()
+  //   .required('Month required')
+  //   .min(1, 'Month not valid')
+  //   .max(12, 'Month not valid'),
+  // dobYear: Yup.number()
+  //   .required('Year required')
+  //   .min(1950, 'Year not valid')
+  //   .max(2003, 'Year not valid'),
 });
 const validationSchemaStep2 = Yup.object().shape({
   country: Yup.string().required('Country is required'),
@@ -129,15 +130,7 @@ const validationSchemaStep5 = Yup.object().shape({
     then: Yup.number().required(),
   }),
 });
-const specialities = [
-  { value: 'Gastro', label: 'Gastro' },
-  { value: 'Pneumo', label: 'Pneumo' },
-  { value: 'Psychiatrie', label: 'Psychiatrie' },
-  { value: 'Orl', label: 'Orl' },
-  { value: 'Dermato', label: 'Dermato' },
-  { value: 'Ophtalmo', label: 'Ophtalmo' },
-  { value: 'Généraliste', label: 'Généraliste' },
-];
+// Secret Questions to choose from
 const secretQuests = [
   { value: '0', label: 'What was your first pet?' },
   { value: '1', label: 'What was the model of your first car?' },
@@ -149,13 +142,16 @@ const secretQuests = [
     label: 'What is the name of the place your wedding reception was held?',
   },
 ];
-const rdvGaps = ['15', '20', '25', '30', '35', '40'];
-
+// this country is needed in region
 let country: string;
+// The alert that shows with the message for each step
 function Alert(props) {
   return <MuiAlert elevation={6} variant="filled" {...props} />;
 }
+
+// The whole function
 export default function Home() {
+  // SPecialities
 const specialities = [
   { value: 'Gastro', label: 'Gastro' },
   { value: 'Pneumo', label: 'Pneumo' },
@@ -165,9 +161,7 @@ const specialities = [
   { value: 'Ophtalmo', label: 'Ophtalmo' },
   { value: 'Généraliste', label: 'Généraliste' },
 ];
-  // const notify = () => toast("Wow so easy !");
-  const [flag1, setFlag1] = React.useState(true);
-  const [flag2, setFlag2] = React.useState(true);
+//UseState for selected time in the working hours step
   const [selectedtimeMM, setSelectedtimeMM] = useState();
   const [selectedtimeMAf, setSelectedtimeMAf] = useState(null);
 
@@ -186,14 +180,8 @@ const specialities = [
   const [selectedtimeSM, setSelectedtimeSM] = useState(null);
   const [selectedtimeSAf, setSelectedtimeSAf] = useState(null);
 
-  const handleClick1 = () => {
-    setFlag1(!flag1);
-    setFlag2(true);
-  };
-  const handleClick2 = () => {
-    setFlag2(!flag2);
-    setFlag1(true);
-  };
+// Usestate to disable/enable TimePickerFields depending on
+// If the user selects the checkbox of the corresponding day or not
   const [disabledM, setDisabledM] = useState(true);
   const [disabledT, setDisabledT] = useState(true);
   const [disabledW, setDisabledW] = useState(true);
@@ -205,11 +193,6 @@ const specialities = [
     let isChecked = e.target.checked;
     setDisabled(!isChecked);
   }
-  const handleChangeMM = (e,time) => {
-    setSelectedtimeMM(time);
-    //console.log(e,time);
-    console.log(selectedtimeMM);
-  }
 
   const [open, setOpen] = useState(true);
   const handleClose = (event, reason) => {
@@ -218,19 +201,14 @@ const specialities = [
     }
     setOpen(false);
   };
-  useEffect(() => {
-    console.log("ENTERD");
-    return function cleanup() {
-        console.log('GOODBYE');
-    }
-})
-
-  const { t, i18n } = useTranslation();
+// Translation needed for i18n
+  const { t} = useTranslation();
   return (
     <Card>
       <CardContent>
         {/* eslint-disable-next-line @typescript-eslint/no-use-before-define */}
         <FormikStepper
+        // Initiate the whole form values
           initialValues={{
             firstName: '',
             lastName: '',
@@ -244,7 +222,6 @@ const specialities = [
             password: '',
             confirmPassword: '',
             gender: '',
-            acceptTerms: false,
             address: '',
             city: '',
             secretQuest: '',
@@ -272,13 +249,13 @@ const specialities = [
           }}
         >
           <FormikStep
-           
+
             label={t('form.step1')}
             validationSchema={validationSchemaStep1}
           >
             <Snackbar open={open} onClose={handleClose}>
               <Alert onClose={handleClose} severity="info">
-                Informations personnelles basiques
+              {t('form.alertStep1')}
               </Alert>
             </Snackbar>
             <Box paddingBottom={2}>
@@ -316,7 +293,7 @@ const specialities = [
               <Field
                 name="confirmPassword"
                 component={TextField}
-                label="Confirm Password"
+                label={t('form.confirmPassword')}
                 type="password"
                 style={{ marginLeft: '50px' }}
               />
@@ -347,8 +324,7 @@ const specialities = [
                 </div>
               </div>
               <Alert severity="info" className="alert">
-                Cette question est votre seul moyen pour récupérer votre mot de
-                passe!
+              {t('form.alertPassword')}
               </Alert>
             </Box>
               <Field
@@ -357,8 +333,6 @@ const specialities = [
                 type="button"
                 variant="contained"
                 buttons={[t('form.female'), t('form.male')]}
-                // onClick={handleClick1}
-                // color={flag1 ? 'default' : 'primary'}
                 style={{ marginLeft: '50px' }}
               />
             <Field
@@ -395,14 +369,14 @@ const specialities = [
               />
             </Box>
           </FormikStep>
+
           <FormikStep
             label={t('form.step2')}
             validationSchema={validationSchemaStep2}
           >
             <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
               <Alert onClose={handleClose} severity="info">
-                Informations sur votre adresse pour permettre au patient de vous
-                trouver facilement
+              {t('form.alertStep2')}
               </Alert>
             </Snackbar>
             <Box paddingBottom={2}>
@@ -424,7 +398,7 @@ const specialities = [
               <Field
                 name="city"
                 component={TextField}
-                label="city"
+                label={t('form.city')}
                 style={{
                   width: '110px',
                 }}
@@ -435,7 +409,7 @@ const specialities = [
                 variant="outlined"
                 name="officeName"
                 component={TextField}
-                label="Hospital/Office name"
+                label={t('form.officeName')}
                 style={{
                   marginLeft: '70px',
                   marginRight: '20px',
@@ -447,7 +421,7 @@ const specialities = [
                 name="postalCode"
                 component={TextField}
                 type="number"
-                label="Postal Code"
+                label={t('form.postalCode')}
                 placeholder="00000"
               />
             </Box>
@@ -456,7 +430,7 @@ const specialities = [
                 variant="outlined"
                 name="address"
                 component={TextField}
-                label="Full Address"
+                label={t('form.fullAddress')}
                 multiline
                 style={{ marginLeft: '13%', width: '440px' }}
               />
@@ -468,7 +442,7 @@ const specialities = [
           >
             <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
               <Alert onClose={handleClose} severity="info">
-                Informations professionnelles!
+              {t('form.alertStep4')}
               </Alert>
             </Snackbar>
             <Box paddingBottom={3}>
@@ -476,7 +450,7 @@ const specialities = [
                 variant="outlined"
                 name="professionalID"
                 component={TextField}
-                label="Your professional ID"
+                label={t('form.professionalId')}
                 style={{
                   marginLeft: '70px',
                   marginRight: '25px',
@@ -488,7 +462,7 @@ const specialities = [
                 name="phoneNumber"
                 component={TextField}
                 type="number"
-                label="Your professional phone number"
+                label={t('form.phone')}
                 placeholder="06666666"
               />
             </Box>
@@ -537,7 +511,7 @@ const specialities = [
                     variant="outlined"
                     name="speciality"
                     component={SelectComponent}
-                    label="Specialities"
+                    label={t('form.specialities')}
                     options={specialities}
                     placeholder="Select your specialities"
                   />
@@ -550,14 +524,15 @@ const specialities = [
                     minRows="2"
                     name="description"
                     component={TextField}
-                    label="Description"
+                    label={t('form.description')}
                     style={{ width: '220px' }}
                   />
                 </div>
               </div>
             </Box>
           </FormikStep>
-          {/* <FormikStep
+          {/* // This part is commented because it is not fully working
+           <FormikStep
             label="Operating days"
             // validationSchema={validationSchemaStep1}
           >
@@ -770,28 +745,12 @@ const specialities = [
           </FormikStep> */}
 
           <FormikStep
-            label={t('form.step4')}
+            label={t('form.step5')}
             validationSchema={validationSchemaStep5}
-            // validationSchema={Yup.object({
-            //   fee: Yup.mixed().when('teleconsultation', {
-            //     is: true,
-            //     then: Yup.number()
-            //       .required()
-            //       .min(
-            //         1_000_000,
-            //         'Because you said you are a millionaire you need to have 1 million'
-            //       ),
-            //     otherwise: Yup.number().required(),
-            //   }),
-            // })}
           >
             <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
               <Alert onClose={handleClose} severity="info">
-                Ces deux clés sont requis pour recevoir les frais de
-                téléconsultation au cas où vous l'assurez.
-                <br />
-                Vous pouvez choisir de faire tourner le noeud IPFS soit su r
-                votre machine locale ou sur un noeud distant.
+              {t('form.alertStep5')}
               </Alert>
             </Snackbar>
             <Box paddingBottom={2}>
@@ -819,7 +778,7 @@ const specialities = [
                 name="isDistantNode"
                 type="checkbox"
                 component={CheckboxWithLabel}
-                Label={{ label: 'Se connecter un noeud distant' }}
+                Label={{ label: t('form.distantNode') }}
                 style={{ marginLeft: '50px' }}
               />
             </Box>
@@ -829,6 +788,7 @@ const specialities = [
     </Card>
   );
 }
+// Custom the Select component to be able to get the Formik Field props and work with it
 const SelectComponent = ({
   field, // { name, value, onChange, onBlur }
   form: {
@@ -856,6 +816,7 @@ const SelectComponent = ({
     />
   );
 };
+// Custom the TimePicker component to be able to get the Formik Field props and work with it
 const TimePickerComponent = ({
   field, // { name, value, onChange, onBlur }
   form: {
@@ -887,6 +848,7 @@ const TimePickerComponent = ({
   />
   );
 };
+// Custom the ButtonGroup component to be able to get the Formik Field props and work with it
 const ButtonGroup = ({ buttons,
   field, // { name, value, onChange, onBlur }
   form: {
@@ -924,6 +886,7 @@ const ButtonGroup = ({ buttons,
     </>
   );
 };
+// Custom the CountryDropdown component to be able to get the Formik Field props and work with it
 const CountryDropdownComponent = ({
   field, // { name, value, onChange, onBlur }
   form: {
@@ -952,6 +915,7 @@ const CountryDropdownComponent = ({
     />
   );
 };
+// Custom the Region component to be able to get the Formik Field props and work with it
 const RegionDropdownComponent = ({
   field, // { name, value, onChange, onBlur }
   form: {
@@ -984,7 +948,7 @@ export interface FormikStepProps
   extends Pick<FormikConfig<FormikValues>, 'children' | 'validationSchema'> {
   label: string;
 }
-
+// This Formik Step represents each step
 export function FormikStep({ children }: FormikStepProps) {
   return <>{children}</>;
 }
@@ -1003,7 +967,7 @@ export function FormikStepper({
   function isLastStep() {
     return step === childrenArray.length - 1;
   }
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
   const history = useHistory();
 
   return (
@@ -1016,24 +980,20 @@ export function FormikStepper({
         onSubmit={async (values, helpers) => {
           if (isLastStep()) {
             await props.onSubmit(values, helpers);
-            //handleDoctorCreate(values);
             setCompleted(true);
-            secretKey= values.password.replace(/[^a-zA-Z0-9]/g, "");
-             model.insertDb(secretKey, values);
-            // this.props.history.push('/moneyform');
-            // <Redirect to="/agenda" />;
-             await sleep(3000);
 
+            secretKey= values.password.replace(/[^a-zA-Z0-9]/g, "");
+            // Insert the values in database with the encryption key for files
+             model.insertDb(secretKey, values, key);
+             await sleep(3000);
+            // Set Local Storage values to remember the email
             localStorage.setItem('user','logged');
             localStorage.setItem('email', values.email);
-            // let doc =model.getDoctor(secretKey);
-          //while(doc==undefined)model.getDoctor(secretKey);
-            // console.log(doc);
-            history.push('/profile');
+            // Redirect to Profile Page
+            history.push('/Profile');
           } else {
             setStep((s) => s + 1);
 
-            // the next line was not covered in the youtube video
             //
             // If you have multiple fields on the same step
             // we will see they show the validation error all at the same time after the first step!

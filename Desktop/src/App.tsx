@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState} from 'react';
 import {
   HashRouter as Router,
   Switch,
@@ -9,96 +9,33 @@ import {
 import icon from '../assets/icon.png';
 import './App.global.css';
 import Profile from './pages/Profile';
-import Agenda from './pages/Agenda';
-import Login from './pages/RegisterForm';
-import App_bar from './pages/Home_page';
-import Sign_in from './pages/Sign_in';
+import Register from './pages/RegisterForm';
+import Home_page from './pages/Home_page';
 import Support from './pages/SupportUsPage';
 import Medical_file from './pages/Medical_file';
-import Menuappbar from './pages/Menuappbar';
 import LoginForm from './pages/LoginForm';
-
-const model = require('./db');
-
-import { makeStyles } from '@material-ui/core/styles';
-
 import { shell } from 'electron';
-
 import Signature from './pages/Signature';
-import LanguageIcon from '@material-ui/icons/Language';
 import InputLabel from '@material-ui/core/InputLabel';
 import MenuItem from '@material-ui/core/MenuItem';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
-import NativeSelect from '@material-ui/core/NativeSelect';
-import InputBase from '@material-ui/core/InputBase';
-import { createStyles, withStyles, Theme } from '@material-ui/core/styles';
 import { useTranslation } from 'react-i18next';
 
 export let secretKeyLogin = null;
 const sleep = (time) => new Promise((acc) => setTimeout(acc, time));
-const BootstrapInput = withStyles((theme: Theme) =>
-  createStyles({
-    root: {
-      'label + &': {
-        marginTop: theme.spacing(3),
-      },
-    },
-    input: {
-      borderRadius: 4,
-      position: 'relative',
-      backgroundColor: theme.palette.background.paper,
-      border: '1px solid #ced4da',
-      fontSize: 16,
-      padding: '10px 26px 10px 12px',
-      transition: theme.transitions.create(['border-color', 'box-shadow']),
-      // Use the system font instead of the default Roboto font.
-      fontFamily: [
-        '-apple-system',
-        'BlinkMacSystemFont',
-        '"Segoe UI"',
-        'Roboto',
-        '"Helvetica Neue"',
-        'Arial',
-        'sans-serif',
-        '"Apple Color Emoji"',
-        '"Segoe UI Emoji"',
-        '"Segoe UI Symbol"',
-      ].join(','),
-      '&:focus': {
-        borderRadius: 4,
-        borderColor: '#80bdff',
-        boxShadow: '0 0 0 0.2rem rgba(0,123,255,.25)',
-      },
-    },
-  })
-)(InputBase);
-const useStyles = makeStyles({
-  root: {
-    width: '350px',
-  },
-  bullet: {
-    display: 'inline-block',
-    margin: '0 2px',
-    transform: 'scale(0.8)',
-  },
-  title: {
-    fontSize: '14',
-  },
-  pos: {
-    marginBottom: '12',
-  },
-});
 
 const lngs = {
   en: { nativeName: 'English' },
   fr: { nativeName: 'Français' },
 };
+const model = require('./db');
+
 const Hello = () => {
   const { t, i18n } = useTranslation();
   const [error, setError] = useState('');
   const [User, setUser] = useState('');
-  const [isKey, setisKey] = useState();
+  const [isKey, setisKey] = useState(false);
   const [SecretKey, setSecretKey] = useState(null);
   const history = useHistory();
   const Loginn = async (details) => {
@@ -115,7 +52,7 @@ const Hello = () => {
           });
           secretKeyLogin = SecretKey;
           localStorage.setItem('user', 'logged');
-          history.push('/App_bar');
+          history.push('/Home_page');
         } else setError('Wrong Password!');
       } else {
         setError('Type a password!');
@@ -173,7 +110,7 @@ const Hello = () => {
                           label="Langue"
                         >
                           {Object.keys(lngs).map((lng) => (
-                            <MenuItem key={lng} value={lngs[lng].nativeName}>
+                            <MenuItem key={lng} value={lng}>
                               {' '}
                               {lngs[lng].nativeName}
                             </MenuItem>
@@ -198,7 +135,7 @@ const Hello = () => {
                           Manage your agenda and make teleconsultation in full
                           confidentiality and security with Opentoubib
                         </p>
-                        <Link to="/Login">
+                        <Link to="/Register">
                           <button type="button" className="btn btn-primary">
                             Inscription
                           </button>
@@ -210,8 +147,7 @@ const Hello = () => {
                           onClick={() =>
                             shell.openExternal('http://localhost:3000/')
                           }
-                        >
-                          En savoir plus
+                        >EN savoir plus
                         </button>
                       </div>
                     </div>
@@ -231,12 +167,12 @@ export default function App() {
     <Router>
       <Switch>
         <Route exact path="/" component={Hello} />
-        <Route path="/profile" component={Profile} />
+        <Route path="/Profile" component={Profile} />
         <Route path="/Signature" component={Signature} />
         <Route path="/Support" component={Support} />
-        <Route path="/App_bar" component={App_bar} />
+        <Route path="/Home_page" component={Home_page} />
         <Route path="/Medical_file" component={Medical_file} />
-        <Route path="/Login" component={Login} />
+        <Route path="/Register" component={Register} />
         <Route path="/LoginForm" component={LoginForm} />
       </Switch>
     </Router>

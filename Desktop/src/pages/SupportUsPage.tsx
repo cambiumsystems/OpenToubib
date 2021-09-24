@@ -50,9 +50,9 @@ const useStyles = makeStyles((theme) => ({
   color_white : {
     background: '#089bab',
     color: '#fff',
-    
+
   },
-  
+
   content: {
     flexGrow: 1,
     padding: theme.spacing(3),
@@ -82,7 +82,7 @@ const useStyless = makeStyles((theme) => ({
     position: 'absolute',
     width: 400,
     backgroundColor: theme.palette.background.paper,
-    
+
     boxShadow: theme.shadows[5],
     padding: theme.spacing(2, 4, 3),
   },
@@ -107,7 +107,7 @@ export default function Support() {
     setOpen(false);
   };
   const [isMenuOpened, setisMenuOpened] = React.useState(false);
- 
+
   const body = (
     <div style={modalStyle} className={classess.paper}>
       <h2 id="simple-modal-title"className="h_txt" >Code couleurs</h2>
@@ -124,7 +124,7 @@ export default function Support() {
               <option > vert</option>
               <option >orange</option>
               <option >gris</option>
-              
+
             </select>
              </div>
           </div>
@@ -155,21 +155,21 @@ export default function Support() {
           <button className="bg-primary_mini pt-5 pb-5 text-center rounded">submit</button>
        </form>
       </div>
-      
+
     </div>
   );
 
    const [value,setValue]= useState("");
   const[slider,setSlider]=useState("")
- 
+
    const Handlechanges=()=>{
      setSlider()
      console.log(slider);
     setValue(slider+"€/Mounth");
    }
- 
-   
-   
+
+
+
  return (
     <div className={classes.root}>
        {
@@ -184,13 +184,13 @@ export default function Support() {
         </Toolbar>
       </AppBar></>)
      }
-      
+
       <main className=" ">
       <div className="">
 <div className="">
   <div className=" col-md-1">
       <div className="iq-card line-height-4 background_support text-white">
-        
+
       </div>
   </div>
   <div className=" col-md-6 ">
@@ -198,30 +198,30 @@ export default function Support() {
       <div className="col-md-6 ">
 
         <div className="iq-card-body w_card  border text-center rounded">
-           
+
              <h2 className="mb-4 display-3 font-weight-bolder text-gris or" >
-             solution solidaire 
+             solution solidaire
              </h2>
             <ul className="list-unstyled  mb-0">
-            
+
             <li><p className="gris"> Supportez ce projet !</p></li>
-              <li><p><b>creer votre propre communoté fermé pour un meilleur 
+              <li><p><b>creer votre propre communoté fermé pour un meilleur
                 service</b>.</p>
-                
+
               </li> <li> <p className="gris">
 Pour assurer une décentralisation totale du côté des patients, nous avons besoin de votre aide !
 Anisi vous contribuerez dans notre mouvement social et solidaire. </p> </li>
  <li> <p >Vous pourriez faire des dons mensuels, ou mieux encore acheter un nœud distant propre à vous pour l’utiliser afin de se connecter au réseau des médecins au lieu de votre propre machine.
 Votre soutien permettra aussi de décentraliser l’application du côté des patients afin de leur fournir des nœuds qui joueront le rôle de passerelle. </p>
               </li>
-                
-              <li><p className="gris">100% sécurisé et décentralisé dons vos donnée seront stoquées localement sur vos pc  , 
+
+              <li><p className="gris">100% sécurisé et décentralisé dons vos donnée seront stoquées localement sur vos pc  ,
 
 Nous avons besoin de votre aide pour assurer des noeuds
 qui joueront le rôle de passerelle/gateway
                 </p>
               </li>
-             <li><p className="gris">Faites le choix de nous encourager  .</p></li> 
+             <li><p className="gris">Faites le choix de nous encourager  .</p></li>
           </ul>
           <div className="box center_e_support">
          <div className="row">
@@ -235,21 +235,21 @@ qui joueront le rôle de passerelle/gateway
 
          </div>
          <button type="button" className="btn btn-primary center_e right_btn">Don</button>
-         
-         
+
+
        </div>
                <br/>
-              <p  className="mb-4 display-3 font-weight-bolder text-gris or center_e_support" style={{float:'right'}}>Merci !</p>         
+              <p  className="mb-4 display-3 font-weight-bolder text-gris or center_e_support" style={{float:'right'}}>Merci !</p>
        </div>
       </div>
-      
+
     </div>
-     
-        
-      
-      
+
+
+
+
   </div>
-  
+
 </div>
 
 </div>

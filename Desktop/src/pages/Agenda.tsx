@@ -10,7 +10,6 @@ import swal from 'sweetalert';
 import { secretKeyLogin } from '../App.tsx';
 import { secretKey } from './RegisterForm';
 
-
 const model = require('../db');
 
 function rand() {
