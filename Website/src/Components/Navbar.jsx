@@ -1,6 +1,7 @@
 import React,{useState} from 'react'
 import logo from '../images/logo (1).png'
 import {Link }from 'react-router-dom'
+import InstallationP from './InstallationP'
 function Navbar() {
     const [nav,setnav]=useState(false)
     const changeBackground=()=>{

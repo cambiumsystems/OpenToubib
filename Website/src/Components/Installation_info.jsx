@@ -5,7 +5,7 @@ function Alert(props) {
     return <MuiAlert elevation={6} 
                      variant="filled" {...props} />;
   }
-function Installation(props) {
+function Installation_info(props) {
     
     return (
         <div>
@@ -31,4 +31,4 @@ function Installation(props) {
     )
 }
 
-export default Installation
+export default Installation_info
